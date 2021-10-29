@@ -25,7 +25,7 @@ import de.sub.goobi.config.ConfigPlugins;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ ConfigPlugins.class })
 @PowerMockIgnore({ "javax.management.*", "javax.net.ssl.*" })
-public class SampleExportPluginTest {
+public class LuxArtistDictionaryExportPluginTest {
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
@@ -49,7 +49,7 @@ public class SampleExportPluginTest {
 
     @Test
     public void testConstructor() {
-        SampleExportPlugin plugin = new SampleExportPlugin();
+        LuxArtistDictionaryExportPlugin plugin = new LuxArtistDictionaryExportPlugin();
         assertNotNull(plugin);
     }
 

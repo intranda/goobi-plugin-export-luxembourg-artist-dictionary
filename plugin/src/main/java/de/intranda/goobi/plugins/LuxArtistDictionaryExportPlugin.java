@@ -34,10 +34,10 @@ import ugh.exceptions.WriteException;
 
 @PluginImplementation
 @Log4j2
-public class SampleExportPlugin implements IExportPlugin, IPlugin {
+public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
     @Getter
-    private String title = "intranda_export_sample";
+    private String title = "intranda_export_luxArtistDictionary";
     @Getter
     private PluginType type = PluginType.Export;
     @Getter
