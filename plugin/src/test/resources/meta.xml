@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets OBJID="" xsi:schemaLocation="http://www.loc.gov/standards/premis/ http://www.loc.gov/standards/premis/v2/premis-v2-0.xsd http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-7.xsd http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd http://www.loc.gov/standards/mix/ http://www.loc.gov/standards/mix/mix.xsd" xmlns:mets="http://www.loc.gov/METS/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:goobi="http://meta.goobi.org/v1.5.1/">
+   <mets:metsHdr CREATEDATE="2021-10-14T11:37:25Z">
+      <mets:agent OTHERTYPE="SOFTWARE" ROLE="CREATOR" TYPE="OTHER">
+         <mets:name>Goobi -  - 2019-03-13 04:03:16+0000</mets:name>
+         <mets:note>Goobi</mets:note>
+      </mets:agent>
+   </mets:metsHdr>
+   <mets:dmdSec ID="DMDLOG_0000">
+      <mets:mdWrap MDTYPE="MODS">
+         <mets:xmlData>
+            <mods:mods>
+               <mods:extension>
+                  <goobi:goobi>
+                     <goobi:metadata name="CatalogIDDigital">XXX-E01-A01 Entity B</goobi:metadata>
+                     <goobi:metadata name="Published">Y</goobi:metadata>
+                     <goobi:metadata name="PrimaryRole">XXX-E01-A14</goobi:metadata>
+                     <goobi:metadata name="Importance">XXX-E01-A15</goobi:metadata>
+                     <goobi:metadata name="PURL">XXX-E01-A20</goobi:metadata>
+                     <goobi:metadata name="FirstPublishedDate">XXX-E01-A24</goobi:metadata>
+                     <goobi:metadata name="LastUpdatedDate">XXX-E01-A25</goobi:metadata>
+                     <goobi:metadata name="ExternalIdentifier" type="group">
+                        <goobi:metadata name="Identifier">XXX-E01-A03-02</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Type">XXX-E01-A03-01</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A03-03</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A03-04</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A03-05</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="PersonMainName" type="group">
+                        <goobi:metadata name="LastnameDe">XXX-E01-A04-02 (de)</goobi:metadata>
+                        <goobi:metadata name="LastnameEn">XXX-E01-A04-02 (en)</goobi:metadata>
+                        <goobi:metadata name="LastnameFr">XXX-E01-A04-02 (fr)</goobi:metadata>
+                        <goobi:metadata name="LastnameOrig">XXX-E01-A04-02 (orig)</goobi:metadata>
+                        <goobi:metadata name="Numeration">XXX-E01-A04-03</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Title">XXX-E01-A04-04</goobi:metadata>
+                        <goobi:metadata name="FirstnameDe">XXX-E01-A04-01 (de)</goobi:metadata>
+                        <goobi:metadata name="FirstnameEn">XXX-E01-A04-01 (en)</goobi:metadata>
+                        <goobi:metadata name="FirstnameFr">XXX-E01-A04-01 (fr)</goobi:metadata>
+                        <goobi:metadata name="FirstnameOrig">XXX-E01-A04-01 (orig)</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A04-05</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A04-06</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A04-07</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="PersonOtherName" type="group">
+                        <goobi:metadata name="LastnameDe">XXX-E01-A05-03 (de)</goobi:metadata>
+                        <goobi:metadata name="LastnameEn">XXX-E01-A05-03 (en)</goobi:metadata>
+                        <goobi:metadata name="LastnameFr">XXX-E01-A05-03 (fr)</goobi:metadata>
+                        <goobi:metadata name="LastnameOrig">XXX-E01-A05-03 (orig)</goobi:metadata>
+                        <goobi:metadata name="Numeration">XXX-E01-A05-04</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Title">XXX-E01-A05-05</goobi:metadata>
+                        <goobi:metadata name="Type">XXX-E01-A05-01</goobi:metadata>
+                        <goobi:metadata name="FirstnameDe">XXX-E01-A05-02 (de)</goobi:metadata>
+                        <goobi:metadata name="FirstnameEn">XXX-E01-A05-02 (en)</goobi:metadata>
+                        <goobi:metadata name="FirstnameFr">XXX-E01-A05-02 (fr)</goobi:metadata>
+                        <goobi:metadata name="FirstnameOrig">XXX-E01-A05-02 (orig)</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A05-07</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A05-08</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A05-09</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="BirthDateGroup" type="group">
+                        <goobi:metadata name="Birthdate">XXX-E01-A06 date</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A06 source</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A06 type</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A06 link</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="AltBirthDateGroup" type="group">
+                        <goobi:metadata name="Birthdate">XXX-E01-A07 date</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A07 source</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A07 type</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A07 link</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="BirthplaceGroup" type="group">
+                        <goobi:metadata authority="geonames" authorityURI="http://www.geonames.org/" name="Birthplace" valueURI="http://www.geonames.org/5128581">XXX-E01-A08-01</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A08-02</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A08-03</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A08-04</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="DeathDateGroup" type="group">
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="DeathDate">XXX-E01-A09 date</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A09 source</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A09 type</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A09 link</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="AltDeathDateGroup" type="group">
+                        <goobi:metadata name="AlternativeDeathDate">XXX-E01-A10 date</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A10 source</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A10 type</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A10 link</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="DeathplaceGroup" type="group">
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata authority="geonames" authorityURI="http://www.geonames.org/" name="Deathplace" valueURI="http://www.geonames.org/2988507">XXX-E01-A11-01</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A11-02</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A11-03</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A11-04</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="GenderGroup" type="group">
+                        <goobi:metadata name="Gender">XXX-E01-A12-01</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A12-02</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A12-03</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A12-04</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Media" type="group">
+                        <goobi:metadata name="File">XXX-E01-A13-03</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Subject">XXX-E01-A13-02</goobi:metadata>
+                        <goobi:metadata name="Type">XXX-E01-A13-01</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A13-05</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A13-06</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A13-07</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="ProfessionGroup" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-E01-A16-01 date beginning</goobi:metadata>
+                        <goobi:metadata name="Profession">XXX-E01-A16-01 profession</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-E01-A16-01 date end</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A16-01 source</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A16-01 type</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A16-01 link</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="DisciplineGroup" type="group">
+                        <goobi:metadata name="Discipline">XXX-E01-A17-01</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A17-02</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A17-03</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A17-04</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="BiographyGroup" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-E01-A18 date beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-E01-A18 date end</goobi:metadata>
+                        <goobi:metadata name="ShortDescription">XXX-E01-A18 short description</goobi:metadata>
+                        <goobi:metadata authority="geonames" authorityURI="http://www.geonames.org/" name="Location" valueURI="http://www.geonames.org/5128581">XXX-E01-A18 location</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Type">XXX-E01-A18-01</goobi:metadata>
+                        <goobi:metadata name="Source" type="group">
+                           <goobi:metadata name="SourceID">ID</goobi:metadata>
+                           <goobi:metadata name="SourceName">XXX-E01-A18 source</goobi:metadata>
+                           <goobi:metadata name="SourceType">XXX-E01-A18 type</goobi:metadata>
+                           <goobi:metadata name="SourceLink">XXX-E01-A18 link</goobi:metadata>
+                           <goobi:metadata name="SourcePage">page range</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Website" type="group">
+                        <goobi:metadata name="Link">XXX-E01-A19-01</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Bibliography" type="group">
+                        <goobi:metadata name="Link">XXX-E01-A23-03</goobi:metadata>
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Type">XXX-E01-A23-01</goobi:metadata>
+                        <goobi:metadata name="Citation">XXX-E01-A23-02</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R01-001 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R01-001 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E01-A01 Entity A link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E01-A01 Entity A name</goobi:metadata>
+                        <goobi:metadata name="Type">is child of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R01-001 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R01-001 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E01-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E01-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is parent of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R01-002 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R01-002 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E01-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E01-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is partner of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXXX-R01-003 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R01-003 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E01-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E01-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is sibling of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXXX-R01-004 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R01-004 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E01-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E01-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is collaborator of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate"/>
+                        <goobi:metadata name="EndDate"/>
+                        <goobi:metadata name="RelationProcessID">XXX-E01-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E01-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">influenced</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R01-006 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R01-006 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E01-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E01-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is nephew/niece of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R01-007 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R01-007 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E01-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E01-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is student of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R01-007 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R01-007 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E01-A01 Entity A link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E01-A01 Entity A name</goobi:metadata>
+                        <goobi:metadata name="Type">is acquaintance of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate"/>
+                        <goobi:metadata name="EndDate"/>
+                        <goobi:metadata name="RelationProcessID">XXX-E01-A01 Entity A link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E01-A01 Entity A name</goobi:metadata>
+                        <goobi:metadata name="Type">was influenced by</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R01-006 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R01-006 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E01-A01 Entity A link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E01-A01 Entity A name</goobi:metadata>
+                        <goobi:metadata name="Type">is uncle/aunt of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate"/>
+                        <goobi:metadata name="EndDate"/>
+                        <goobi:metadata name="RelationProcessID">XXX-E01-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E01-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is teacher of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R03-001 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R03-001 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E02-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E02-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is member of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R03-003 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R03-003 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E02-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E02-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">influenced</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R03-002 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R03-002 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E02-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E02-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is founder of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R03-004 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R03-004 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E02-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E02-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is the president of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R03-005 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R03-005 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E02-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E02-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is the vice-president of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R03-006 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R03-006 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E02-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E02-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is the secretary of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R03-007 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R03-007 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E02-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E02-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is the treasurer of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R03-008 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R03-008 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E02-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E02-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is board member of</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R03-009 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R03-009 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E02-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E02-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is represented by</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R03-010 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R03-010 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E02-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E02-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">collaborates with</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R04-001 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R04-001Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E03-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E03-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">participated in</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate"/>
+                        <goobi:metadata name="EndDate"/>
+                        <goobi:metadata name="RelationProcessID">XXX-E03-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E03-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">organized</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R06-001 Date of creation</goobi:metadata>
+                        <goobi:metadata name="EndDate"/>
+                        <goobi:metadata name="RelationProcessID">XXX-E04-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E04-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">created</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R06-002 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R06-002 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E04-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E04-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">owns</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate"/>
+                        <goobi:metadata name="EndDate"/>
+                        <goobi:metadata name="RelationProcessID">XXX-E04-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E04-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">is referred to in</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R09-001 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="AwardDegree">XXX-R09-001 Award degree</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R09-001 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E05-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E05-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">received</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="Relationship" type="group">
+                        <goobi:metadata name="BeginningDate">XXX-R09-001 Date Beginning</goobi:metadata>
+                        <goobi:metadata name="EndDate">XXX-R09-001 Date End</goobi:metadata>
+                        <goobi:metadata name="RelationProcessID">XXX-E05-A01 Entity B link</goobi:metadata>
+                        <goobi:metadata name="RelationName">XXX-E05-A01 Entity B name</goobi:metadata>
+                        <goobi:metadata name="Type">awarded</goobi:metadata>
+                     </goobi:metadata>
+                     <goobi:metadata name="TextualDescription" type="group">
+                        <goobi:metadata name="Published">Y</goobi:metadata>
+                        <goobi:metadata name="Text">XXX-E01-A21-01</goobi:metadata>
+                        <goobi:metadata name="AuthorDescription" type="group">
+                           <goobi:metadata name="Author">XXX-E01-A22-01</goobi:metadata>
+                           <goobi:metadata name="Published">Y</goobi:metadata>
+                        </goobi:metadata>
+                     </goobi:metadata>
+                  </goobi:goobi>
+               </mods:extension>
+            </mods:mods>
+         </mets:xmlData>
+      </mets:mdWrap>
+   </mets:dmdSec>
+   <mets:dmdSec ID="DMDPHYS_0000">
+      <mets:mdWrap MDTYPE="MODS">
+         <mets:xmlData>
+            <mods:mods>
+               <mods:extension>
+                  <goobi:goobi>
+                     <goobi:metadata name="pathimagefiles">file:///opt/digiverso/goobi/metadata/309927/images/CompletePerson_tif</goobi:metadata>
+                  </goobi:goobi>
+               </mods:extension>
+            </mods:mods>
+         </mets:xmlData>
+      </mets:mdWrap>
+   </mets:dmdSec>
+   <mets:structMap TYPE="LOGICAL">
+      <mets:div DMDID="DMDLOG_0000" ID="LOG_0000" TYPE="Person"/>
+   </mets:structMap>
+   <mets:structMap TYPE="PHYSICAL">
+      <mets:div DMDID="DMDPHYS_0000" ID="PHYS_0000" TYPE="BoundBook"/>
+   </mets:structMap>
+</mets:mets>
