@@ -141,49 +141,32 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
 
             // create bibliography from exported sources
-            for (MetadataGroup currentSource : allSources) {
-                boolean sourceMatched = false;
-                String sourceId = currentSource.getMetadataByType("SourceID").get(0).getValue();
-                for (MetadataGroup bibliography : bibliographyList) {
-                    if (bibliography.getMetadataByType("SourceID").get(0).getValue().equals(sourceId)) {
-                        sourceMatched = true;
-                        break;
-                    }
-                }
-                if (!sourceMatched) {
-                    MetadataGroup bib = new MetadataGroup(prefs.getMetadataGroupTypeByName("Bibliography"));
-
-                    for (Metadata oldMd : currentSource.getMetadataList())  {
-                        try {
-                            Metadata newMd = new Metadata(oldMd.getType());
-                            newMd.setValue(oldMd.getValue());
-                            newMd.setAuthorityValue(oldMd.getAuthorityValue());
-                            bib.addMetadata(newMd);
-                        } catch (MetadataTypeNotAllowedException e) {
-                        }
-
-                    }
-
-                    //                    Metadata id = new Metadata(prefs.getMetadataTypeByName("SourceID"));
-                    //                    id.setValue(sourceId);
-                    //                    bib.addMetadata(id);
-
-                    //                    Metadata type = new Metadata(prefs.getMetadataTypeByName("Type"));
-                    //                    type.setValue(currentSource.getMetadataByType("SourceType").get(0).getValue());
-                    //                    bib.addMetadata(type);
-                    //
-                    //                    Metadata citation = new Metadata(prefs.getMetadataTypeByName("Citation"));
-                    //                    citation.setValue(currentSource.getMetadataByType("SourceName").get(0).getValue());
-                    //                    bib.addMetadata(citation);
-
-                    //                    Metadata link = new Metadata(prefs.getMetadataTypeByName("Link"));
-                    //                    link.setValue(currentSource.getMetadataByType("SourceLink").get(0).getValue());
-                    //                    bib.addMetadata(link);
-
-                    logical.addMetadataGroup(bib);
-                    bibliographyList.add(bib);
-                }
-            }
+            //            for (MetadataGroup currentSource : allSources) {
+            //                boolean sourceMatched = false;
+            //                String sourceId = currentSource.getMetadataByType("SourceID").get(0).getValue();
+            //                for (MetadataGroup bibliography : bibliographyList) {
+            //                    if (bibliography.getMetadataByType("SourceID").get(0).getValue().equals(sourceId)) {
+            //                        sourceMatched = true;
+            //                        break;
+            //                    }
+            //                }
+            //                if (!sourceMatched) {
+            //                    MetadataGroup bib = new MetadataGroup(prefs.getMetadataGroupTypeByName("Bibliography"));
+            //
+            //                    for (Metadata oldMd : currentSource.getMetadataList())  {
+            //                        try {
+            //                            Metadata newMd = new Metadata(oldMd.getType());
+            //                            newMd.setValue(oldMd.getValue());
+            //                            newMd.setAuthorityValue(oldMd.getAuthorityValue());
+            //                            bib.addMetadata(newMd);
+            //                        } catch (MetadataTypeNotAllowedException e) {
+            //                        }
+            //
+            //                    }
+            //                    logical.addMetadataGroup(bib);
+            //                    bibliographyList.add(bib);
+            //                }
+            //            }
 
 
             // export data
