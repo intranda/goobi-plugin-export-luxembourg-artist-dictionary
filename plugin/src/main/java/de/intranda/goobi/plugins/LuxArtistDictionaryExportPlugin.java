@@ -173,7 +173,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             MetsModsImportExport mm = new MetsModsImportExport(prefs);
             mm.setDigitalDocument(dd);
             mm.write(destination + process.getTitel() + ".xml");
-        } catch (ReadException | PreferencesException | WriteException | IOException | InterruptedException | SwapException | DAOException e) {
+        } catch (ReadException | PreferencesException | WriteException | IOException | SwapException e) {
             log.error(e);
             problems.add("Cannot read metadata file.");
             return false;
