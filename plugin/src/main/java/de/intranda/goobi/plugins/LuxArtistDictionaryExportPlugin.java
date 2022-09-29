@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.goobi.beans.LogEntry;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
 import org.goobi.production.enums.LogType;
@@ -21,7 +20,6 @@ import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.ExportFileException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.helper.exceptions.UghHelperException;
-import de.sub.goobi.persistence.managers.ProcessManager;
 import de.sub.goobi.persistence.managers.VocabularyManager;
 import lombok.Getter;
 import lombok.Setter;
@@ -139,7 +137,6 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
             }
 
-
             // create bibliography from exported sources
             //            for (MetadataGroup currentSource : allSources) {
             //                boolean sourceMatched = false;
@@ -167,7 +164,6 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             //                    bibliographyList.add(bib);
             //                }
             //            }
-
 
             // export data
             MetsModsImportExport mm = new MetsModsImportExport(prefs);
@@ -313,10 +309,6 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         } else {
             Helper.setMeldung(message);
         }
-        LogEntry le = new LogEntry();
-        le.setContent(message);
-        le.setProcessId(process.getId());
-        le.setType(logtype);
-        ProcessManager.saveLogEntry(le);
+        Helper.addMessageToProcessJournal(process.getId(), logtype, message);
     }
 }
