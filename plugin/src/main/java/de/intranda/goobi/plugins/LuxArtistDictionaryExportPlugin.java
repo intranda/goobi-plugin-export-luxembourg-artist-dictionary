@@ -185,7 +185,19 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             String vocabRecordID = vocabRecordUrl.substring(vocabRecordUrl.lastIndexOf("/") + 1);
             vocabRecordUrl = vocabRecordUrl.substring(0, vocabRecordUrl.lastIndexOf("/"));
             String vocabularyID = vocabRecordUrl.substring(vocabRecordUrl.lastIndexOf("/") + 1);
-            VocabRecord vr = VocabularyManager.getRecord(Integer.parseInt(vocabularyID), Integer.parseInt(vocabRecordID));
+
+            int voc;
+            int rec;
+
+            try {
+                voc = Integer.parseInt(vocabularyID);
+                rec = Integer.parseInt(vocabRecordID);
+            }catch (Exception e) {
+                log.info( e);
+                return;
+            }
+
+            VocabRecord vr = VocabularyManager.getRecord(voc, rec);
             // TODO export authority data at group level
 
             if (vr != null) {
