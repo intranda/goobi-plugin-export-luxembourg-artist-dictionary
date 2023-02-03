@@ -16,6 +16,7 @@ import org.goobi.vocabulary.Field;
 import org.goobi.vocabulary.VocabRecord;
 
 import de.sub.goobi.helper.Helper;
+import de.sub.goobi.helper.VariableReplacer;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.ExportFileException;
 import de.sub.goobi.helper.exceptions.SwapException;
@@ -65,16 +66,16 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
     @Override
     public boolean startExport(Process process) throws IOException, InterruptedException, DocStructHasNoTypeException, PreferencesException,
-    WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException, SwapException, DAOException,
-    TypeNotAllowedForParentException {
+            WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException, SwapException, DAOException,
+            TypeNotAllowedForParentException {
         String benutzerHome = process.getProjekt().getDmsImportImagesPath();
         return startExport(process, benutzerHome);
     }
 
     @Override
     public boolean startExport(Process process, String destination) throws IOException, InterruptedException, DocStructHasNoTypeException,
-    PreferencesException, WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException,
-    SwapException, DAOException, TypeNotAllowedForParentException {
+            PreferencesException, WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException,
+            SwapException, DAOException, TypeNotAllowedForParentException {
         problems = new ArrayList<>();
 
         try {
@@ -105,7 +106,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             for (MetadataGroup grp : new ArrayList<>(logical.getAllMetadataGroups())) {
                 boolean removed = false;
                 for (Metadata metadata : grp.getMetadataList()) {
-                    if (metadata.getType().getName().equals("Published") && metadata.getValue().equalsIgnoreCase("N")) {
+                    if ("Published".equals(metadata.getType().getName()) && "N".equalsIgnoreCase(metadata.getValue())) {
                         // remove group, if its marked as not exportable
                         logical.removeMetadataGroup(grp);
                         removed = true;
@@ -115,7 +116,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                     // collect all sources
                     List<MetadataGroup> sources = grp.getAllMetadataGroupsByName("Source");
                     allSources.addAll(sources);
-                    if (grp.getType().getName().equals("Bibliography")) {
+                    if ("Bibliography".equals(grp.getType().getName())) {
                         bibliographyList.add(grp);
                     }
                 }
@@ -166,8 +167,39 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             //            }
 
             // export data
+            VariableReplacer vp = new VariableReplacer(dd, prefs, process, null);
             MetsModsImportExport mm = new MetsModsImportExport(prefs);
             mm.setDigitalDocument(dd);
+            // Replace rights and digiprov entries.
+            mm.setRightsOwner(vp.replace(process.getProjekt().getMetsRightsOwner()));
+            mm.setRightsOwnerLogo(vp.replace(process.getProjekt().getMetsRightsOwnerLogo()));
+            mm.setRightsOwnerSiteURL(vp.replace(process.getProjekt().getMetsRightsOwnerSite()));
+            mm.setRightsOwnerContact(vp.replace(process.getProjekt().getMetsRightsOwnerMail()));
+            mm.setDigiprovPresentation(vp.replace(process.getProjekt().getMetsDigiprovPresentation()));
+            mm.setDigiprovReference(vp.replace(process.getProjekt().getMetsDigiprovReference()));
+            mm.setDigiprovPresentationAnchor(vp.replace(process.getProjekt().getMetsDigiprovPresentationAnchor()));
+            mm.setDigiprovReferenceAnchor(vp.replace(process.getProjekt().getMetsDigiprovReferenceAnchor()));
+
+            mm.setMetsRightsLicense(vp.replace(process.getProjekt().getMetsRightsLicense()));
+            mm.setMetsRightsSponsor(vp.replace(process.getProjekt().getMetsRightsSponsor()));
+            mm.setMetsRightsSponsorLogo(vp.replace(process.getProjekt().getMetsRightsSponsorLogo()));
+            mm.setMetsRightsSponsorSiteURL(vp.replace(process.getProjekt().getMetsRightsSponsorSiteURL()));
+
+            mm.setPurlUrl(vp.replace(process.getProjekt().getMetsPurl()));
+            mm.setContentIDs(vp.replace(process.getProjekt().getMetsContentIDs()));
+
+            String pointer = process.getProjekt().getMetsPointerPath();
+            pointer = vp.replace(pointer);
+            mm.setMptrUrl(pointer);
+
+            String anchor = process.getProjekt().getMetsPointerPathAnchor();
+            pointer = vp.replace(anchor);
+            mm.setMptrAnchorUrl(pointer);
+
+            mm.setGoobiID(String.valueOf(process.getId()));
+
+            mm.setIIIFUrl(vp.replace(process.getProjekt().getMetsIIIFUrl()));
+            mm.setSruUrl(vp.replace(process.getProjekt().getMetsSruUrl()));
             mm.write(destination + process.getTitel() + ".xml");
         } catch (ReadException | PreferencesException | WriteException | IOException | SwapException e) {
             log.error(e);
@@ -192,8 +224,8 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             try {
                 voc = Integer.parseInt(vocabularyID);
                 rec = Integer.parseInt(vocabRecordID);
-            }catch (Exception e) {
-                log.info( e);
+            } catch (Exception e) {
+                log.info(e);
                 return;
             }
 
@@ -206,9 +238,9 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                         String value = null;
                         String authority = null;
                         for (Field f : vr.getFields()) {
-                            if (f.getDefinition().getLabel().equals("Location")) {
+                            if ("Location".equals(f.getDefinition().getLabel())) {
                                 value = f.getValue();
-                            } else if (f.getDefinition().getLabel().equals("Authority Value")) {
+                            } else if ("Authority Value".equals(f.getDefinition().getLabel())) {
                                 authority = f.getValue();
                             }
                         }
