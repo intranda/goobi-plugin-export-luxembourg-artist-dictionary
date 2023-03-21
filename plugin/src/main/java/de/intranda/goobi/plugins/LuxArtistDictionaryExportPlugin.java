@@ -14,6 +14,7 @@ import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.vocabulary.Definition;
 import org.goobi.vocabulary.Field;
 import org.goobi.vocabulary.VocabRecord;
+import org.goobi.vocabulary.Vocabulary;
 
 import de.sub.goobi.helper.Helper;
 import de.sub.goobi.helper.VariableReplacer;
@@ -45,6 +46,8 @@ import ugh.fileformats.mets.MetsModsImportExport;
 @Log4j2
 public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
+    private static final long serialVersionUID = 4952992593656226170L;
+
     @Getter
     private String title = "intranda_export_luxArtistDictionary";
     @Getter
@@ -66,16 +69,16 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
     @Override
     public boolean startExport(Process process) throws IOException, InterruptedException, DocStructHasNoTypeException, PreferencesException,
-            WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException, SwapException, DAOException,
-            TypeNotAllowedForParentException {
+    WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException, SwapException, DAOException,
+    TypeNotAllowedForParentException {
         String benutzerHome = process.getProjekt().getDmsImportImagesPath();
         return startExport(process, benutzerHome);
     }
 
     @Override
     public boolean startExport(Process process, String destination) throws IOException, InterruptedException, DocStructHasNoTypeException,
-            PreferencesException, WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException,
-            SwapException, DAOException, TypeNotAllowedForParentException {
+    PreferencesException, WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException,
+    SwapException, DAOException, TypeNotAllowedForParentException {
         problems = new ArrayList<>();
 
         try {
@@ -218,19 +221,33 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             vocabRecordUrl = vocabRecordUrl.substring(0, vocabRecordUrl.lastIndexOf("/"));
             String vocabularyID = vocabRecordUrl.substring(vocabRecordUrl.lastIndexOf("/") + 1);
 
-            int voc;
-            int rec;
-
-            try {
-                voc = Integer.parseInt(vocabularyID);
-                rec = Integer.parseInt(vocabRecordID);
-            } catch (Exception e) {
-                log.info(e);
+            if (!StringUtils.isNumeric(vocabularyID)) {
                 return;
             }
 
-            VocabRecord vr = VocabularyManager.getRecord(voc, rec);
-            // TODO export authority data at group level
+            VocabRecord vr = null;
+            if (StringUtils.isNumeric(vocabRecordID)) {
+                try {
+                    int  voc = Integer.parseInt(vocabularyID);
+                    int rec = Integer.parseInt(vocabRecordID);
+                    vr = VocabularyManager.getRecord(voc, rec);
+                } catch (Exception e) {
+                    log.info(e);
+                    return;
+                }
+            } else {
+                Vocabulary vocabulary=  VocabularyManager.getVocabularyById(Integer.parseInt(vocabularyID));
+                VocabularyManager.getAllRecords(vocabulary) ;
+                for (VocabRecord r : vocabulary.getRecords()) {
+                    if (r.getTitle().equals(vocabRecordID)) {
+                        metadata.setAuthorityValue(metadata.getAuthorityURI() + "/" + r.getId());
+                        vr = r;
+                        break;
+                    }
+                }
+            }
+
+
 
             if (vr != null) {
                 switch (vocabularyName) {
