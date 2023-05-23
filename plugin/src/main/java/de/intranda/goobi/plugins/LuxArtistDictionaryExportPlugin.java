@@ -1,6 +1,7 @@
 package de.intranda.goobi.plugins;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     public boolean startExport(Process process) throws IOException, InterruptedException, DocStructHasNoTypeException, PreferencesException,
     WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException, SwapException, DAOException,
     TypeNotAllowedForParentException {
-        String benutzerHome = process.getProjekt().getDmsImportImagesPath();
+        String benutzerHome = process.getProjekt().getDmsImportRootPath();
         return startExport(process, benutzerHome);
     }
 
@@ -203,7 +204,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
             mm.setIIIFUrl(vp.replace(process.getProjekt().getMetsIIIFUrl()));
             mm.setSruUrl(vp.replace(process.getProjekt().getMetsSruUrl()));
-            mm.write(destination + process.getTitel() + ".xml");
+            mm.write(Paths.get(destination , process.getTitel() + ".xml").toString());
         } catch (ReadException | PreferencesException | WriteException | IOException | SwapException e) {
             log.error(e);
             problems.add("Cannot read metadata file.");
