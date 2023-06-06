@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.goobi.beans.Process;
@@ -24,6 +26,7 @@ import org.goobi.vocabulary.Field;
 import org.goobi.vocabulary.VocabRecord;
 import org.goobi.vocabulary.Vocabulary;
 
+import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.FilesystemHelper;
 import de.sub.goobi.helper.Helper;
@@ -107,14 +110,17 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
             // check if record should be exported
             DocStruct logical = dd.getLogicalDocStruct();
-            List<? extends Metadata> md = logical.getAllMetadataByType(published);
-            if (md.isEmpty()) {
-                generateMessage(process, LogType.DEBUG, "Record is not marked as exportable, skip export");
-                return true;
-            }
-            if ("N".equalsIgnoreCase(md.get(0).getValue())) {
-                generateMessage(process, LogType.DEBUG, "Record is not marked as exportable, skip export");
-                return true;
+            boolean exportAll = getConfig().getBoolean("exportUnpublishedRecords", false);
+            if(!exportAll) {                
+                List<? extends Metadata> md = logical.getAllMetadataByType(published);
+                if (md.isEmpty()) {
+                    generateMessage(process, LogType.DEBUG, "Record is not marked as exportable, skip export");
+                    return true;
+                }
+                if ("N".equalsIgnoreCase(md.get(0).getValue())) {
+                    generateMessage(process, LogType.DEBUG, "Record is not marked as exportable, skip export");
+                    return true;
+                }
             }
             // otherwise record can be exported
 
@@ -208,6 +214,13 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         
 
         return true;
+    }
+    
+    private XMLConfiguration getConfig() {
+        XMLConfiguration xmlConfig = ConfigPlugins.getPluginConfig(title);
+//      xmlConfig.setExpressionEngine(new XPathExpressionEngine());
+      xmlConfig.setReloadingStrategy(new FileChangedReloadingStrategy());
+      return xmlConfig;
     }
 
     private void writeFileGroups(Process process, DigitalDocument dd, VariableReplacer vp, MetsModsImportExport mm) throws IOException, SwapException {

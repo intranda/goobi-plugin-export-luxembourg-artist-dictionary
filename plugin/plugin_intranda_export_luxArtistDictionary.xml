@@ -1,6 +1,5 @@
 <config_plugin>
  
-    <!-- sample parameter -->
-    <value>test</value>
+    <exportUnpublishedRecords>false</exportUnpublishedRecords>
 
 </config_plugin>
