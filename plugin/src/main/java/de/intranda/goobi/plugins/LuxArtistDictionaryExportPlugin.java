@@ -706,14 +706,18 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
                     default:
                         for (Field f : vr.getFields()) {
+                            String recordLabel = vr.getFields().stream().filter(field -> "eng".equals(field.getLanguage())).map(field -> field.getLabel()).findAny().orElse(null);
+                            if(StringUtils.isBlank(recordLabel)) {
+                                recordLabel = f.getLabel();
+                            }
                             if (StringUtils.isNotBlank(f.getValue())) {
                                 String metadataName = null;
                                 Definition def = f.getDefinition();
                                 // find metadata name
                                 if (StringUtils.isNotBlank(def.getLanguage())) {
-                                    metadataName = "_" + def.getLabel() + "_" + def.getLanguage();
+                                    metadataName = "_" + recordLabel + "_" + def.getLanguage();
                                 } else {
-                                    metadataName = "_" + def.getLabel();
+                                    metadataName = "_" + recordLabel;
                                 }
                                 metadataName = metadataName.replace(" ", "").toLowerCase();
                                 // create metadata
