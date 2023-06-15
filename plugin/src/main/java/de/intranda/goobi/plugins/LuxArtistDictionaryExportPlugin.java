@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.configuration.XMLConfiguration;
@@ -63,7 +64,7 @@ import ugh.fileformats.mets.MetsModsImportExport;
 public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
     private static final long serialVersionUID = 4952992593656226170L;
-    
+
     public static final String DIRECTORY_SUFFIX = "_media";
     private static final String EXPORT_ERROR_PREFIX = "Export cancelled: ";
 
@@ -84,19 +85,18 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     @Getter
     private List<String> problems;
 
-
     @Override
     public boolean startExport(Process process) throws IOException, InterruptedException, DocStructHasNoTypeException, PreferencesException,
-    WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException, SwapException, DAOException,
-    TypeNotAllowedForParentException {
+            WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException, SwapException, DAOException,
+            TypeNotAllowedForParentException {
         String benutzerHome = process.getProjekt().getDmsImportRootPath();
         return startExport(process, benutzerHome);
     }
 
     @Override
     public boolean startExport(Process process, String destination) throws IOException, InterruptedException, DocStructHasNoTypeException,
-    PreferencesException, WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException,
-    SwapException, DAOException, TypeNotAllowedForParentException {
+            PreferencesException, WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException,
+            SwapException, DAOException, TypeNotAllowedForParentException {
         problems = new ArrayList<>();
 
         try {
@@ -104,14 +104,13 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             Prefs prefs = process.getRegelsatz().getPreferences();
             MetadataType published = prefs.getMetadataTypeByName("Published");
 
-            Fileformat ff = null;
-            ff = process.readMetadataFile();
+            Fileformat ff = process.readMetadataFile();
             DigitalDocument dd = ff.getDigitalDocument();
 
             // check if record should be exported
             DocStruct logical = dd.getLogicalDocStruct();
             boolean exportAll = getConfig().getBoolean("exportUnpublishedRecords", false);
-            if(!exportAll) {                
+            if (!exportAll) {
                 List<? extends Metadata> md = logical.getAllMetadataByType(published);
                 if (md.isEmpty()) {
                     generateMessage(process, LogType.DEBUG, "Record is not marked as exportable, skip export");
@@ -127,6 +126,11 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             // run through all groups, check if group should be exported
             List<MetadataGroup> allSources = new ArrayList<>();
             List<MetadataGroup> bibliographyList = new ArrayList<>();
+            if (logical == null) {
+                log.error("No logical structure defined");
+                problems.add("No logical structure defined");
+                return false;
+            }
             for (MetadataGroup grp : new ArrayList<>(logical.getAllMetadataGroups())) {
                 boolean removed = false;
                 for (Metadata metadata : grp.getMetadataList()) {
@@ -144,6 +148,11 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                         bibliographyList.add(grp);
                     }
                 }
+            }
+
+            if (ff.getDigitalDocument().getFileSet().getAllFiles() != null && !ff.getDigitalDocument().getFileSet().getAllFiles().isEmpty()
+                    && ff.getDigitalDocument().getFileSet().getAllFiles().stream().noneMatch(file -> file.isRepresentative())) {
+                setRepresentative(prefs, ff);
             }
 
             for (Metadata metadata : new ArrayList<>(logical.getAllMetadata())) {
@@ -197,33 +206,56 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             mm.setIIIFUrl(vp.replace(process.getProjekt().getMetsIIIFUrl()));
             mm.setSruUrl(vp.replace(process.getProjekt().getMetsSruUrl()));
             writeFileGroups(process, dd, vp, mm);
-            mm.write(Paths.get(destination , process.getTitel() + ".xml").toString());
+            mm.write(Paths.get(destination, process.getTitel() + ".xml").toString());
 
-            
-            if(!exportFiles(process, vp, destination)) {
+            if (!exportFiles(process, vp, destination)) {
                 log.error("Failed to download images or fulltext files");
                 problems.add("Failed to download images or fulltext files");
                 return false;
             }
-            
+
         } catch (ReadException | PreferencesException | WriteException | IOException | SwapException e) {
             log.error(e);
             problems.add("Cannot read metadata file.");
             return false;
         }
-        
 
         return true;
     }
-    
-    private XMLConfiguration getConfig() {
-        XMLConfiguration xmlConfig = ConfigPlugins.getPluginConfig(title);
-//      xmlConfig.setExpressionEngine(new XPathExpressionEngine());
-      xmlConfig.setReloadingStrategy(new FileChangedReloadingStrategy());
-      return xmlConfig;
+
+    private void setRepresentative(Prefs prefs, Fileformat ff) throws PreferencesException {
+        List<MetadataGroup> mediaGroups =
+                ff.getDigitalDocument().getLogicalDocStruct().getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("Media"));
+        Optional<MetadataGroup> firstPortrait = mediaGroups.stream()
+                .filter(gr -> gr.getMetadataByType("Subject").stream().anyMatch(md -> "Portrait".equals(md.getValue())))
+                .findFirst();
+        firstPortrait.ifPresent(gr -> {
+            gr.getMetadataByType("File").stream().findAny().map(Metadata::getValue).ifPresent(filepath -> {
+                String filename = Paths.get(filepath).toAbsolutePath().getFileName().toString();
+                try {
+                    ff.getDigitalDocument()
+                            .getFileSet()
+                            .getAllFiles()
+                            .stream()
+                            .filter(file -> file.getLocation().endsWith(filename))
+                            .findFirst()
+                            .ifPresent(file -> file.setRepresentative(true));
+                } catch (PreferencesException e) {
+                    log.error("Error reading fileset", e);
+                }
+            });
+        });
     }
 
-    private void writeFileGroups(Process process, DigitalDocument dd, VariableReplacer vp, MetsModsImportExport mm) throws IOException, SwapException {
+    private XMLConfiguration getConfig() {
+        XMLConfiguration xmlConfig = ConfigPlugins.getPluginConfig(title);
+        //      xmlConfig.setExpressionEngine(new XPathExpressionEngine());
+        xmlConfig.setReloadingStrategy(new FileChangedReloadingStrategy());
+        return xmlConfig;
+    }
+
+    private void writeFileGroups(Process process, DigitalDocument dd, VariableReplacer vp, MetsModsImportExport mm)
+            throws IOException, SwapException {
         List<ProjectFileGroup> myFilegroups = process.getProjekt().getFilegroups();
         boolean useOriginalFiles = false;
         if (myFilegroups != null && !myFilegroups.isEmpty()) {
@@ -248,7 +280,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 }
             }
         }
-        
+
         if (useOriginalFiles) {
             // check if media folder contains images
             List<Path> filesInFolder = StorageProvider.getInstance().listFiles(process.getImagesTifDirectory(false));
@@ -300,7 +332,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             }
         }
     }
-    
+
     private VirtualFileGroup createFilegroup(VariableReplacer variableRplacer, ProjectFileGroup projectFileGroup) {
         VirtualFileGroup v = new VirtualFileGroup();
         v.setName(projectFileGroup.getName());
@@ -324,7 +356,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     private boolean exportFiles(Process myProzess, VariableReplacer replacer, String inZielVerzeichnis) {
         String errorMessageTitle = EXPORT_ERROR_PREFIX + "Process: " + myProzess.getTitel();
         String atsPpnBand = myProzess.getTitel();
-        
+
         String zielVerzeichnis;
         Path benutzerHome;
         if (myProzess.getProjekt().isUseDmsImport()) {
@@ -388,8 +420,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             }
             prepareUserDirectory(zielVerzeichnis);
         }
-        
-        
+
         try {
             if (this.exportImages) {
                 imageDownload(myProzess, benutzerHome, atsPpnBand, DIRECTORY_SUFFIX);
@@ -442,7 +473,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         }
         return true;
     }
-    
+
     protected String prepareUserDirectory(String inTargetFolder) {
         String target = inTargetFolder;
         User myBenutzer = Helper.getCurrentUser();
@@ -455,7 +486,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         }
         return target;
     }
-    
+
     public void fulltextDownload(Process myProzess, Path benutzerHome, String atsPpnBand, final String ordnerEndung)
             throws IOException, InterruptedException, SwapException, DAOException {
 
@@ -492,7 +523,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             }
         }
     }
-    
+
     public void imageDownload(Process myProzess, Path benutzerHome, String atsPpnBand, final String ordnerEndung)
             throws IOException, InterruptedException, SwapException, DAOException {
 
@@ -564,7 +595,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             }
         }
     }
-    
+
     public void copy3DObjectHelperFiles(Process myProzess, Path zielTif, Path file)
             throws IOException, InterruptedException, SwapException, DAOException {
         Path tiffDirectory = Paths.get(myProzess.getImagesTifDirectory(true));
@@ -584,7 +615,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             }
         }
     }
-    
+
     private void vocabularyEnrichment(Prefs prefs, Metadata metadata) throws MetadataTypeNotAllowedException {
         if (StringUtils.isNotBlank(metadata.getAuthorityValue()) && metadata.getAuthorityURI().contains("vocabulary")) {
             String vocabularyName = metadata.getAuthorityID();
@@ -600,7 +631,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             VocabRecord vr = null;
             if (StringUtils.isNumeric(vocabRecordID)) {
                 try {
-                    int  voc = Integer.parseInt(vocabularyID);
+                    int voc = Integer.parseInt(vocabularyID);
                     int rec = Integer.parseInt(vocabRecordID);
                     vr = VocabularyManager.getRecord(voc, rec);
                 } catch (Exception e) {
@@ -608,8 +639,8 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                     return;
                 }
             } else {
-                Vocabulary vocabulary=  VocabularyManager.getVocabularyById(Integer.parseInt(vocabularyID));
-                VocabularyManager.getAllRecords(vocabulary) ;
+                Vocabulary vocabulary = VocabularyManager.getVocabularyById(Integer.parseInt(vocabularyID));
+                VocabularyManager.getAllRecords(vocabulary);
                 for (VocabRecord r : vocabulary.getRecords()) {
                     if (r.getTitle().equals(vocabRecordID)) {
                         metadata.setAuthorityValue(metadata.getAuthorityURI() + "/" + r.getId());
@@ -618,8 +649,6 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                     }
                 }
             }
-
-
 
             if (vr != null) {
                 switch (vocabularyName) {
@@ -706,8 +735,13 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
                     default:
                         for (Field f : vr.getFields()) {
-                            String recordLabel = vr.getFields().stream().filter(field -> "eng".equals(field.getLanguage())).map(field -> field.getLabel()).findAny().orElse(null);
-                            if(StringUtils.isBlank(recordLabel)) {
+                            String recordLabel = vr.getFields()
+                                    .stream()
+                                    .filter(field -> "eng".equals(field.getLanguage()))
+                                    .map(field -> field.getLabel())
+                                    .findAny()
+                                    .orElse(null);
+                            if (StringUtils.isBlank(recordLabel)) {
                                 recordLabel = f.getLabel();
                             }
                             if (StringUtils.isNotBlank(f.getValue())) {
