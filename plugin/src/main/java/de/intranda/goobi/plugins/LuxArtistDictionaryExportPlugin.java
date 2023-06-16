@@ -43,6 +43,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
+import ugh.dl.ContentFile;
 import ugh.dl.DigitalDocument;
 import ugh.dl.DocStruct;
 import ugh.dl.Fileformat;
@@ -102,109 +103,19 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         try {
             // read mets file
             Prefs prefs = process.getRegelsatz().getPreferences();
-            MetadataType published = prefs.getMetadataTypeByName("Published");
-
             Fileformat ff = process.readMetadataFile();
-            DigitalDocument dd = ff.getDigitalDocument();
+            XMLConfiguration config = getConfig();
+            
+            DigitalDocument dd = enrichFileformat(ff, prefs, config);
 
-            // check if record should be exported
-            DocStruct logical = dd.getLogicalDocStruct();
-            boolean exportAll = getConfig().getBoolean("exportUnpublishedRecords", false);
-            if (!exportAll) {
-                List<? extends Metadata> md = logical.getAllMetadataByType(published);
-                if (md.isEmpty()) {
-                    generateMessage(process, LogType.DEBUG, "Record is not marked as exportable, skip export");
-                    return true;
-                }
-                if ("N".equalsIgnoreCase(md.get(0).getValue())) {
-                    generateMessage(process, LogType.DEBUG, "Record is not marked as exportable, skip export");
-                    return true;
-                }
-            }
-            // otherwise record can be exported
-
-            // run through all groups, check if group should be exported
-            List<MetadataGroup> allSources = new ArrayList<>();
-            List<MetadataGroup> bibliographyList = new ArrayList<>();
-            if (logical == null) {
-                log.error("No logical structure defined");
-                problems.add("No logical structure defined");
-                return false;
-            }
-            for (MetadataGroup grp : new ArrayList<>(logical.getAllMetadataGroups())) {
-                boolean removed = false;
-                for (Metadata metadata : grp.getMetadataList()) {
-                    if ("Published".equals(metadata.getType().getName()) && "N".equalsIgnoreCase(metadata.getValue())) {
-                        // remove group, if its marked as not exportable
-                        logical.removeMetadataGroup(grp);
-                        removed = true;
-                    }
-                }
-                if (!removed) {
-                    // collect all sources
-                    List<MetadataGroup> sources = grp.getAllMetadataGroupsByName("Source");
-                    allSources.addAll(sources);
-                    if ("Bibliography".equals(grp.getType().getName())) {
-                        bibliographyList.add(grp);
-                    }
-                }
-            }
-
-            if (ff.getDigitalDocument().getFileSet().getAllFiles() != null && !ff.getDigitalDocument().getFileSet().getAllFiles().isEmpty()
-                    && ff.getDigitalDocument().getFileSet().getAllFiles().stream().noneMatch(file -> file.isRepresentative())) {
-                setRepresentative(prefs, ff);
-            }
-
-            for (Metadata metadata : new ArrayList<>(logical.getAllMetadata())) {
-                vocabularyEnrichment(prefs, metadata);
-            }
-
-            for (MetadataGroup group : logical.getAllMetadataGroups()) {
-                for (Metadata metadata : new ArrayList<>(group.getMetadataList())) {
-                    vocabularyEnrichment(prefs, metadata);
-                }
-                for (MetadataGroup subgroup : group.getAllMetadataGroups()) {
-                    for (Metadata metadata : new ArrayList<>(subgroup.getMetadataList())) {
-                        vocabularyEnrichment(prefs, metadata);
-                    }
-                }
-
-            }
-
+            enrichFromVocabulary(prefs, dd);
+            
             // export data
             VariableReplacer vp = new VariableReplacer(dd, prefs, process, null);
             MetsModsImportExport mm = new MetsModsImportExport(prefs);
             mm.setDigitalDocument(dd);
             // Replace rights and digiprov entries.
-            mm.setRightsOwner(vp.replace(process.getProjekt().getMetsRightsOwner()));
-            mm.setRightsOwnerLogo(vp.replace(process.getProjekt().getMetsRightsOwnerLogo()));
-            mm.setRightsOwnerSiteURL(vp.replace(process.getProjekt().getMetsRightsOwnerSite()));
-            mm.setRightsOwnerContact(vp.replace(process.getProjekt().getMetsRightsOwnerMail()));
-            mm.setDigiprovPresentation(vp.replace(process.getProjekt().getMetsDigiprovPresentation()));
-            mm.setDigiprovReference(vp.replace(process.getProjekt().getMetsDigiprovReference()));
-            mm.setDigiprovPresentationAnchor(vp.replace(process.getProjekt().getMetsDigiprovPresentationAnchor()));
-            mm.setDigiprovReferenceAnchor(vp.replace(process.getProjekt().getMetsDigiprovReferenceAnchor()));
-
-            mm.setMetsRightsLicense(vp.replace(process.getProjekt().getMetsRightsLicense()));
-            mm.setMetsRightsSponsor(vp.replace(process.getProjekt().getMetsRightsSponsor()));
-            mm.setMetsRightsSponsorLogo(vp.replace(process.getProjekt().getMetsRightsSponsorLogo()));
-            mm.setMetsRightsSponsorSiteURL(vp.replace(process.getProjekt().getMetsRightsSponsorSiteURL()));
-
-            mm.setPurlUrl(vp.replace(process.getProjekt().getMetsPurl()));
-            mm.setContentIDs(vp.replace(process.getProjekt().getMetsContentIDs()));
-
-            String pointer = process.getProjekt().getMetsPointerPath();
-            pointer = vp.replace(pointer);
-            mm.setMptrUrl(pointer);
-
-            String anchor = process.getProjekt().getMetsPointerPathAnchor();
-            pointer = vp.replace(anchor);
-            mm.setMptrAnchorUrl(pointer);
-
-            mm.setGoobiID(String.valueOf(process.getId()));
-
-            mm.setIIIFUrl(vp.replace(process.getProjekt().getMetsIIIFUrl()));
-            mm.setSruUrl(vp.replace(process.getProjekt().getMetsSruUrl()));
+            addProjectData(mm, process, vp);
             writeFileGroups(process, dd, vp, mm);
             mm.write(Paths.get(destination, process.getTitel() + ".xml").toString());
 
@@ -213,7 +124,13 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 problems.add("Failed to download images or fulltext files");
                 return false;
             }
-
+        } catch(ExportException e) {
+            log.error(e.getMessage());
+            problems.add(e.getMessage());
+            return false;
+        } catch(NotExportableException e) {
+            generateMessage(process, LogType.DEBUG, e.getMessage());
+            return true;
         } catch (ReadException | PreferencesException | WriteException | IOException | SwapException e) {
             log.error(e);
             problems.add("Cannot read metadata file.");
@@ -221,6 +138,111 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         }
 
         return true;
+    }
+
+    private void enrichFromVocabulary(Prefs prefs, DigitalDocument dd) throws MetadataTypeNotAllowedException {
+        DocStruct logical = dd.getLogicalDocStruct();
+        for (Metadata metadata : new ArrayList<>(logical.getAllMetadata())) {
+            vocabularyEnrichment(prefs, metadata);
+        }
+
+        for (MetadataGroup group : logical.getAllMetadataGroups()) {
+            for (Metadata metadata : new ArrayList<>(group.getMetadataList())) {
+                vocabularyEnrichment(prefs, metadata);
+            }
+            for (MetadataGroup subgroup : group.getAllMetadataGroups()) {
+                for (Metadata metadata : new ArrayList<>(subgroup.getMetadataList())) {
+                    vocabularyEnrichment(prefs, metadata);
+                }
+            }
+
+        }
+    }
+
+    private void addProjectData(MetsModsImportExport mm, Process process, VariableReplacer vp) {
+        mm.setRightsOwner(vp.replace(process.getProjekt().getMetsRightsOwner()));
+        mm.setRightsOwnerLogo(vp.replace(process.getProjekt().getMetsRightsOwnerLogo()));
+        mm.setRightsOwnerSiteURL(vp.replace(process.getProjekt().getMetsRightsOwnerSite()));
+        mm.setRightsOwnerContact(vp.replace(process.getProjekt().getMetsRightsOwnerMail()));
+        mm.setDigiprovPresentation(vp.replace(process.getProjekt().getMetsDigiprovPresentation()));
+        mm.setDigiprovReference(vp.replace(process.getProjekt().getMetsDigiprovReference()));
+        mm.setDigiprovPresentationAnchor(vp.replace(process.getProjekt().getMetsDigiprovPresentationAnchor()));
+        mm.setDigiprovReferenceAnchor(vp.replace(process.getProjekt().getMetsDigiprovReferenceAnchor()));
+
+        mm.setMetsRightsLicense(vp.replace(process.getProjekt().getMetsRightsLicense()));
+        mm.setMetsRightsSponsor(vp.replace(process.getProjekt().getMetsRightsSponsor()));
+        mm.setMetsRightsSponsorLogo(vp.replace(process.getProjekt().getMetsRightsSponsorLogo()));
+        mm.setMetsRightsSponsorSiteURL(vp.replace(process.getProjekt().getMetsRightsSponsorSiteURL()));
+
+        mm.setPurlUrl(vp.replace(process.getProjekt().getMetsPurl()));
+        mm.setContentIDs(vp.replace(process.getProjekt().getMetsContentIDs()));
+
+        String pointer = process.getProjekt().getMetsPointerPath();
+        pointer = vp.replace(pointer);
+        mm.setMptrUrl(pointer);
+
+        String anchor = process.getProjekt().getMetsPointerPathAnchor();
+        pointer = vp.replace(anchor);
+        mm.setMptrAnchorUrl(pointer);
+
+        mm.setGoobiID(String.valueOf(process.getId()));
+
+        mm.setIIIFUrl(vp.replace(process.getProjekt().getMetsIIIFUrl()));
+        mm.setSruUrl(vp.replace(process.getProjekt().getMetsSruUrl()));
+    }
+
+    protected DigitalDocument enrichFileformat(Fileformat ff, Prefs prefs, XMLConfiguration config)
+            throws PreferencesException, MetadataTypeNotAllowedException, NotExportableException, ExportException {
+        MetadataType published = prefs.getMetadataTypeByName("Published");
+        DigitalDocument dd = ff.getDigitalDocument();
+
+        // check if record should be exported
+        DocStruct logical = dd.getLogicalDocStruct();
+        boolean exportAll = config.getBoolean("exportUnpublishedRecords", false);
+        if (!exportAll) {
+            List<? extends Metadata> md = logical.getAllMetadataByType(published);
+            if (md.isEmpty()) {
+                throw new NotExportableException("Record is not marked as exportable, skip export");
+                
+            }
+            if ("N".equalsIgnoreCase(md.get(0).getValue())) {
+                throw new NotExportableException("Record is not marked as exportable, skip export");
+            }
+        }
+        // otherwise record can be exported
+
+        // run through all groups, check if group should be exported
+        List<MetadataGroup> allSources = new ArrayList<>();
+        List<MetadataGroup> bibliographyList = new ArrayList<>();
+        if (logical == null) {
+            throw new ExportException("No logical structure defined");
+            
+        }
+        for (MetadataGroup grp : new ArrayList<>(logical.getAllMetadataGroups())) {
+            boolean removed = false;
+            for (Metadata metadata : grp.getMetadataList()) {
+                if ("Published".equals(metadata.getType().getName()) && "N".equalsIgnoreCase(metadata.getValue())) {
+                    // remove group, if its marked as not exportable
+                    logical.removeMetadataGroup(grp);
+                    removed = true;
+                }
+            }
+            if (!removed) {
+                // collect all sources
+                List<MetadataGroup> sources = grp.getAllMetadataGroupsByName("Source");
+                allSources.addAll(sources);
+                if ("Bibliography".equals(grp.getType().getName())) {
+                    bibliographyList.add(grp);
+                }
+            }
+        }
+
+        if (ff.getDigitalDocument().getFileSet().getAllFiles() != null && !ff.getDigitalDocument().getFileSet().getAllFiles().isEmpty()
+                && ff.getDigitalDocument().getFileSet().getAllFiles().stream().noneMatch(ContentFile::isRepresentative)) {
+            setRepresentative(prefs, ff);
+        }
+
+        return dd;
     }
 
     private void setRepresentative(Prefs prefs, Fileformat ff) throws PreferencesException {
@@ -231,15 +253,16 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 .findFirst();
         firstPortrait.ifPresent(gr -> {
             gr.getMetadataByType("File").stream().findAny().map(Metadata::getValue).ifPresent(filepath -> {
-                String filename = Paths.get(filepath).toAbsolutePath().getFileName().toString();
+                String filename = Paths.get(filepath).toAbsolutePath().getFileName().toString().replaceAll("\\s+", " ");
                 try {
-                    ff.getDigitalDocument()
-                            .getFileSet()
-                            .getAllFiles()
-                            .stream()
-                            .filter(file -> file.getLocation().endsWith(filename))
-                            .findFirst()
-                            .ifPresent(file -> file.setRepresentative(true));
+                    List<ContentFile> allFiles = ff.getDigitalDocument().getFileSet().getAllFiles();
+                    for (ContentFile contentFile : allFiles) {
+                        String location = contentFile.getLocation();
+                        if(location != null && location.replaceAll("\\s+", " ").endsWith(filename)) {
+                            contentFile.setRepresentative(true);
+                        }
+                    }
+                    
                 } catch (PreferencesException e) {
                     log.error("Error reading fileset", e);
                 }

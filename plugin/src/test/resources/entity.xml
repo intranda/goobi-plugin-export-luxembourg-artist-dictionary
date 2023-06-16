@@ -1,0 +1,2230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Preferences>
+
+  <MetadataType>
+    <Name>Published</Name>
+    <language name="de">Publiziert J/N</language>
+    <language name="en">Published Y/N</language>
+    <language name="fr">Publié O/N</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>Type</Name>
+    <language name="de">Typ</language>
+    <language name="en">Type</language>
+    <language name="fr">Type</language>
+  </MetadataType>
+  <!-- internal metadata for vocabulary enrichment -->
+  <MetadataType>
+    <Name>_type_eng</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_type_fre</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_type_ger</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_subject_eng</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_subject_fre</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_subject_ger</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_primaryrole_eng</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_primaryrole_fre</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_primaryrole_ger</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_discipline_ger</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_discipline_eng</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_discipline_fre</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_artisticmovement_ger</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_artisticmovement_eng</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_artisticmovement_fre</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_profession_ger</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_profession_eng</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_profession_fre</Name>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>_relationship_type_eng</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_relationship_type_fre</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_relationship_type_ger</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_citation_ger</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_citation_eng</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_citation_fre</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_sourcetype_ger</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_sourcetype_eng</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_sourcetype_fre</Name>
+  </MetadataType>
+  <MetadataType>
+    <Name>_purl</Name>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>Identifier</Name>
+    <language name="de">Identifier</language>
+    <language name="en">Identifier</language>
+    <language name="fr">Identifiant</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>SourceID</Name>
+    <language name="de">Identifier Quelle</language>
+    <language name="en">Identifier Source</language>
+    <language name="fr">Identifier Source</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>SourceName</Name>
+    <language name="de">Quelle</language>
+    <language name="en">Source</language>
+    <language name="fr">Source</language>
+  </MetadataType>
+
+
+  <MetadataType>
+    <Name>SourceType</Name>
+    <language name="de">Quellentyp</language>
+    <language name="en">Source Type</language>
+    <language name="fr">Type Source</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>SourceLink</Name>
+    <language name="de">Quellenlink</language>
+    <language name="en">Source Link</language>
+    <language name="fr">Lien Source</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>SourcePage</Name>
+    <language name="de">Page</language>
+    <language name="en">Page</language>
+    <language name="fr">Page</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>FirstnameDe</Name>
+    <language name="de">Vorname (deu)</language>
+    <language name="en">First Name (ger)</language>
+    <language name="fr">Prénom (ger)</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>LastnameDe</Name>
+    <language name="de">Nachname (deu)</language>
+    <language name="en">Last Name (ger)</language>
+    <language name="fr">Nom (ger)</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>FirstnameEn</Name>
+    <language name="de">Vorname (eng)</language>
+    <language name="en">First Name (eng)</language>
+    <language name="fr">Prénom (eng)</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>LastnameEn</Name>
+    <language name="de">Nachname (eng)</language>
+    <language name="en">Last Name (eng)</language>
+    <language name="fr">Nom (eng)</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>FirstnameFr</Name>
+    <language name="de">Vorname (fre)</language>
+    <language name="en">First Name (fre)</language>
+    <language name="fr">Prénom (fre)</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>LastnameFr</Name>
+    <language name="de">Nachname (fre)</language>
+    <language name="en">Last Name (fre)</language>
+    <language name="fr">Nom (fre)</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>FirstnameOrig</Name>
+    <language name="de">Vorname (orig)</language>
+    <language name="en">First Name (orig)</language>
+    <language name="fr">Prénom (orig)</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>LastnameOrig</Name>
+    <language name="de">Nachname (orig)</language>
+    <language name="en">Last Name (orig)</language>
+    <language name="fr">Nom (orig)</language>
+  </MetadataType>
+
+
+  <MetadataType>
+    <Name>Numeration</Name>
+    <language name="de">Numerierung</language>
+    <language name="en">Numeration</language>
+    <language name="fr">Numérotation</language>
+  </MetadataType>
+  <!-- person title, numeration etc -->
+  <MetadataType>
+    <Name>Title</Name>
+    <language name="de">Titel</language>
+    <language name="en">Title</language>
+    <language name="fr">Titre</language>
+  </MetadataType>
+  <!-- work title -->
+  <MetadataType>
+    <Name>TitleDE</Name>
+    <language name="de">Titel (ger)</language>
+    <language name="en">Title (ger)</language>
+    <language name="fr">Titre (ger)</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>TitleEN</Name>
+    <language name="de">Titel (eng)</language>
+    <language name="en">Title (eng)</language>
+    <language name="fr">Titre (eng)</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>TitleFR</Name>
+    <language name="de">Titel (fre)</language>
+    <language name="en">Title (fre)</language>
+    <language name="fr">Titre (fre)</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>TitleORIG</Name>
+    <language name="de">Titel (orig)</language>
+    <language name="en">Title (orig)</language>
+    <language name="fr">Titre (orig)</language>
+  </MetadataType>
+
+
+  <MetadataType>
+    <Name>ChangeDate</Name>
+    <language name="de">Änderungsdatum</language>
+    <language name="en">Change date</language>
+    <language name="fr">ChangeDate</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>Date</Name>
+    <language name="de">Datum</language>
+    <language name="en">Date</language>
+    <language name="fr">Date</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>Birthdate</Name>
+    <language name="de">Geburtsdatum</language>
+    <language name="en">Date of Birth</language>
+    <language name="fr">Date de naissance</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>AlternativeBrithdate</Name>
+    <language name="de">Alternatives Gebutsdatum</language>
+    <language name="en">Alternative Date of Birth</language>
+    <language name="fr">Date de naissance alternative</language>
+  </MetadataType>
+
+  <MetadataType normdata="true">
+    <Name>Birthplace</Name>
+    <language name="de">Geburtsort</language>
+    <language name="en">Birthplace</language>
+    <language name="fr">Lieu de naissance (Lieu de naissance)</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>DeathDate</Name>
+    <language name="de">Sterbedatum</language>
+    <language name="en">Date of Death</language>
+    <language name="fr">Date de décès</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>AlternativeDeathDate</Name>
+    <language name="de">Alternatives Sterbedatum</language>
+    <language name="en">Alternative Date of Death</language>
+    <language name="fr">Date de décès alternative</language>
+  </MetadataType>
+
+  <MetadataType normdata="true">
+    <Name>Deathplace</Name>
+    <language name="de">Sterbeort</language>
+    <language name="en">Deathplace</language>
+    <language name="fr">Lieu de décès</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>Gender</Name>
+    <language name="de">Geschlecht</language>
+    <language name="en">Gender</language>
+    <language name="fr">Genre</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>Subject</Name>
+    <language name="de">Subjekt</language>
+    <language name="en">Subject</language>
+    <language name="fr">Sujet</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>File</Name>
+    <language name="de">Datei</language>
+    <language name="en">File</language>
+    <language name="fr">Fichier</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>PrimaryRole</Name>
+    <language name="de">Hauptrolle in der Datenbank</language>
+    <language name="en">Primary Role in Database</language>
+    <language name="fr">Rôle principal dans la base de données</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>Importance</Name>
+    <language name="de">Wichtigkeit</language>
+    <language name="en">Importance</language>
+    <language name="fr">Importance</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>Profession</Name>
+    <language name="de">Beruf</language>
+    <language name="en">Profession</language>
+    <language name="fr">Profession</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>BeginningDate</Name>
+    <language name="de">Anfangsdatum</language>
+    <language name="en">Date Beginning</language>
+    <language name="fr">Date début</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>EndDate</Name>
+    <language name="de">Enddatum</language>
+    <language name="en">Date End</language>
+    <language name="fr">Date fin</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>Discipline</Name>
+    <language name="de">Disziplin</language>
+    <language name="en">Discipline</language>
+    <language name="fr">Discipline</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>ArtisticMovement</Name>
+    <language name="de">Künstlerische Strömung</language>
+    <language name="en">Artistic Movement</language>
+    <language name="fr">Mouvement artistique</language>
+  </MetadataType>
+
+  <MetadataType normdata="true">
+    <Name>Location</Name>
+    <language name="de">Ort</language>
+    <language name="en">Location</language>
+    <language name="fr">Lieu</language>
+  </MetadataType>
+
+
+  <MetadataType>
+    <Name>ShortDescription</Name>
+    <language name="de">Kurze Beschreibung (eng)</language>
+    <language name="en">Short description (eng)</language>
+    <language name="fr">Description courte (eng)</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>ShortDescriptionDE</Name>
+    <language name="de">Kurze Beschreibung (ger)</language>
+    <language name="en">Short description (ger)</language>
+    <language name="fr">Description courte (ger)</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>ShortDescriptionFR</Name>
+    <language name="de">Kurze Beschreibung (fre)</language>
+    <language name="en">Short description (fre)</language>
+    <language name="fr">Description courte (fre)</language>
+  </MetadataType>
+
+
+  <MetadataType>
+    <Name>Link</Name>
+    <language name="de">Link</language>
+    <language name="en">Link</language>
+    <language name="fr">Lien</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>PURL</Name>
+    <language name="de">PURL der publizierten Entität</language>
+    <language name="en">Persistent URL of published Entity</language>
+    <language name="fr">PURL de l'entité publiée</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>Text</Name>
+    <language name="de">Text DE</language>
+    <language name="en">Text DE</language>
+    <language name="fr">Texte DE</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>TextEN</Name>
+    <language name="de">Text EN</language>
+    <language name="en">Text EN</language>
+    <language name="fr">Texte EN</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>TextFR</Name>
+    <language name="de">Text FR</language>
+    <language name="en">Text FR</language>
+    <language name="fr">Texte FR</language>
+  </MetadataType>
+
+
+  <MetadataType>
+    <Name>Author</Name>
+    <language name="de">Autor</language>
+    <language name="en">Author</language>
+    <language name="fr">Auteur.e</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>Citation</Name>
+    <language name="de">Zitat</language>
+    <language name="en">Citation</language>
+    <language name="fr">Citation</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>FirstPublishedDate</Name>
+    <language name="en">First Published Date</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>LastUpdatedDate</Name>
+    <language name="en">Last Updated Date</language>
+  </MetadataType>
+
+  <MetadataType type="identifier">
+    <Name>CatalogIDDigital</Name>
+    <language name="de">Interner Identifier</language>
+    <language name="en">Internal Identifier</language>
+    <language name="fr">Identifiant Interne</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>NameDE</Name>
+    <language name="de">Hauptname (ger)</language>
+    <language name="en">Main Name (ger)</language>
+    <language name="fr">Nom principal (ger)</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>NameEN</Name>
+    <language name="de">Hauptname (eng)</language>
+    <language name="en">Main Name (eng)</language>
+    <language name="fr">Nom principal (eng)</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>NameFR</Name>
+    <language name="de">Hauptname (fre)</language>
+    <language name="en">Main Name (fre)</language>
+    <language name="fr">Nom principal (fre)</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>NameORIG</Name>
+    <language name="de">Hauptname (orig)</language>
+    <language name="en">Main Name (orig)</language>
+    <language name="fr">Nom principal (orig)</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>FoundationDate</Name>
+    <language name="de">Gründungsdatum</language>
+    <language name="en">Date of Foundation</language>
+    <language name="fr">Date de fondation</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>ClosingDate</Name>
+    <language name="de">Schließdatum</language>
+    <language name="en">Closing Date</language>
+    <language name="fr">Date de fermeture</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>EventType</Name>
+    <language name="de">Ereignistyp</language>
+    <language name="en">Event Type</language>
+    <language name="fr">Type d'Événement</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>RecurringEvent</Name>
+    <language name="de">Wiederkehrendes Ereignis J/N</language>
+    <language name="en">Recurring Event Y/N</language>
+    <language name="fr">Événement récurrent O/N</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>WorkType</Name>
+    <language name="de">Werktyp</language>
+    <language name="en">Work Type</language>
+    <language name="fr">Type d'oeuvre</language>
+  </MetadataType>
+
+  <MetadataType>
+    <Name>AwardType</Name>
+    <language name="de">Preistyp</language>
+    <language name="en">Award Type</language>
+    <language name="fr">Type de Prix</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>RelationName</Name>
+    <language name="de">Name</language>
+    <language name="en">Name</language>
+    <language name="fr">Nom</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>RelationEntityType</Name>
+    <language name="de">EntityType</language>
+    <language name="en">EntityType</language>
+    <language name="fr">EntityType</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>RelationProcessID</Name>
+    <language name="de">Identifier</language>
+    <language name="en">Identifier</language>
+    <language name="es">Identifier</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>AwardDegree</Name>
+    <language name="de">Award degree</language>
+    <language name="en">Award degree</language>
+    <language name="es">Award degree</language>
+  </MetadataType>
+
+
+  <MetadataType>
+    <Name>physPageNumber</Name>
+    <language name="de">Physische Seitenzahl (Imagenummer)</language>
+    <language name="en">Physical page number</language>
+    <language name="es">Número de página físico</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>logicalPageNumber</Name>
+    <language name="de">Logische Seitenzahl (gedruckte Zeitenzahl)
+    </language>
+    <language name="en">Logical page number</language>
+    <language name="es">Número de página lógica</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>_COORDS</Name>
+    <language name="de">Koordinaten</language>
+    <language name="en">Coordinates</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>_SHAPE</Name>
+    <language name="de">Form</language>
+    <language name="en">Shape</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>PhysicalLocation</Name>
+    <language name="de">Physikalischer Standort</language>
+    <language name="en">Physical location</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>datedigit</Name>
+    <language name="de">Datum Digitalisierung</language>
+    <language name="en">Date digitalization</language>
+    <language name="es">Fecha digitalización</language>
+  </MetadataType>
+  <MetadataType>
+    <Name>pathimagefiles</Name>
+    <language name="de">Pfad der Imagedaten</language>
+    <language name="en">Path of image data</language>
+    <language name="es">Ruta de los datos de la imagen</language>
+  </MetadataType>
+
+
+  <Group>
+    <Name>Source</Name>
+    <language name="de">Quelle</language>
+    <language name="en">Source</language>
+    <language name="fr">Source</language>
+    <metadata DefaultDisplay="true" num="1m">SourceID</metadata>
+    <metadata DefaultDisplay="true" num="1o">SourceName</metadata>
+    <metadata DefaultDisplay="true" num="1o">SourceType</metadata>
+    <metadata DefaultDisplay="true" num="1o">SourceLink</metadata>
+    <metadata DefaultDisplay="true" num="1o">SourcePage</metadata>
+    <metadata num="1o">_purl</metadata>
+    <metadata num="1o">_citation_ger</metadata>
+    <metadata num="1o">_citation_eng</metadata>
+    <metadata num="1o">_citation_fre</metadata>
+    <metadata num="1o">_sourcetype_eng</metadata>
+    <metadata num="1o">_sourcetype_fre</metadata>
+    <metadata num="1o">_sourcetype_ger</metadata>
+  </Group>
+
+  <Group>
+    <Name>ExternalIdentifier</Name>
+    <language name="de">Externer Idenifier</language>
+    <language name="en">External Identifier</language>
+    <language name="fr">Identifiant Externe</language>
+    <metadata DefaultDisplay="true" num="1o">Type</metadata>
+    <metadata DefaultDisplay="true" num="1o">Identifier</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <metadata num="1o">_type_eng</metadata>
+    <metadata num="1o">_type_fre</metadata>
+    <metadata num="1o">_type_ger</metadata>
+  </Group>
+
+  <Group>
+    <Name>PersonMainName</Name>
+    <language name="de">Hauptname</language>
+    <language name="en">Main Name</language>
+    <language name="fr">Nom principal</language>
+    <metadata DefaultDisplay="true" num="1o">FirstnameDe</metadata>
+    <metadata DefaultDisplay="true" num="1m">LastnameDe</metadata>
+    <metadata DefaultDisplay="true" num="1o">FirstnameEn</metadata>
+    <metadata DefaultDisplay="true" num="1m">LastnameEn</metadata>
+    <metadata DefaultDisplay="true" num="1o">FirstnameFr</metadata>
+    <metadata DefaultDisplay="true" num="1m">LastnameFr</metadata>
+    <metadata DefaultDisplay="true" num="1o">FirstnameOrig</metadata>
+    <metadata DefaultDisplay="true" num="1m">LastnameOrig</metadata>
+    <metadata DefaultDisplay="true" num="*">Numeration</metadata>
+    <metadata DefaultDisplay="true" num="*">Title</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+  </Group>
+  <Group>
+    <Name>PersonOtherName</Name>
+    <language name="de">Andere Namensform</language>
+    <language name="en">Other Name Form</language>
+    <language name="fr">Autres noms</language>
+    <metadata DefaultDisplay="true" num="1o">Type</metadata>
+    <metadata DefaultDisplay="true" num="1o">FirstnameDe</metadata>
+    <metadata DefaultDisplay="true" num="1o">LastnameDe</metadata>
+    <metadata DefaultDisplay="true" num="1o">FirstnameEn</metadata>
+    <metadata DefaultDisplay="true" num="1m">LastnameEn</metadata>
+    <metadata DefaultDisplay="true" num="1o">FirstnameFr</metadata>
+    <metadata DefaultDisplay="true" num="1m">LastnameFr</metadata>
+    <metadata DefaultDisplay="true" num="1o">FirstnameOrig</metadata>
+    <metadata DefaultDisplay="true" num="1m">LastnameOrig</metadata>
+    <metadata DefaultDisplay="true" num="*">Numeration</metadata>
+    <metadata DefaultDisplay="true" num="*">Title</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <metadata num="1o">_type_eng</metadata>
+    <metadata num="1o">_type_fre</metadata>
+    <metadata num="1o">_type_ger</metadata>
+  </Group>
+
+  <Group>
+    <Name>BirthDateGroup</Name>
+    <language name="de">Geburtsdatum</language>
+    <language name="en">Date of Birth</language>
+    <language name="fr">Date de naissance</language>
+    <metadata DefaultDisplay="true" num="1m">Birthdate</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+  </Group>
+  <Group>
+    <Name>AltBirthDateGroup</Name>
+    <language name="de">Alternatives Gebutsdatum</language>
+    <language name="en">Alternative Date of Birth</language>
+    <language name="fr">Date de naissance alternative</language>
+    <metadata DefaultDisplay="true" num="1o">Birthdate</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+  </Group>
+  <Group>
+    <Name>BirthplaceGroup</Name>
+    <language name="de">Geburtsort</language>
+    <language name="en">Birthplace</language>
+    <language name="fr">Lieu de naissance</language>
+    <metadata DefaultDisplay="true" num="1o">Birthplace</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+  </Group>
+
+  <Group>
+    <Name>DeathDateGroup</Name>
+    <language name="de">Sterbedatum</language>
+    <language name="en">Date of Death</language>
+    <language name="fr">Date de décès</language>
+    <metadata DefaultDisplay="true" num="1o">DeathDate</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+  </Group>
+  <Group>
+    <Name>AltDeathDateGroup</Name>
+    <language name="de">Alternatives Sterbedatum</language>
+    <language name="en">Alternative Date of Death</language>
+    <language name="fr">Date de décès alternative</language>
+    <metadata DefaultDisplay="true" num="1o">AlternativeDeathDate</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+  </Group>
+  <Group>
+    <Name>DeathplaceGroup</Name>
+    <language name="de">Sterbeort</language>
+    <language name="en">Deathplace</language>
+    <language name="fr">Lieu de décès</language>
+    <metadata DefaultDisplay="true" num="1o">Deathplace</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+  </Group>
+  <Group>
+    <Name>GenderGroup</Name>
+    <language name="de">Geschlecht</language>
+    <language name="en">Gender</language>
+    <language name="fr">Genre</language>
+    <metadata DefaultDisplay="true" num="1o">Gender</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+  </Group>
+  <Group>
+    <Name>Media</Name>
+    <language name="de">Audiovisuelle Medien</language>
+    <language name="en">Audiovisual Media</language>
+    <language name="fr">Médias Audiovisuels</language>
+    <metadata DefaultDisplay="true" num="1o">Type</metadata>
+    <metadata DefaultDisplay="true" num="1o">Subject</metadata>
+    <metadata DefaultDisplay="true" num="1o">File</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <metadata num="1o">_type_eng</metadata>
+    <metadata num="1o">_type_fre</metadata>
+    <metadata num="1o">_type_ger</metadata>
+    <metadata num="1o">_subject_eng</metadata>
+    <metadata num="1o">_subject_fre</metadata>
+    <metadata num="1o">_subject_ger</metadata>
+
+  </Group>
+
+  <Group>
+    <Name>ProfessionGroup</Name>
+    <language name="de">Beruf</language>
+    <language name="en">Profession</language>
+    <language name="fr">Profession</language>
+    <metadata DefaultDisplay="true" num="1o">Profession</metadata>
+    <metadata DefaultDisplay="true" num="1o">BeginningDate</metadata>
+    <metadata DefaultDisplay="true" num="1o">EndDate</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <metadata num="1o">_profession_eng</metadata>
+    <metadata num="1o">_profession_fre</metadata>
+    <metadata num="1o">_profession_ger</metadata>
+
+  </Group>
+  <Group>
+    <Name>DisciplineGroup</Name>
+    <language name="de">Disziplin</language>
+    <language name="en">Discipline</language>
+    <language name="fr">Discipline</language>
+    <metadata DefaultDisplay="true" num="1o">Discipline</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <metadata num="1o">_discipline_ger</metadata>
+    <metadata num="1o">_discipline_eng</metadata>
+    <metadata num="1o">_discipline_fre</metadata>
+  </Group>
+
+  <Group>
+    <Name>ArtisticMovementGroup</Name>
+    <language name="de">Künstlerische Strömung</language>
+    <language name="en">Artistic Movement</language>
+    <language name="fr">Mouvement artistique</language>
+    <metadata DefaultDisplay="true" num="1o">ArtisticMovement</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <metadata num="1o">_artisticmovement_ger</metadata>
+    <metadata num="1o">_artisticmovement_eng</metadata>
+    <metadata num="1o">_artisticmovement_fre</metadata>
+  </Group>
+
+  <Group>
+    <Name>BiographyGroup</Name>
+    <language name="de">Biografie</language>
+    <language name="en">Biography</language>
+    <language name="fr">Biographie</language>
+    <metadata DefaultDisplay="true" num="1o">Type</metadata>
+    <metadata DefaultDisplay="true" num="1o">BeginningDate</metadata>
+    <metadata DefaultDisplay="true" num="1o">EndDate</metadata>
+    <metadata DefaultDisplay="true" num="1o">Location</metadata>
+    <metadata DefaultDisplay="true" num="1o">ShortDescription</metadata>
+    <metadata DefaultDisplay="true" num="1o">ShortDescriptionDE</metadata>
+    <metadata DefaultDisplay="true" num="1o">ShortDescriptionFR</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+
+    <metadata num="1o">_type_eng</metadata>
+    <metadata num="1o">_type_fre</metadata>
+    <metadata num="1o">_type_ger</metadata>
+  </Group>
+  <Group>
+    <Name>Website</Name>
+    <language name="de">Webseite</language>
+    <language name="en">Website</language>
+    <language name="fr">Site Web</language>
+    <metadata DefaultDisplay="true" num="1o">Link</metadata>
+    <metadata DefaultDisplay="true" num="1o">ShortDescription</metadata>
+    <metadata DefaultDisplay="true" num="1o">ShortDescriptionDE</metadata>
+    <metadata DefaultDisplay="true" num="1o">ShortDescriptionFR</metadata>
+
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+  </Group>
+
+  <Group>
+    <Name>TextualDescription</Name>
+    <language name="de">Textuelle Beschreibung</language>
+    <language name="en">Textual Description</language>
+    <language name="fr">Description Textuelle</language>
+    <metadata DefaultDisplay="true" num="1o">Text</metadata>
+    <metadata DefaultDisplay="true" num="1o">TextEN</metadata>
+    <metadata DefaultDisplay="true" num="1o">TextFR</metadata>
+    <metadata DefaultDisplay="true" num="1o">Date</metadata>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <metadata DefaultDisplay="true" num="1o">Author</metadata>
+    <group DefaultDisplay="true" num="*">AuthorDescription</group>
+  </Group>
+  <Group>
+    <Name>AuthorDescription</Name>
+    <language name="de">Autor*in Textuelle Beschreibung</language>
+    <language name="en">Author Textual Description</language>
+    <language name="fr">Auteur.e Description Textuelle</language>
+    <metadata DefaultDisplay="true" num="1o">Author</metadata>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+  </Group>
+  <Group>
+    <Name>Bibliography</Name>
+    <language name="de">Bibliografie</language>
+    <language name="en">Bibliography</language>
+    <language name="fr">Bibliographie</language>
+    <metadata DefaultDisplay="true" num="1m">SourceID</metadata>
+    <metadata DefaultDisplay="true" num="1o">Type</metadata>
+    <metadata DefaultDisplay="true" num="1o">Citation</metadata>
+    <metadata DefaultDisplay="true" num="1o">Link</metadata>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <metadata num="1o">_sourcetype_eng</metadata>
+    <metadata num="1o">_sourcetype_fre</metadata>
+    <metadata num="1o">_sourcetype_ger</metadata>
+    <metadata num="1o">_citation_ger</metadata>
+    <metadata num="1o">_citation_eng</metadata>
+    <metadata num="1o">_citation_fre</metadata>
+    <metadata num="1o">_purl</metadata>
+  </Group>
+
+
+  <Group>
+    <Name>MainName</Name>
+    <language name="de">Hauptname</language>
+    <language name="en">Main Name</language>
+    <language name="fr">Nom principal</language>
+    <metadata DefaultDisplay="true" num="1o">NameDE</metadata>
+    <metadata DefaultDisplay="true" num="1o">NameEN</metadata>
+    <metadata DefaultDisplay="true" num="1o">NameFR</metadata>
+    <metadata DefaultDisplay="true" num="1o">NameORIG</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+
+  </Group>
+  <Group>
+    <Name>OtherName</Name>
+    <language name="de">Andere Namensform</language>
+    <language name="en">Other Name Form</language>
+    <language name="fr">Autres nom</language>
+    <metadata DefaultDisplay="true" num="1o">Type</metadata>
+    <metadata DefaultDisplay="true" num="1o">NameDE</metadata>
+    <metadata DefaultDisplay="true" num="1o">NameEN</metadata>
+    <metadata DefaultDisplay="true" num="1o">NameFR</metadata>
+    <metadata DefaultDisplay="true" num="1o">NameORIG</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <metadata num="1o">_type_eng</metadata>
+    <metadata num="1o">_type_fre</metadata>
+    <metadata num="1o">_type_ger</metadata>
+  </Group>
+
+  <Group>
+    <Name>FoundationDateGroup</Name>
+    <language name="de">Gründungsdatum</language>
+    <language name="en">Date of Foundation</language>
+    <language name="fr">Date de fondation</language>
+    <metadata DefaultDisplay="true" num="1o">FoundationDate</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+  </Group>
+
+  <Group>
+    <Name>ClosingDateGroup</Name>
+    <language name="de">Schließdatum</language>
+    <language name="en">Closing Date</language>
+    <language name="fr">Date de fermeture</language>
+    <metadata DefaultDisplay="true" num="1o">ClosingDate</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+  </Group>
+
+  <Group>
+    <Name>LocationGroup</Name>
+    <language name="de">Ort</language>
+    <language name="en">Location</language>
+    <language name="fr">Lieu</language>
+    <metadata DefaultDisplay="true" num="1o">Location</metadata>
+    <metadata DefaultDisplay="true" num="1o">Type</metadata>
+    <metadata DefaultDisplay="true" num="1o">BeginningDate</metadata>
+    <metadata DefaultDisplay="true" num="1o">EndDate</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <metadata num="1o">_type_eng</metadata>
+    <metadata num="1o">_type_fre</metadata>
+    <metadata num="1o">_type_ger</metadata>
+  </Group>
+
+  <Group>
+    <Name>RecurringEventGroup</Name>
+    <language name="de">Wiederkehrendes Ereignis</language>
+    <language name="en">Recurring Event</language>
+    <language name="fr">Événement récurrent</language>
+    <metadata DefaultDisplay="true" num="1o">RecurringEvent</metadata>
+    <metadata DefaultDisplay="true" num="1o">NameDE</metadata>
+    <metadata DefaultDisplay="true" num="1o">NameEN</metadata>
+    <metadata DefaultDisplay="true" num="1o">NameFR</metadata>
+    <metadata DefaultDisplay="true" num="1o">NameORIG</metadata>
+  </Group>
+
+  <Group>
+    <Name>Duration</Name>
+    <language name="de">Ereignisdauer</language>
+    <language name="en">Duration of Event</language>
+    <language name="fr">Durée de l'Événement</language>
+    <metadata DefaultDisplay="true" num="1o">BeginningDate</metadata>
+    <metadata DefaultDisplay="true" num="1o">EndDate</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+  </Group>
+
+  <Group>
+    <Name>TitleGroup</Name>
+    <language name="de">Haupttitel</language>
+    <language name="en">Main Title</language>
+    <language name="fr">Titre principal</language>
+    <metadata DefaultDisplay="true" num="1o">TitleDE</metadata>
+    <metadata DefaultDisplay="true" num="1o">TitleEN</metadata>
+    <metadata DefaultDisplay="true" num="1o">TitleFR</metadata>
+    <metadata DefaultDisplay="true" num="1o">TitleORIG</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+
+  </Group>
+
+  <Group>
+    <Name>AltTitleGroup</Name>
+    <language name="de">Alternativer Titel</language>
+    <language name="en">Alternative Title</language>
+    <language name="fr">Titre alternatif</language>
+    <metadata DefaultDisplay="true" num="1o">Type</metadata>
+    <metadata DefaultDisplay="true" num="1o">TitleDE</metadata>
+    <metadata DefaultDisplay="true" num="1o">TitleEN</metadata>
+    <metadata DefaultDisplay="true" num="1o">TitleFR</metadata>
+    <metadata DefaultDisplay="true" num="1o">TitleORIG</metadata>
+    <group DefaultDisplay="true" num="*">Source</group>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <metadata num="1o">_type_eng</metadata>
+    <metadata num="1o">_type_fre</metadata>
+    <metadata num="1o">_type_ger</metadata>
+  </Group>
+
+
+  <Group>
+    <Name>Relationship</Name>
+    <language name="de">Relationship</language>
+    <language name="en">Relationship</language>
+    <language name="fr">Relationship</language>
+    <metadata DefaultDisplay="true" num="1m">Type</metadata>
+    <metadata DefaultDisplay="true" num="1m">RelationEntityType</metadata>
+    <metadata DefaultDisplay="true" num="1o">BeginningDate</metadata>
+    <metadata DefaultDisplay="true" num="1o">EndDate</metadata>
+    <metadata DefaultDisplay="true" num="1m">RelationName</metadata>
+    <metadata DefaultDisplay="true" num="1o">RelationProcessID</metadata>
+    <metadata num="1o">AwardDegree</metadata>
+    <metadata num="1o">_type_eng</metadata>
+    <metadata num="1o">_type_fre</metadata>
+    <metadata num="1o">_type_ger</metadata>
+
+    <metadata num="1o">_relationship_type_eng</metadata>
+    <metadata num="1o">_relationship_type_ger</metadata>
+    <metadata num="1o">_relationship_type_fre</metadata>
+  </Group>
+
+
+  <DocStrctType topstruct="true">
+    <Name>Person</Name>
+    <language name="en">Person</language>
+    <language name="de">Person</language>
+    <language name="fr">Person</language>
+    <metadata DefaultDisplay="true" num="1m">CatalogIDDigital</metadata>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <group DefaultDisplay="true" num="*">ExternalIdentifier</group>
+    <group DefaultDisplay="true" num="1m">PersonMainName</group>
+    <group DefaultDisplay="true" num="*">PersonOtherName</group>
+    <group DefaultDisplay="true" num="1m">BirthDateGroup</group>
+    <group DefaultDisplay="true" num="*">AltBirthDateGroup</group>
+    <group DefaultDisplay="true" num="1o">BirthplaceGroup</group>
+    <group DefaultDisplay="true" num="1o">DeathDateGroup</group>
+    <group DefaultDisplay="true" num="*">AltDeathDateGroup</group>
+    <group DefaultDisplay="true" num="1o">DeathplaceGroup</group>
+    <group DefaultDisplay="true" num="*">GenderGroup</group>
+    <group DefaultDisplay="true" num="*">Media</group>
+    <metadata DefaultDisplay="true" num="1o">PrimaryRole</metadata>
+    <metadata DefaultDisplay="true" num="1o">Importance</metadata>
+    <group DefaultDisplay="true" num="*">ProfessionGroup</group>
+    <group DefaultDisplay="true" num="*">DisciplineGroup</group>
+    <group DefaultDisplay="true" num="*">ArtisticMovementGroup</group>
+    <group DefaultDisplay="true" num="*">BiographyGroup</group>
+    <group DefaultDisplay="true" num="*">Website</group>
+    <metadata DefaultDisplay="true" num="*">PURL</metadata>
+    <group DefaultDisplay="true" num="1o">TextualDescription</group>
+    <group DefaultDisplay="true" num="*">Bibliography</group>
+    <metadata DefaultDisplay="true" num="1o">FirstPublishedDate</metadata>
+    <metadata DefaultDisplay="true" num="1o">LastUpdatedDate</metadata>
+    <group DefaultDisplay="true" num="*">Relationship</group>
+    <metadata DefaultDisplay="true" num="1o">ChangeDate</metadata>
+
+    <metadata num="1o">_primaryrole_eng</metadata>
+    <metadata num="1o">_primaryrole_fre</metadata>
+    <metadata num="1o">_primaryrole_ger</metadata>
+  </DocStrctType>
+  <DocStrctType topstruct="true">
+    <Name>Agent</Name>
+    <language name="en">Collective agent</language>
+    <language name="de">Künstlergruppe</language>
+    <language name="fr">Collective agent</language>
+    <metadata DefaultDisplay="true" num="1m">CatalogIDDigital</metadata>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <group DefaultDisplay="true" num="*">ExternalIdentifier</group>
+    <group DefaultDisplay="true" num="1m">MainName</group>
+    <group DefaultDisplay="true" num="*">OtherName</group>
+    <group DefaultDisplay="true" num="+">FoundationDateGroup</group>
+    <group DefaultDisplay="true" num="*">ClosingDateGroup</group>
+    <group DefaultDisplay="true" num="*">LocationGroup</group>
+    <group DefaultDisplay="true" num="*">Media</group>
+    <metadata DefaultDisplay="true" num="1o">PrimaryRole</metadata>
+    <metadata DefaultDisplay="true" num="1o">Importance</metadata>
+    <group DefaultDisplay="true" num="*">DisciplineGroup</group>
+    <group DefaultDisplay="true" num="*">ArtisticMovementGroup</group>
+    <group DefaultDisplay="true" num="*">BiographyGroup</group>
+    <group DefaultDisplay="true" num="*">Website</group>
+    <metadata DefaultDisplay="true" num="*">PURL</metadata>
+    <group DefaultDisplay="true" num="1o">TextualDescription</group>
+    <group DefaultDisplay="true" num="*">Bibliography</group>
+    <metadata DefaultDisplay="true" num="1o">FirstPublishedDate</metadata>
+    <metadata DefaultDisplay="true" num="1o">LastUpdatedDate</metadata>
+    <group DefaultDisplay="true" num="*">Relationship</group>
+    <metadata num="1o">_primaryrole_eng</metadata>
+    <metadata num="1o">_primaryrole_fre</metadata>
+    <metadata num="1o">_primaryrole_ger</metadata>
+    <metadata DefaultDisplay="true" num="1o">ChangeDate</metadata>
+  </DocStrctType>
+
+
+  <DocStrctType topstruct="true">
+    <Name>Event</Name>
+    <language name="en">Event</language>
+    <language name="de">Event</language>
+    <language name="fr">Event</language>
+    <metadata DefaultDisplay="true" num="1m">CatalogIDDigital</metadata>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <metadata DefaultDisplay="true" num="1o">EventType</metadata>
+    <group DefaultDisplay="true" num="*">RecurringEventGroup</group>
+    <group DefaultDisplay="true" num="1m">MainName</group>
+    <group DefaultDisplay="true" num="*">OtherName</group>
+    <group DefaultDisplay="true" num="1o">Duration</group>
+    <group DefaultDisplay="true" num="*">LocationGroup</group>
+    <group DefaultDisplay="true" num="*">Media</group>
+    <group DefaultDisplay="true" num="*">Website</group>
+    <metadata DefaultDisplay="true" num="*">PURL</metadata>
+    <group DefaultDisplay="true" num="1o">TextualDescription</group>
+    <group DefaultDisplay="true" num="*">Bibliography</group>
+    <metadata DefaultDisplay="true" num="1o">FirstPublishedDate</metadata>
+    <metadata DefaultDisplay="true" num="1o">LastUpdatedDate</metadata>
+    <group DefaultDisplay="true" num="*">Relationship</group>
+    <metadata num="1o">_type_eng</metadata>
+    <metadata num="1o">_type_fre</metadata>
+    <metadata num="1o">_type_ger</metadata>
+    <metadata DefaultDisplay="true" num="1o">ChangeDate</metadata>
+  </DocStrctType>
+
+  <DocStrctType topstruct="true">
+    <Name>Work</Name>
+    <language name="en">Work</language>
+    <language name="de">Work</language>
+    <language name="fr">Work</language>
+    <metadata DefaultDisplay="true" num="1m">CatalogIDDigital</metadata>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <group DefaultDisplay="true" num="*">ExternalIdentifier</group>
+    <metadata DefaultDisplay="true" num="1o">WorkType</metadata>
+    <group DefaultDisplay="true" num="1m">TitleGroup</group>
+    <group DefaultDisplay="true" num="*">AltTitleGroup</group>
+    <group DefaultDisplay="true" num="*">Media</group>
+    <group DefaultDisplay="true" num="*">Website</group>
+    <metadata DefaultDisplay="true" num="*">PURL</metadata>
+    <group DefaultDisplay="true" num="*">Bibliography</group>
+    <group DefaultDisplay="true" num="*">Relationship</group>
+    <metadata num="1o">_type_eng</metadata>
+    <metadata num="1o">_type_fre</metadata>
+    <metadata num="1o">_type_ger</metadata>
+    <metadata DefaultDisplay="true" num="1o">ChangeDate</metadata>
+  </DocStrctType>
+
+  <DocStrctType topstruct="true">
+    <Name>Award</Name>
+    <language name="en">Award</language>
+    <language name="de">Award</language>
+    <language name="fr">Award</language>
+    <metadata DefaultDisplay="true" num="1m">CatalogIDDigital</metadata>
+    <metadata DefaultDisplay="true" num="1m">Published</metadata>
+    <metadata DefaultDisplay="true" num="1m">PrimaryRole</metadata>
+    <metadata DefaultDisplay="true" num="1o">AwardType</metadata>
+    <group DefaultDisplay="true" num="1m">TitleGroup</group>
+    <group DefaultDisplay="true" num="*">AltTitleGroup</group>
+    <group DefaultDisplay="true" num="*">Media</group>
+    <group DefaultDisplay="true" num="*">Website</group>
+    <metadata DefaultDisplay="true" num="*">PURL</metadata>
+    <group DefaultDisplay="true" num="1o">TextualDescription</group>
+    <group DefaultDisplay="true" num="*">Bibliography</group>
+    <metadata DefaultDisplay="true" num="1o">FirstPublishedDate</metadata>
+    <metadata DefaultDisplay="true" num="1o">LastUpdatedDate</metadata>
+    <group DefaultDisplay="true" num="*">Relationship</group>
+    <metadata num="1o">_type_eng</metadata>
+    <metadata num="1o">_type_fre</metadata>
+    <metadata num="1o">_type_ger</metadata>
+    <metadata DefaultDisplay="true" num="1o">ChangeDate</metadata>
+  </DocStrctType>
+
+
+  <DocStrctType>
+    <Name>page</Name>
+    <language name="de">Seite</language>
+    <language name="en">Page</language>
+    <language name="rusdml">page</language>
+    <language name="es">Página</language>
+    <allowedchildtype>area</allowedchildtype>
+    <metadata num="1m">logicalPageNumber</metadata>
+    <metadata num="1m">physPageNumber</metadata>
+  </DocStrctType>
+  <DocStrctType>
+    <Name>audio</Name>
+    <language name="de">Audio</language>
+    <language name="en">Audio</language>
+    <metadata num="1m">logicalPageNumber</metadata>
+    <metadata num="1m">physPageNumber</metadata>
+  </DocStrctType>
+
+  <DocStrctType>
+    <Name>video</Name>
+    <language name="de">Video</language>
+    <language name="en">Video</language>
+    <metadata num="1m">logicalPageNumber</metadata>
+    <metadata num="1m">physPageNumber</metadata>
+  </DocStrctType>
+
+  <DocStrctType>
+    <Name>object</Name>
+    <language name="de">3D Objekt</language>
+    <language name="en">3D Object</language>
+    <metadata num="1m">logicalPageNumber</metadata>
+    <metadata num="1m">physPageNumber</metadata>
+  </DocStrctType>
+  <DocStrctType>
+    <Name>area</Name>
+    <language name="de">Region</language>
+    <language name="en">Area</language>
+    <metadata num="1o">_COORDS</metadata>
+    <metadata num="1o">_SHAPE</metadata>
+    <metadata num="1m">physPageNumber</metadata>
+    <metadata num="1m">logicalPageNumber</metadata>
+  </DocStrctType>
+
+  <DocStrctType>
+    <Name>BoundBook</Name>
+    <language name="de">Gebundenes Buch</language>
+    <language name="en">Bound Book</language>
+    <language name="es">Libro encuadernado</language>
+    <allowedchildtype>page</allowedchildtype>
+    <allowedchildtype>audio</allowedchildtype>
+    <allowedchildtype>video</allowedchildtype>
+    <allowedchildtype>object</allowedchildtype>
+    <metadata num="1o">PhysicalLocation</metadata>
+    <metadata num="1o">pathimagefiles</metadata>
+  </DocStrctType>
+
+  <!-- Formats
+
+        ====================================================================================
+        The Format section contains information how the ruleset defined above can be
+        read/written to a specific format. The format needs to be implemented by
+        special classes. The appropriate section of the configuration file are read by
+        those file format specific classes. The workflow component of GOOBI uses the
+        RDF format only. For that reason METS/MODS information is not defined yet
+        completly.
+        ================================================================================ -->
+  <Formats>
+
+    <PicaPlus></PicaPlus>
+    <Marc></Marc>
+
+    <METS>
+      <!-- Namespace definitions :
+                                If the METS' <NamespaceDefinition> has the attribute default="true", the METS namespace
+                                is set as default namespace and written without its namespace prefix.
+                                If a <schemaLocation> tag is set, that location is used in the created METS file. METS
+                                and MODS schema locations are set from UGH and may be overwritten by a <schemaLocation>
+                                tag (thought that would not be wise, because UGH does know, which METS and MODS schema
+                                version it is generating.
+                        -->
+      <NamespaceDefinition>
+        <URI>http://example.com/luxArtistDictionary</URI>
+        <prefix>luxArtDic</prefix>
+      </NamespaceDefinition>
+      <XPathAnchorQuery>
+        ./mods:mods/mods:relatedItem[@type='host']/mods:recordInfo/mods:recordIdentifier[@source='gbv-ppn']
+      </XPathAnchorQuery>
+      <AnchorIdentifierMetadataType>CatalogIDDigital
+      </AnchorIdentifierMetadataType>
+
+
+      <Metadata>
+        <InternalName>CatalogIDDigital</InternalName>
+        <WriteXPath>./mods:mods/mods:recordInfo/#mods:recordIdentifier[@source='artist-dictionary']</WriteXPath>
+      </Metadata>
+      <!--
+    <Metadata>
+      <InternalName>Published</InternalName>
+      <WriteXPath>./mods:mods/mods:recordInfo/#mods:recordIdentifier[@source='lux']</WriteXPath>
+  </Metadata>
+-->
+      <Metadata>
+        <InternalName>PrimaryRole</InternalName>
+        <WriteXPath>./mods:mods/#mods:typeOfResource[@usage='role']</WriteXPath>
+      </Metadata>
+      <Metadata>
+        <InternalName>_primaryrole_eng</InternalName>
+        <WriteXPath>./mods:mods/#mods:typeOfResource[@usage='role'][@xml:lang='eng']</WriteXPath>
+      </Metadata>
+      <Metadata>
+        <InternalName>_primaryrole_fre</InternalName>
+        <WriteXPath>./mods:mods/#mods:typeOfResource[@usage='role'][@xml:lang='fre']</WriteXPath>
+      </Metadata>
+      <Metadata>
+        <InternalName>_primaryrole_ger</InternalName>
+        <WriteXPath>./mods:mods/#mods:typeOfResource[@usage='role'][@xml:lang='ger']</WriteXPath>
+      </Metadata>
+      <Metadata>
+        <InternalName>Importance</InternalName>
+        <WriteXPath>./mods:mods/#mods:typeOfResource[@usage='role'][@usage='importance']</WriteXPath>
+      </Metadata>
+      <Metadata>
+        <InternalName>PURL</InternalName>
+        <WriteXPath>./mods:mods/#mods:identifier[@type='purl']</WriteXPath>
+      </Metadata>
+
+      <Metadata>
+        <InternalName>FirstPublishedDate</InternalName>
+        <WriteXPath>./mods:mods/mods:originInfo[@eventType='creation']/#mods:dateCreated</WriteXPath>
+      </Metadata>
+      <Metadata>
+        <InternalName>LastUpdatedDate</InternalName>
+        <WriteXPath>./mods:mods/mods:originInfo[@eventType='creation']/#mods:dateModified</WriteXPath>
+      </Metadata>
+
+
+      <Metadata>
+        <InternalName>ChangeDate</InternalName>
+        <WriteXPath>./mods:mods/mods:originInfo[@eventType='creation']/#mods:dateOther</WriteXPath>
+      </Metadata>
+
+      <Metadata>
+        <InternalName>EventType</InternalName>
+        <WriteXPath>./mods:mods/#mods:genre</WriteXPath>
+      </Metadata>
+      <Metadata>
+        <InternalName>WorkType</InternalName>
+        <WriteXPath>./mods:mods/#mods:genre</WriteXPath>
+      </Metadata>
+      <Metadata>
+        <InternalName>AwardType</InternalName>
+        <WriteXPath>./mods:mods/#mods:genre</WriteXPath>
+      </Metadata>
+      <Metadata>
+        <InternalName>_type_ger</InternalName>
+        <WriteXPath>./mods:mods/#mods:genre[@xml:lang='ger']</WriteXPath>
+      </Metadata>
+      <Metadata>
+        <InternalName>_type_eng</InternalName>
+        <WriteXPath>./mods:mods/#mods:genre[@xml:lang='eng']</WriteXPath>
+      </Metadata>
+      <Metadata>
+        <InternalName>_type_fre</InternalName>
+        <WriteXPath>./mods:mods/#mods:genre[@xml:lang='fre']</WriteXPath>
+      </Metadata>
+
+      <Group>
+        <InternalName>PersonMainName</InternalName>
+        <WriteXPath>./mods:mods/#mods:name[@type="personal"]</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>FirstnameDe</InternalName>
+          <WriteXPath>./#mods:namePart[@type='given'][@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>LastnameDe</InternalName>
+          <WriteXPath>./#mods:namePart[@type='family'][@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>FirstnameEn</InternalName>
+          <WriteXPath>./#mods:namePart[@type='given'][@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>LastnameEn</InternalName>
+          <WriteXPath>./#mods:namePart[@type='family'][@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>FirstnameFr</InternalName>
+          <WriteXPath>./#mods:namePart[@type='given'][@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>LastnameFr</InternalName>
+          <WriteXPath>./#mods:namePart[@type='family'][@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>FirstnameOrig</InternalName>
+          <WriteXPath>./#mods:namePart[@type='given'][@xml:lang='und']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>LastnameOrig</InternalName>
+          <WriteXPath>./#mods:namePart[@type='family'][@xml:lang='und']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Numeration</InternalName>
+          <WriteXPath>./#mods:namePart[@type='termsOfAddress']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Title</InternalName>
+          <WriteXPath>./#mods:namePart[@type='termsOfAddress']</WriteXPath>
+        </Metadata>
+      </Group>
+
+      <Group>
+        <InternalName>PersonOtherName</InternalName>
+        <WriteXPath>./mods:mods/mods:name/#mods:alternativeName</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Type</InternalName>
+          <WriteXPath>./@displayLabel</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>FirstnameDe</InternalName>
+          <WriteXPath>./#mods:namePart[@type='given'][@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>LastnameDe</InternalName>
+          <WriteXPath>./#mods:namePart[@type='family'][@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>FirstnameEn</InternalName>
+          <WriteXPath>./#mods:namePart[@type='given'][@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>LastnameEn</InternalName>
+          <WriteXPath>./#mods:namePart[@type='family'][@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>FirstnameFr</InternalName>
+          <WriteXPath>./#mods:namePart[@type='given'][@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>LastnameFr</InternalName>
+          <WriteXPath>./#mods:namePart[@type='family'][@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>FirstnameOrig</InternalName>
+          <WriteXPath>./#mods:namePart[@type='given'][@xml:lang='und']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>LastnameOrig</InternalName>
+          <WriteXPath>./#mods:namePart[@type='family'][@xml:lang='und']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Numeration</InternalName>
+          <WriteXPath>./#mods:namePart[@type='termsOfAddress']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Title</InternalName>
+          <WriteXPath>./#mods:namePart[@type='termsOfAddress']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_eng</InternalName>
+          <WriteXPath>./#mods:description[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_fre</InternalName>
+          <WriteXPath>./#mods:description[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_ger</InternalName>
+          <WriteXPath>./#mods:description[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+      </Group>
+
+
+      <Group>
+        <InternalName>Source</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:source</WriteXPath>
+        <Metadata>
+          <InternalName>PARENT_ID</InternalName>
+          <WriteXPath>./#luxArtDic:refs</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>SourceID</InternalName>
+          <WriteXPath>./#luxArtDic:sourceID</WriteXPath>
+        </Metadata>
+        
+        <Metadata>
+          <InternalName>SourceName</InternalName>
+          <WriteXPath>./#luxArtDic:name</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>SourceType</InternalName>
+          <WriteXPath>./#luxArtDic:type</WriteXPath>
+        </Metadata>
+      
+        <Metadata>
+          <InternalName>_citation_ger</InternalName>
+          <WriteXPath>./#luxArtDic:name[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_citation_eng</InternalName>
+          <WriteXPath>./#luxArtDic:name[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_citation_fre</InternalName>
+          <WriteXPath>./#luxArtDic:name[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_sourcetype_eng</InternalName>
+          <WriteXPath>./#mods:type[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_sourcetype_fre</InternalName>
+          <WriteXPath>./#mods:type[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_sourcetype_ger</InternalName>
+          <WriteXPath>./#mods:type[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_purl</InternalName>
+          <WriteXPath>./#luxArtDic:link</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>SourcePage</InternalName>
+          <WriteXPath>./#luxArtDic:sourcePage</WriteXPath>
+        </Metadata>
+      </Group>
+
+
+      <Group>
+        <InternalName>ExternalIdentifier</InternalName>
+        <WriteXPath>./mods:mods/#mods:identifier</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Type</InternalName>
+          <WriteXPath>@type</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Identifier</InternalName>
+          <WriteXPath>.</WriteXPath>
+        </Metadata>
+      </Group>
+
+
+      <Group>
+        <InternalName>BirthDateGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:birthdate</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Birthdate</InternalName>
+          <WriteXPath>.</WriteXPath>
+        </Metadata>
+      </Group>
+      <Group>
+        <InternalName>AltBirthDateGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:birthdate[@type='alternative']</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Birthdate</InternalName>
+          <WriteXPath>.</WriteXPath>
+        </Metadata>
+      </Group>
+      <Group>
+        <InternalName>BirthplaceGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:birthplace</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Birthplace</InternalName>
+          <WriteXPath>./#luxArtDic:place</WriteXPath>
+        </Metadata>
+      </Group>
+
+      <Group>
+        <InternalName>DeathDateGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:deathdate</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>DeathDate</InternalName>
+          <WriteXPath>.</WriteXPath>
+        </Metadata>
+      </Group>
+      <Group>
+        <InternalName>AltDeathDateGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:deathdate[@type='alternative']</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>AlternativeDeathDate</InternalName>
+          <WriteXPath>.</WriteXPath>
+        </Metadata>
+      </Group>
+      <Group>
+        <InternalName>DeathplaceGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:deathplace</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Deathplace</InternalName>
+          <WriteXPath>./#luxArtDic:place</WriteXPath>
+        </Metadata>
+      </Group>
+      <Group>
+        <InternalName>GenderGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:gender</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Gender</InternalName>
+          <WriteXPath>.</WriteXPath>
+        </Metadata>
+      </Group>
+
+      <Group>
+        <InternalName>Media</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:media</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <!--
+        <Metadata>
+          <InternalName>Type</InternalName>
+          <WriteXPath>./@type</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Subject</InternalName>
+          <WriteXPath>./#luxArtDic:subject</WriteXPath>
+        </Metadata>
+      -->
+        <Metadata>
+          <InternalName>File</InternalName>
+          <WriteXPath>./#luxArtDic:file</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_subject_eng</InternalName>
+          <WriteXPath>./#luxArtDic:subject[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_subject_ger</InternalName>
+          <WriteXPath>./#luxArtDic:subject[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_subject_fre</InternalName>
+          <WriteXPath>./#luxArtDic:subject[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_eng</InternalName>
+          <WriteXPath>./#luxArtDic:type[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_ger</InternalName>
+          <WriteXPath>./#luxArtDic:type[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_fre</InternalName>
+          <WriteXPath>./#luxArtDic:type[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+
+
+      </Group>
+
+      <Group>
+        <InternalName>ProfessionGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:profession</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <!--
+        <Metadata>
+          <InternalName>Profession</InternalName>
+          <WriteXPath>.</WriteXPath>
+        </Metadata> -->
+        <Metadata>
+          <InternalName>BeginningDate</InternalName>
+          <WriteXPath>./@start</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>EndDate</InternalName>
+          <WriteXPath>./@end</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_profession_ger</InternalName>
+          <WriteXPath>./#luxArtDic:value[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_profession_eng</InternalName>
+          <WriteXPath>./#luxArtDic:value[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_profession_fre</InternalName>
+          <WriteXPath>./#luxArtDic:value[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+
+      </Group>
+
+      <Group>
+        <InternalName>DisciplineGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:discipline</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Discipline</InternalName>
+          <WriteXPath>./#luxArtDic:discipline</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_discipline_ger</InternalName>
+          <WriteXPath>./#luxArtDic:discipline[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_discipline_eng</InternalName>
+          <WriteXPath>./#luxArtDic:discipline[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_discipline_fre</InternalName>
+          <WriteXPath>./#luxArtDic:discipline[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+
+      </Group>
+
+      <Group>
+        <InternalName>ArtisticMovementGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:artisticmovement</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>ArtisticMovement</InternalName>
+          <WriteXPath>./#luxArtDic:artisticmovement</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_artisticmovement_ger</InternalName>
+          <WriteXPath>./#luxArtDic:artisticmovement[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_artisticmovement_eng</InternalName>
+          <WriteXPath>./#luxArtDic:artisticmovement[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_artisticmovement_fre</InternalName>
+          <WriteXPath>./#luxArtDic:artisticmovement[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+
+      </Group>
+
+      <Group>
+        <InternalName>BiographyGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:biography</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_eng</InternalName>
+          <WriteXPath>./#luxArtDic:type[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_ger</InternalName>
+          <WriteXPath>./#luxArtDic:type[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_fre</InternalName>
+          <WriteXPath>./#luxArtDic:type[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+
+        <Metadata>
+          <InternalName>Type</InternalName>
+          <WriteXPath>./@type</WriteXPath>
+        </Metadata>
+
+        <Metadata>
+          <InternalName>BeginningDate</InternalName>
+          <WriteXPath>./@start</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>EndDate</InternalName>
+          <WriteXPath>./@end</WriteXPath>
+        </Metadata>
+
+
+        <Metadata>
+          <InternalName>Location</InternalName>
+          <WriteXPath>./#luxArtDic:location</WriteXPath>
+        </Metadata>
+
+        <Metadata>
+          <InternalName>ShortDescription</InternalName>
+          <WriteXPath>./#luxArtDic:description[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>ShortDescriptionDE</InternalName>
+          <WriteXPath>./#luxArtDic:description[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>ShortDescriptionFR</InternalName>
+          <WriteXPath>./#luxArtDic:description[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+      </Group>
+
+      <Group>
+        <InternalName>Website</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:website</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Link</InternalName>
+          <WriteXPath>./#luxArtDic:link</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>ShortDescription</InternalName>
+          <WriteXPath>./#luxArtDic:text[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>ShortDescriptionDE</InternalName>
+          <WriteXPath>/#luxArtDic:text[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>ShortDescriptionFR</InternalName>
+          <WriteXPath>./#luxArtDic:text[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+
+      </Group>
+
+
+      <Group>
+        <InternalName>TextualDescription</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:description</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Text</InternalName>
+          <WriteXPath>./#luxArtDic:text[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>TextEN</InternalName>
+          <WriteXPath>./#luxArtDic:text[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>TextFR</InternalName>
+          <WriteXPath>./#luxArtDic:text[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Date</InternalName>
+          <WriteXPath>./#luxArtDic:date</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Author</InternalName>
+          <WriteXPath>./#luxArtDic:author</WriteXPath>
+        </Metadata>
+      </Group>
+      <Group>
+        <InternalName>AuthorDescription</InternalName>
+        <WriteXPath>./#luxArtDic:author</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Author</InternalName>
+          <WriteXPath>.</WriteXPath>
+        </Metadata>
+      </Group>
+
+      <Group>
+        <InternalName>Bibliography</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:bibliography</WriteXPath>
+        <Metadata>
+          <InternalName>SourceID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Type</InternalName>
+          <WriteXPath>./@type</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Citation</InternalName>
+          <WriteXPath>.</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_purl</InternalName>
+          <WriteXPath>./@link</WriteXPath>
+        </Metadata>
+        <!--
+        <Metadata>
+          <InternalName>Type</InternalName>
+          <WriteXPath>./@type</WriteXPath>
+        </Metadata>-->
+        <Metadata>
+          <InternalName>_sourcetype_eng</InternalName>
+          <WriteXPath>./#luxArtDic:type[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_sourcetype_ger</InternalName>
+          <WriteXPath>./#luxArtDic:type[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_sourcetype_fre</InternalName>
+          <WriteXPath>./#luxArtDic:type[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+
+
+        <Metadata>
+          <InternalName>_citation_ger</InternalName>
+          <WriteXPath>./#luxArtDic:name[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_citation_eng</InternalName>
+          <WriteXPath>./#luxArtDic:name[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_citation_fre</InternalName>
+          <WriteXPath>./#luxArtDic:name[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+
+      </Group>
+
+
+      <Group>
+        <InternalName>MainName</InternalName>
+        <WriteXPath>./mods:mods/#mods:name[@type="corporate"]</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>NameDE</InternalName>
+          <WriteXPath>./#mods:namePart[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>NameEN</InternalName>
+          <WriteXPath>./#mods:namePart[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>NameFR</InternalName>
+          <WriteXPath>./#mods:namePart[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>NameORIG</InternalName>
+          <WriteXPath>./#mods:namePart[@xml:lang='und']</WriteXPath>
+        </Metadata>
+      </Group>
+
+      <Group>
+        <InternalName>OtherName</InternalName>
+        <WriteXPath>./mods:mods/mods:name/#mods:alternativeName</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Type</InternalName>
+          <WriteXPath>./@displayLabel</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>NameDE</InternalName>
+          <WriteXPath>./#mods:namePart[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>NameEN</InternalName>
+          <WriteXPath>./#mods:namePart[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>NameFR</InternalName>
+          <WriteXPath>./#mods:namePart[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>NameORIG</InternalName>
+          <WriteXPath>./#mods:namePart[@xml:lang='und']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_eng</InternalName>
+          <WriteXPath>./#mods:description[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_fre</InternalName>
+          <WriteXPath>./#mods:description[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_ger</InternalName>
+          <WriteXPath>./#mods:description[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+      </Group>
+
+      <Group>
+        <InternalName>FoundationDateGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:foundationDate</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>FoundationDate</InternalName>
+          <WriteXPath>.</WriteXPath>
+        </Metadata>
+      </Group>
+
+      <Group>
+        <InternalName>ClosingDateGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:extension/#luxArtDic:closingDate</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>ClosingDate</InternalName>
+          <WriteXPath>.</WriteXPath>
+        </Metadata>
+      </Group>
+
+      <Group>
+        <InternalName>LocationGroup</InternalName>
+        <WriteXPath>./mods:mods/#mods:originInfo[@eventType='location']</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Type</InternalName>
+          <WriteXPath>@displayLabel</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Location</InternalName>
+          <WriteXPath>./#mods:place/mods:placeTerm</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>BeginningDate</InternalName>
+          <WriteXPath>./mods:dateCreated</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>EndDate</InternalName>
+          <WriteXPath>./mods:dateOther</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_eng</InternalName>
+          <WriteXPath>./#mods:description[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_fre</InternalName>
+          <WriteXPath>./#mods:description[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_ger</InternalName>
+          <WriteXPath>./#mods:description[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+
+      </Group>
+
+      <Group>
+        <InternalName>RecurringEventGroup</InternalName>
+        <WriteXPath>./mods:mods/mods:relatedItem[@type='series']/#mods:titleInfo</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>NameDE</InternalName>
+          <WriteXPath>./#mods:title[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>NameEN</InternalName>
+          <WriteXPath>./#mods:title[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>NameFR</InternalName>
+          <WriteXPath>./#mods:title[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>NameORIG</InternalName>
+          <WriteXPath>./#mods:title[@xml:lang='und']</WriteXPath>
+        </Metadata>
+      </Group>
+
+      <Group>
+        <InternalName>Duration</InternalName>
+        <WriteXPath>./mods:mods/#mods:part[@type='event']</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>BeginningDate</InternalName>
+          <WriteXPath>./mods:part/mods:extent/#mods:start</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>EndDate</InternalName>
+          <WriteXPath>./mods:part/mods:extent/#mods:end</WriteXPath>
+        </Metadata>
+      </Group>
+
+      <Group>
+        <InternalName>TitleGroup</InternalName>
+        <WriteXPath>./mods:mods/#mods:titleInfo</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>TitleDE</InternalName>
+          <WriteXPath>./#mods:title[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>TitleEN</InternalName>
+          <WriteXPath>./#mods:title[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>TitleFR</InternalName>
+          <WriteXPath>./#mods:title[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>TitleORIG</InternalName>
+          <WriteXPath>./#mods:title[@xml:lang='und']</WriteXPath>
+        </Metadata>
+      </Group>
+
+      <Group>
+        <InternalName>AltTitleGroup</InternalName>
+        <WriteXPath>./mods:mods/#mods:titleInfo[@type='alternative']</WriteXPath>
+        <Metadata>
+          <InternalName>GENERATED_ID</InternalName>
+          <WriteXPath>@xml:ID</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>Type</InternalName>
+          <WriteXPath>./@otherType</WriteXPath>
+        </Metadata>
+
+        <Metadata>
+          <InternalName>TitleDE</InternalName>
+          <WriteXPath>./#mods:title[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>TitleEN</InternalName>
+          <WriteXPath>./#mods:title[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>TitleFR</InternalName>
+          <WriteXPath>./#mods:title[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>TitleORIG</InternalName>
+          <WriteXPath>./#mods:title[@xml:lang='und']</WriteXPath>
+        </Metadata>
+
+        <Metadata>
+          <InternalName>_type_eng</InternalName>
+          <WriteXPath>./#mods:partName[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_fre</InternalName>
+          <WriteXPath>./#mods:partName[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_ger</InternalName>
+          <WriteXPath>./#mods:partName[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+      </Group>
+
+      <Group>
+        <InternalName>Relationship</InternalName>
+        <WriteXPath>./mods:mods/#mods:relatedItem[@type='references']</WriteXPath>
+        <Metadata>
+          <InternalName>Type</InternalName>
+          <WriteXPath>./@otherType</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>BeginningDate</InternalName>
+          <WriteXPath>mods:extension/#luxArtDic:date</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>EndDate</InternalName>
+          <WriteXPath>mods:extension/#luxArtDic:endDate</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>RelationName</InternalName>
+          <WriteXPath>./#mods:titleInfo/mods:title</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>RelationProcessID</InternalName>
+          <WriteXPath>./#mods:recordInfo/mods:recordIdentifier</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>AwardDegree</InternalName>
+          <WriteXPath>mods:extension/#luxArtDic:degree</WriteXPath>
+        </Metadata>
+
+        <Metadata>
+          <InternalName>_type_eng</InternalName>
+          <WriteXPath>mods:extension/#luxArtDic:degree[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_fre</InternalName>
+          <WriteXPath>mods:extension/#luxArtDic:degree[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_type_ger</InternalName>
+          <WriteXPath>mods:extension/#luxArtDic:degree[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_relationship_type_eng</InternalName>
+          <WriteXPath>mods:extension/#luxArtDic:relation[@xml:lang='eng']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_relationship_type_fre</InternalName>
+          <WriteXPath>mods:extension/#luxArtDic:relation[@xml:lang='fre']</WriteXPath>
+        </Metadata>
+        <Metadata>
+          <InternalName>_relationship_type_ger</InternalName>
+          <WriteXPath>mods:extension/#luxArtDic:relation[@xml:lang='ger']</WriteXPath>
+        </Metadata>
+      </Group>
+      <DocStruct>
+        <InternalName>Person</InternalName>
+        <MetsType>person</MetsType>
+      </DocStruct>
+      <DocStruct>
+        <InternalName>Agent</InternalName>
+        <MetsType>agent</MetsType>
+      </DocStruct>
+      <DocStruct>
+        <InternalName>Event</InternalName>
+        <MetsType>event</MetsType>
+      </DocStruct>
+      <DocStruct>
+        <InternalName>Work</InternalName>
+        <MetsType>work</MetsType>
+      </DocStruct>
+      <DocStruct>
+        <InternalName>Award</InternalName>
+        <MetsType>award</MetsType>
+      </DocStruct>
+      <DocStruct>
+        <InternalName>page</InternalName>
+        <MetsType>page</MetsType>
+      </DocStruct>
+      <DocStruct>
+        <InternalName>BoundBook</InternalName>
+        <MetsType>physSequence</MetsType>
+      </DocStruct>
+    </METS>
+  </Formats>
+</Preferences>
