@@ -1,5 +1,6 @@
 <config_plugin>
  
     <exportUnpublishedRecords>false</exportUnpublishedRecords>
+	<addEventLocationFromAgent>false</addEventLocationFromAgent>
 
 </config_plugin>

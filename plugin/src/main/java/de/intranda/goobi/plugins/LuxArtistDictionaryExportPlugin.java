@@ -243,7 +243,8 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             setRepresentative(prefs, ff);
         }
         
-        if(logical.getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("LocationGroup")).isEmpty()) {
+        boolean addEventLocationFromAgent = config.getBoolean("addEventLocationFromAgent", false);
+        if(addEventLocationFromAgent && logical.getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("LocationGroup")).isEmpty()) {
             try {
                 addLocationFromRelatedAgent(logical, prefs);
             } catch (PreferencesException | ReadException | MetadataTypeNotAllowedException | DocStructHasNoTypeException e) {
