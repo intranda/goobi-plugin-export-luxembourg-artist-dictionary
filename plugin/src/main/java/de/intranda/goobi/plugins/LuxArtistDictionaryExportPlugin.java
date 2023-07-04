@@ -58,6 +58,7 @@ import ugh.exceptions.PreferencesException;
 import ugh.exceptions.ReadException;
 import ugh.exceptions.TypeNotAllowedForParentException;
 import ugh.exceptions.WriteException;
+import ugh.fileformats.mets.MetsMods;
 import ugh.fileformats.mets.MetsModsImportExport;
 
 @PluginImplementation
@@ -241,8 +242,33 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 && ff.getDigitalDocument().getFileSet().getAllFiles().stream().noneMatch(ContentFile::isRepresentative)) {
             setRepresentative(prefs, ff);
         }
+        
+        if(logical.getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("LocationGroup")).isEmpty()) {
+            try {
+                addLocationFromRelatedAgent(logical, prefs);
+            } catch (PreferencesException | ReadException | MetadataTypeNotAllowedException | DocStructHasNoTypeException e) {
+                log.error("Unable to add location metadata group to event from agent: {}", e.toString());
+            }
+        }
 
         return dd;
+    }
+
+    private void addLocationFromRelatedAgent(DocStruct logical, Prefs prefs) throws PreferencesException, ReadException, MetadataTypeNotAllowedException, DocStructHasNoTypeException {
+        List<MetadataGroup> relationships = logical.getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("Relationship"));
+        for (MetadataGroup rel : relationships) {
+            String type = rel.getMetadataByType("RelationEntityType").stream().findFirst().map(md -> md.getValue()).orElse(null);
+            if("Agent".equals(type)) {
+                String agentIdentifier = rel.getMetadataByType("RelationProcessID").stream().findFirst().map(md -> md.getValue()).orElse(null);
+                Path agentMetsPath = Paths.get(ConfigurationHelper.getInstance().getMetadataFolder(), agentIdentifier, "meta.xml");
+                Fileformat agentFormat = new MetsMods(prefs);
+                agentFormat.read(agentMetsPath.toAbsolutePath().toString());
+                MetadataGroup locationGroup = agentFormat.getDigitalDocument().getLogicalDocStruct().getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("LocationGroup")).stream().findFirst().orElse(null);
+                if(locationGroup != null) {
+                    logical.addMetadataGroup(locationGroup);
+                }
+            }
+        }
     }
 
     private void setRepresentative(Prefs prefs, Fileformat ff) throws PreferencesException {
