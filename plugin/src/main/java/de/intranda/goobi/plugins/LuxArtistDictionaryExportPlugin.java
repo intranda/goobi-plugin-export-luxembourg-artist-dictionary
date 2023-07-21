@@ -206,7 +206,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 throw new NotExportableException("Record is not marked as exportable, skip export");
                 
             }
-            if ("N".equalsIgnoreCase(md.get(0).getValue())) {
+            if (!md.stream().anyMatch(m -> m.getValue() != null && m.getValue().matches("[YyJj]"))) {
                 throw new NotExportableException("Record is not marked as exportable, skip export");
             }
         }
@@ -258,8 +258,9 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     private void addLocationFromRelatedAgent(DocStruct logical, Prefs prefs) throws PreferencesException, ReadException, MetadataTypeNotAllowedException, DocStructHasNoTypeException {
         List<MetadataGroup> relationships = logical.getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("Relationship"));
         for (MetadataGroup rel : relationships) {
-            String type = rel.getMetadataByType("RelationEntityType").stream().findFirst().map(md -> md.getValue()).orElse(null);
-            if("Agent".equals(type)) {
+            String entityType = rel.getMetadataByType("RelationEntityType").stream().findFirst().map(md -> md.getValue()).orElse(null);
+            String relationshipType = rel.getMetadataByType("Type").stream().findFirst().map(md -> md.getValue()).orElse(null);
+            if("Agent".equals(entityType) && "was organized by".equals(relationshipType)) {
                 String agentIdentifier = rel.getMetadataByType("RelationProcessID").stream().findFirst().map(md -> md.getValue()).orElse(null);
                 Path agentMetsPath = Paths.get(ConfigurationHelper.getInstance().getMetadataFolder(), agentIdentifier, "meta.xml");
                 Fileformat agentFormat = new MetsMods(prefs);
