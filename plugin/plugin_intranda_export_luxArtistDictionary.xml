@@ -2,5 +2,16 @@
  
     <exportUnpublishedRecords>false</exportUnpublishedRecords>
 	<addEventLocationFromAgent>false</addEventLocationFromAgent>
-
+	<!-- <metadata type="lklIdentifier" force="false">
+    	<rule numberFormat="00000">lkl{processid}</rule>
+    </metadata>
+    <vocabulary>
+    	<metadataGroupType>Source</metadataGroupType>
+    	<vocabularyId>6</vocabularyId>
+    	<recordIdentifierMetadata>SourceID</recordIdentifierMetadata>
+    	<enrich>
+    		<metadataType>SourceType</metadataType>
+    		<vocabularyField>Source Type</vocabularyField>
+    	</enrich>
+    </vocabulary>-->
 </config_plugin>

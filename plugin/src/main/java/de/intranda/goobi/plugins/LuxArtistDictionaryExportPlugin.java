@@ -6,10 +6,13 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.io.FilenameUtils;
@@ -106,17 +109,21 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             Prefs prefs = process.getRegelsatz().getPreferences();
             Fileformat ff = process.readMetadataFile();
             XMLConfiguration config = getConfig();
+
+            List<MetadataConfiguration> additionalMetadata = readMetadataConfigurations(getConfig());
+            List<VocabularyRecordConfig> vocabularyConfigs = readVocabularyRecordConfigs(getConfig());
             
             DigitalDocument dd = enrichFileformat(ff, prefs, config);
 
-            enrichFromVocabulary(prefs, dd);
-            
+            enrichFromVocabulary(prefs, dd, vocabularyConfigs);
+
             // export data
             VariableReplacer vp = new VariableReplacer(dd, prefs, process, null);
             MetsModsImportExport mm = new MetsModsImportExport(prefs);
             mm.setDigitalDocument(dd);
             // Replace rights and digiprov entries.
             addProjectData(mm, process, vp);
+            addAdditionalMetadata(additionalMetadata, dd, prefs, vp);
             writeFileGroups(process, dd, vp, mm);
             mm.write(Paths.get(destination, process.getTitel() + ".xml").toString());
 
@@ -125,11 +132,11 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 problems.add("Failed to download images or fulltext files");
                 return false;
             }
-        } catch(ExportException e) {
+        } catch (ExportException e) {
             log.error(e.getMessage());
             problems.add(e.getMessage());
             return false;
-        } catch(NotExportableException e) {
+        } catch (NotExportableException e) {
             generateMessage(process, LogType.DEBUG, e.getMessage());
             return true;
         } catch (ReadException | PreferencesException | WriteException | IOException | SwapException e) {
@@ -141,17 +148,92 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         return true;
     }
 
-    private void enrichFromVocabulary(Prefs prefs, DigitalDocument dd) throws MetadataTypeNotAllowedException {
+
+    private void addAdditionalMetadata(List<MetadataConfiguration> additionalMetadata, DigitalDocument dd, Prefs prefs, VariableReplacer vp) {
+        for (MetadataConfiguration config : additionalMetadata) {
+            MetadataType type = prefs.getMetadataTypeByName(config.getMetadataType());
+            if (type != null) {
+                List<? extends Metadata> existingMetadata = dd.getLogicalDocStruct().getAllMetadataByType(type);
+                if (config.isForceCreation() || existingMetadata == null || existingMetadata.isEmpty()) {
+                    try {
+                        Metadata md = new Metadata(type);
+                        md.setValue(config.getRule().generate(vp));
+                        if (StringUtils.isNotBlank(md.getValue())) {
+                            dd.getLogicalDocStruct().addMetadata(md);
+                        }
+                    } catch (MetadataTypeNotAllowedException e) {
+                        log.error(e);
+                        problems.add("Error adding metadata of type " + config.getMetadataType());
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    private List<VocabularyRecordConfig> readVocabularyRecordConfigs(XMLConfiguration configuration) {
+        List<HierarchicalConfiguration> configs = configuration.configurationsAt("vocabulary");
+        if(configs != null) {
+            return configs.stream().map(config -> {
+                String groupType = config.getString("metadataGroupType", null);
+                Integer vocabularyId = config.getInteger("vocabularyId", null);
+                String identifierMetadata = config.getString("recordIdentifierMetadata", null);
+                if(StringUtils.isNotBlank(groupType) && StringUtils.isNotBlank(identifierMetadata) && vocabularyId != null) {
+                    List<HierarchicalConfiguration> enrichConfigs = config.configurationsAt("enrich");
+                    List<VocabularyEnrichment> enrichments = Optional.ofNullable(enrichConfigs).map(ecs -> {
+                        return ecs.stream().map(ec -> {
+                            String md = ec.getString("metadataType", "");
+                            String field = ec.getString("vocabularyField", "");
+                            return new VocabularyEnrichment(field, md);
+                        }).collect(Collectors.toList());
+                    }).orElse(Collections.emptyList());
+                    return new VocabularyRecordConfig(groupType, vocabularyId, identifierMetadata, enrichments);
+                } else {
+                    return null;
+                }
+            })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());    
+        } else {
+            return Collections.emptyList();
+        }
+    }
+    
+    private List<MetadataConfiguration> readMetadataConfigurations(XMLConfiguration configuration) {
+        List<HierarchicalConfiguration> metadataConfigs = configuration.configurationsAt("metadata");
+        if (metadataConfigs != null) {
+            return metadataConfigs.stream().map(config -> {
+                String type = config.getString("[@type]");
+                boolean force = config.getBoolean("[@force]", false);
+                GenerationRule rule = new GenerationRule(config.getString("rule"), config.getString("rule[@numberFormat]"));
+                if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(rule.getValue())) {
+                    MetadataConfiguration md = new MetadataConfiguration(type, force, rule);
+                    return md;
+                } else {
+                    return null;
+                }
+            })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    private void enrichFromVocabulary(Prefs prefs, DigitalDocument dd, List<VocabularyRecordConfig> vocabConfigs) throws MetadataTypeNotAllowedException {
         DocStruct logical = dd.getLogicalDocStruct();
         for (Metadata metadata : new ArrayList<>(logical.getAllMetadata())) {
             vocabularyEnrichment(prefs, metadata);
         }
 
         for (MetadataGroup group : logical.getAllMetadataGroups()) {
+            vocabularyEnrichment(group, vocabConfigs);
             for (Metadata metadata : new ArrayList<>(group.getMetadataList())) {
                 vocabularyEnrichment(prefs, metadata);
             }
             for (MetadataGroup subgroup : group.getAllMetadataGroups()) {
+                vocabularyEnrichment(subgroup, vocabConfigs);
                 for (Metadata metadata : new ArrayList<>(subgroup.getMetadataList())) {
                     vocabularyEnrichment(prefs, metadata);
                 }
@@ -204,7 +286,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             List<? extends Metadata> md = logical.getAllMetadataByType(published);
             if (md.isEmpty()) {
                 throw new NotExportableException("Record is not marked as exportable, skip export");
-                
+
             }
             if (!md.stream().anyMatch(m -> m.getValue() != null && m.getValue().matches("[YyJj]"))) {
                 throw new NotExportableException("Record is not marked as exportable, skip export");
@@ -217,7 +299,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         List<MetadataGroup> bibliographyList = new ArrayList<>();
         if (logical == null) {
             throw new ExportException("No logical structure defined");
-            
+
         }
         for (MetadataGroup grp : new ArrayList<>(logical.getAllMetadataGroups())) {
             boolean removed = false;
@@ -242,9 +324,9 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 && ff.getDigitalDocument().getFileSet().getAllFiles().stream().noneMatch(ContentFile::isRepresentative)) {
             setRepresentative(prefs, ff);
         }
-        
+
         boolean addEventLocationFromAgent = config.getBoolean("addEventLocationFromAgent", false);
-        if(addEventLocationFromAgent && logical.getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("LocationGroup")).isEmpty()) {
+        if (addEventLocationFromAgent && logical.getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("LocationGroup")).isEmpty()) {
             try {
                 addLocationFromRelatedAgent(logical, prefs);
             } catch (PreferencesException | ReadException | MetadataTypeNotAllowedException | DocStructHasNoTypeException e) {
@@ -255,18 +337,24 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         return dd;
     }
 
-    private void addLocationFromRelatedAgent(DocStruct logical, Prefs prefs) throws PreferencesException, ReadException, MetadataTypeNotAllowedException, DocStructHasNoTypeException {
+    private void addLocationFromRelatedAgent(DocStruct logical, Prefs prefs)
+            throws PreferencesException, ReadException, MetadataTypeNotAllowedException, DocStructHasNoTypeException {
         List<MetadataGroup> relationships = logical.getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("Relationship"));
         for (MetadataGroup rel : relationships) {
             String entityType = rel.getMetadataByType("RelationEntityType").stream().findFirst().map(md -> md.getValue()).orElse(null);
             String relationshipType = rel.getMetadataByType("Type").stream().findFirst().map(md -> md.getValue()).orElse(null);
-            if("Agent".equals(entityType) && "was organized by".equals(relationshipType)) {
+            if ("Agent".equals(entityType) && "was organized by".equals(relationshipType)) {
                 String agentIdentifier = rel.getMetadataByType("RelationProcessID").stream().findFirst().map(md -> md.getValue()).orElse(null);
                 Path agentMetsPath = Paths.get(ConfigurationHelper.getInstance().getMetadataFolder(), agentIdentifier, "meta.xml");
                 Fileformat agentFormat = new MetsMods(prefs);
                 agentFormat.read(agentMetsPath.toAbsolutePath().toString());
-                MetadataGroup locationGroup = agentFormat.getDigitalDocument().getLogicalDocStruct().getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("LocationGroup")).stream().findFirst().orElse(null);
-                if(locationGroup != null) {
+                MetadataGroup locationGroup = agentFormat.getDigitalDocument()
+                        .getLogicalDocStruct()
+                        .getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("LocationGroup"))
+                        .stream()
+                        .findFirst()
+                        .orElse(null);
+                if (locationGroup != null) {
                     logical.addMetadataGroup(locationGroup);
                 }
             }
@@ -286,11 +374,11 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                     List<ContentFile> allFiles = ff.getDigitalDocument().getFileSet().getAllFiles();
                     for (ContentFile contentFile : allFiles) {
                         String location = contentFile.getLocation();
-                        if(location != null && location.replaceAll("\\s+", " ").endsWith(filename)) {
+                        if (location != null && location.replaceAll("\\s+", " ").endsWith(filename)) {
                             contentFile.setRepresentative(true);
                         }
                     }
-                    
+
                 } catch (PreferencesException e) {
                     log.error("Error reading fileset", e);
                 }
@@ -667,7 +755,45 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         }
     }
 
+    private void vocabularyEnrichment(MetadataGroup group, List<VocabularyRecordConfig> vocabConfigs) {
+
+        for (VocabularyRecordConfig config : vocabConfigs) {
+            if (Objects.equals(config.getGroupType(), group.getType().getName())) {
+                List<Metadata> vocabIds = group.getMetadataByType(config.getRecordIdentifierMetadata());
+                if (vocabIds != null) {
+                    for (Metadata vocabIdMetadata : vocabIds) {
+                        Integer vocabularyRecordId = Optional.ofNullable(vocabIdMetadata)
+                                .map(Metadata::getValue)
+                                .filter(StringUtils::isNotBlank)
+                                .filter(StringUtils::isNumeric)
+                                .map(Long::parseLong)
+                                .map(Long::intValue)
+                                .orElse(-1);
+                        VocabRecord vocabRecord = VocabularyManager.getRecord(config.getVocabularyId(), vocabularyRecordId);
+
+                        for (VocabularyEnrichment enrichment : config.getEnrichments()) {
+                            String fieldValue = Optional.ofNullable(vocabRecord)
+                                    .map(r -> r.getFieldByLabel(enrichment.getVocabularyField()))
+                                    .map(Field::getValue)
+                                    .orElse(null);
+                            if (StringUtils.isNotBlank(fieldValue) && !"null".equalsIgnoreCase(fieldValue)) {
+                                List<Metadata> metadataList =
+                                        Optional.ofNullable(group.getMetadataByType(enrichment.getMetadataType())).orElse(Collections.emptyList());
+                                for (Metadata metadata : metadataList) {
+                                    if (StringUtils.isBlank(metadata.getValue()) || "null".equalsIgnoreCase(metadata.getValue())) {
+                                        metadata.setValue(fieldValue);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private void vocabularyEnrichment(Prefs prefs, Metadata metadata) throws MetadataTypeNotAllowedException {
+
         if (StringUtils.isNotBlank(metadata.getAuthorityValue()) && metadata.getAuthorityURI().contains("vocabulary")) {
             String vocabularyName = metadata.getAuthorityID();
             String vocabRecordUrl = metadata.getAuthorityValue();
