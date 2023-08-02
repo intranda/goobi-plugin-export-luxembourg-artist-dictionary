@@ -773,7 +773,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
                         for (VocabularyEnrichment enrichment : config.getEnrichments()) {
                             String fieldValue = Optional.ofNullable(vocabRecord)
-                                    .map(r -> r.getFieldByLabel(enrichment.getVocabularyField()))
+                                    .map(r -> getFieldByLabel(r, enrichment.getVocabularyField()))
                                     .map(Field::getValue)
                                     .orElse(null);
                             if (StringUtils.isNotBlank(fieldValue) && !"null".equalsIgnoreCase(fieldValue)) {
@@ -790,6 +790,15 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 }
             }
         }
+    }
+
+    private Field getFieldByLabel(VocabRecord r, String label) {
+        for (Field field : r.getFields()) {
+            if (field.getLabel().equals(label)) {
+                return field;
+            }
+        }
+        return null;
     }
 
     private void vocabularyEnrichment(Prefs prefs, Metadata metadata) throws MetadataTypeNotAllowedException {
