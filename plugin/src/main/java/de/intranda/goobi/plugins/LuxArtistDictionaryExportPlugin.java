@@ -41,6 +41,7 @@ import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.ExportFileException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.helper.exceptions.UghHelperException;
+import de.sub.goobi.persistence.managers.ProcessManager;
 import de.sub.goobi.persistence.managers.VocabularyManager;
 import lombok.Getter;
 import lombok.Setter;
@@ -72,6 +73,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
     public static final String DIRECTORY_SUFFIX = "_media";
     private static final String EXPORT_ERROR_PREFIX = "Export cancelled: ";
+    private static final String PROCESS_PROPERTY_PROCESS_STATUS = "ProcessStatus";
 
     @Getter
     private String title = "intranda_export_luxArtistDictionary";
@@ -132,6 +134,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 problems.add("Failed to download images or fulltext files");
                 return false;
             }
+            setProcessStatus(process, "Published");
         } catch (ExportException e) {
             log.error(e.getMessage());
             problems.add(e.getMessage());
@@ -148,6 +151,17 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         return true;
     }
 
+
+    private void setProcessStatus(Process process, String value) {
+        process.getEigenschaften().stream().filter(prop -> PROCESS_PROPERTY_PROCESS_STATUS.equals(prop.getTitel())).findAny().ifPresent(prop -> {
+            try {
+                prop.setValueList(List.of(value));
+                ProcessManager.saveProcess(process);
+            } catch (DAOException e) {
+                log.error("Error updating process status of process {}. Reason: {}", process.getTitel(), e.toString());
+            }
+        });
+    }
 
     private void addAdditionalMetadata(List<MetadataConfiguration> additionalMetadata, DigitalDocument dd, Prefs prefs, VariableReplacer vp) {
         for (MetadataConfiguration config : additionalMetadata) {
