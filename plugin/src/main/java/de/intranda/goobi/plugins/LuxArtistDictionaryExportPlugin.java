@@ -156,7 +156,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     private void setProcessStatus(Process process, String value) {
         process.getEigenschaften().stream().filter(prop -> PROCESS_PROPERTY_PROCESS_STATUS.equals(prop.getTitel())).findAny().ifPresent(prop -> {
                 log.info("Settting property {} of process {} to {}", PROCESS_PROPERTY_PROCESS_STATUS, process.getId(), value);
-                prop.setValueList(List.of(value));
+                prop.setWert(value);
                 PropertyManager.saveProcessProperty(prop);
                 log.info("Successfully set process property");
         });
