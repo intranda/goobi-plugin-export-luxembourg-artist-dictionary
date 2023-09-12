@@ -92,16 +92,16 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
     @Override
     public boolean startExport(Process process) throws IOException, InterruptedException, DocStructHasNoTypeException, PreferencesException,
-            WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException, SwapException, DAOException,
-            TypeNotAllowedForParentException {
+    WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException, SwapException, DAOException,
+    TypeNotAllowedForParentException {
         String benutzerHome = process.getProjekt().getDmsImportRootPath();
         return startExport(process, benutzerHome);
     }
 
     @Override
     public boolean startExport(Process process, String destination) throws IOException, InterruptedException, DocStructHasNoTypeException,
-            PreferencesException, WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException,
-            SwapException, DAOException, TypeNotAllowedForParentException {
+    PreferencesException, WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException,
+    SwapException, DAOException, TypeNotAllowedForParentException {
         problems = new ArrayList<>();
 
         try {
@@ -112,7 +112,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
             List<MetadataConfiguration> additionalMetadata = readMetadataConfigurations(getConfig());
             List<VocabularyRecordConfig> vocabularyConfigs = readVocabularyRecordConfigs(getConfig());
-            
+
             DigitalDocument dd = enrichFileformat(ff, prefs, config);
 
             enrichFromVocabulary(prefs, dd, vocabularyConfigs);
@@ -194,12 +194,12 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 }
             })
                     .filter(Objects::nonNull)
-                    .collect(Collectors.toList());    
+                    .collect(Collectors.toList());
         } else {
             return Collections.emptyList();
         }
     }
-    
+
     private List<MetadataConfiguration> readMetadataConfigurations(XMLConfiguration configuration) {
         List<HierarchicalConfiguration> metadataConfigs = configuration.configurationsAt("metadata");
         if (metadataConfigs != null) {
@@ -863,6 +863,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                     case "R09 Relationship Person - Award":
                     case "R10 Relationship Collective agent - Award":
                     case "R11 Relationship Work - Award":
+                    case "R12 Relationship Event - Award":
                         String eng = null;
                         String fre = null;
                         String ger = null;
