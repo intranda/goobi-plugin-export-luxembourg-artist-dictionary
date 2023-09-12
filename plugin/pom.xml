@@ -2,11 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.intranda.goobi.plugins.export</groupId>
   <artifactId>luxArtistDictionary</artifactId>
-  <version>23.05.5</version>
+  <version>23.07.3</version>
   <properties>
     <jar.name>plugin_intranda_export_luxArtistDictionary</jar.name>
     <dest.folder>/opt/digiverso/goobi/plugins/export/</dest.folder>
-    <goobi.version>22.09.2</goobi.version>
+    <goobi.version>23.07.3</goobi.version>
   </properties>
   <distributionManagement>
     <repository>
