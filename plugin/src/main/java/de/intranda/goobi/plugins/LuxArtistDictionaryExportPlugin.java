@@ -42,6 +42,7 @@ import de.sub.goobi.helper.exceptions.ExportFileException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.helper.exceptions.UghHelperException;
 import de.sub.goobi.persistence.managers.ProcessManager;
+import de.sub.goobi.persistence.managers.PropertyManager;
 import de.sub.goobi.persistence.managers.VocabularyManager;
 import lombok.Getter;
 import lombok.Setter;
@@ -154,14 +155,10 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
     private void setProcessStatus(Process process, String value) {
         process.getEigenschaften().stream().filter(prop -> PROCESS_PROPERTY_PROCESS_STATUS.equals(prop.getTitel())).findAny().ifPresent(prop -> {
-            try {
                 log.info("Settting property {} of process {} to {}", PROCESS_PROPERTY_PROCESS_STATUS, process.getId(), value);
                 prop.setValueList(List.of(value));
-                ProcessManager.saveProcess(process);
+                PropertyManager.saveProcessProperty(prop);
                 log.info("Successfully set process property");
-            } catch (DAOException e) {
-                log.error("Error updating process status of process {}. Reason: {}", process.getTitel(), e.toString());
-            }
         });
     }
 
