@@ -76,6 +76,8 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     private static final String EXPORT_ERROR_PREFIX = "Export cancelled: ";
     private static final String PROCESS_PROPERTY_PROCESS_STATUS = "ProcessStatus";
 
+    private static final List<String> REPRESENTATIVE_IMAGE_SUBJECTS = List.of("Portrait", "Event visual", "Award visual ");
+    
     @Getter
     private String title = "intranda_export_luxArtistDictionary";
     @Getter
@@ -378,7 +380,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         List<MetadataGroup> mediaGroups =
                 ff.getDigitalDocument().getLogicalDocStruct().getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("Media"));
         Optional<MetadataGroup> firstPortrait = mediaGroups.stream()
-                .filter(gr -> gr.getMetadataByType("Subject").stream().anyMatch(md -> "Portrait".equals(md.getValue())))
+                .filter(gr -> gr.getMetadataByType("Subject").stream().anyMatch(md -> REPRESENTATIVE_IMAGE_SUBJECTS.contains(md.getValue())))
                 .findFirst();
         firstPortrait.ifPresent(gr -> {
             gr.getMetadataByType("File").stream().findAny().map(Metadata::getValue).ifPresent(filepath -> {
