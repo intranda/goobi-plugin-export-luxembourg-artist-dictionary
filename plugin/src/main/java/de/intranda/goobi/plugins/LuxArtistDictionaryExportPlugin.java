@@ -358,7 +358,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         for (MetadataGroup rel : relationships) {
             String entityType = rel.getMetadataByType("RelationEntityType").stream().findFirst().map(md -> md.getValue()).orElse(null);
             String relationshipType = rel.getMetadataByType("Type").stream().findFirst().map(md -> md.getValue()).orElse(null);
-            if ("Agent".equals(entityType) && "was organized by".equals(relationshipType)) {
+            if ("Agent".equals(entityType) && ("was organized by".equals(relationshipType) || "organized".equals(relationshipType))) {
                 String agentIdentifier = rel.getMetadataByType("RelationProcessID").stream().findFirst().map(md -> md.getValue()).orElse(null);
                 Path agentMetsPath = Paths.get(ConfigurationHelper.getInstance().getMetadataFolder(), agentIdentifier, "meta.xml");
                 Fileformat agentFormat = new MetsMods(prefs);
