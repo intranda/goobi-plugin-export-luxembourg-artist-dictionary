@@ -41,7 +41,6 @@ import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.ExportFileException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.helper.exceptions.UghHelperException;
-import de.sub.goobi.persistence.managers.ProcessManager;
 import de.sub.goobi.persistence.managers.PropertyManager;
 import de.sub.goobi.persistence.managers.VocabularyManager;
 import lombok.Getter;
@@ -77,7 +76,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     private static final String PROCESS_PROPERTY_PROCESS_STATUS = "ProcessStatus";
 
     private static final List<String> REPRESENTATIVE_IMAGE_SUBJECTS = List.of("Portrait", "Event visual", "Award visual ");
-    
+
     @Getter
     private String title = "intranda_export_luxArtistDictionary";
     @Getter
@@ -97,16 +96,16 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
     @Override
     public boolean startExport(Process process) throws IOException, InterruptedException, DocStructHasNoTypeException, PreferencesException,
-    WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException, SwapException, DAOException,
-    TypeNotAllowedForParentException {
+            WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException, SwapException, DAOException,
+            TypeNotAllowedForParentException {
         String benutzerHome = process.getProjekt().getDmsImportRootPath();
         return startExport(process, benutzerHome);
     }
 
     @Override
     public boolean startExport(Process process, String destination) throws IOException, InterruptedException, DocStructHasNoTypeException,
-    PreferencesException, WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException,
-    SwapException, DAOException, TypeNotAllowedForParentException {
+            PreferencesException, WriteException, MetadataTypeNotAllowedException, ExportFileException, UghHelperException, ReadException,
+            SwapException, DAOException, TypeNotAllowedForParentException {
         problems = new ArrayList<>();
 
         try {
@@ -154,13 +153,12 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         return true;
     }
 
-
     private void setProcessStatus(Process process, String value) {
         process.getEigenschaften().stream().filter(prop -> PROCESS_PROPERTY_PROCESS_STATUS.equals(prop.getTitel())).findAny().ifPresent(prop -> {
-                log.info("Settting property {} of process {} to {}", PROCESS_PROPERTY_PROCESS_STATUS, process.getId(), value);
-                prop.setWert(value);
-                PropertyManager.saveProcessProperty(prop);
-                log.info("Successfully set process property");
+            log.info("Settting property {} of process {} to {}", PROCESS_PROPERTY_PROCESS_STATUS, process.getId(), value);
+            prop.setWert(value);
+            PropertyManager.saveProcessProperty(prop);
+            log.info("Successfully set process property");
         });
     }
 
@@ -186,15 +184,14 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
     }
 
-
     private List<VocabularyRecordConfig> readVocabularyRecordConfigs(XMLConfiguration configuration) {
         List<HierarchicalConfiguration> configs = configuration.configurationsAt("vocabulary");
-        if(configs != null) {
+        if (configs != null) {
             return configs.stream().map(config -> {
                 String groupType = config.getString("metadataGroupType", null);
                 Integer vocabularyId = config.getInteger("vocabularyId", null);
                 String identifierMetadata = config.getString("recordIdentifierMetadata", null);
-                if(StringUtils.isNotBlank(groupType) && StringUtils.isNotBlank(identifierMetadata) && vocabularyId != null) {
+                if (StringUtils.isNotBlank(groupType) && StringUtils.isNotBlank(identifierMetadata) && vocabularyId != null) {
                     List<HierarchicalConfiguration> enrichConfigs = config.configurationsAt("enrich");
                     List<VocabularyEnrichment> enrichments = Optional.ofNullable(enrichConfigs).map(ecs -> {
                         return ecs.stream().map(ec -> {
@@ -236,7 +233,8 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         }
     }
 
-    private void enrichFromVocabulary(Prefs prefs, DigitalDocument dd, List<VocabularyRecordConfig> vocabConfigs) throws MetadataTypeNotAllowedException {
+    private void enrichFromVocabulary(Prefs prefs, DigitalDocument dd, List<VocabularyRecordConfig> vocabConfigs)
+            throws MetadataTypeNotAllowedException {
         DocStruct logical = dd.getLogicalDocStruct();
         for (Metadata metadata : new ArrayList<>(logical.getAllMetadata())) {
             vocabularyEnrichment(prefs, metadata);
@@ -501,7 +499,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         }
         v.setFileExtensionsToIgnore(projectFileGroup.getIgnoreMimetypes());
         v.setIgnoreConfiguredMimetypeAndSuffix(projectFileGroup.isUseOriginalFiles());
-        if (projectFileGroup.getName().equals("PRESENTATION")) {
+        if ("PRESENTATION".equals(projectFileGroup.getName())) {
             v.setMainGroup(true);
         }
         return v;
