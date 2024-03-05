@@ -112,12 +112,13 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             // read mets file
             Prefs prefs = process.getRegelsatz().getPreferences();
             Fileformat ff = process.readMetadataFile();
+
             XMLConfiguration config = getConfig();
 
             List<MetadataConfiguration> additionalMetadata = readMetadataConfigurations(getConfig());
             List<VocabularyRecordConfig> vocabularyConfigs = readVocabularyRecordConfigs(getConfig());
 
-            DigitalDocument dd = enrichFileformat(ff, prefs, config);
+            DigitalDocument dd = enrichFileformat(ff, prefs, config, process.getImagesTifDirectory(true));
 
             enrichFromVocabulary(prefs, dd, vocabularyConfigs);
 
@@ -181,7 +182,6 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 }
             }
         }
-
     }
 
     private List<VocabularyRecordConfig> readVocabularyRecordConfigs(XMLConfiguration configuration) {
@@ -220,8 +220,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 boolean force = config.getBoolean("[@force]", false);
                 GenerationRule rule = new GenerationRule(config.getString("rule"), config.getString("rule[@numberFormat]"));
                 if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(rule.getValue())) {
-                    MetadataConfiguration md = new MetadataConfiguration(type, force, rule);
-                    return md;
+                    return new MetadataConfiguration(type, force, rule);
                 } else {
                     return null;
                 }
@@ -287,7 +286,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         mm.setSruUrl(vp.replace(process.getProjekt().getMetsSruUrl()));
     }
 
-    protected DigitalDocument enrichFileformat(Fileformat ff, Prefs prefs, XMLConfiguration config)
+    protected DigitalDocument enrichFileformat(Fileformat ff, Prefs prefs, XMLConfiguration config, String imageFolder)
             throws PreferencesException, MetadataTypeNotAllowedException, NotExportableException, ExportException {
         MetadataType published = prefs.getMetadataTypeByName("Published");
         DigitalDocument dd = ff.getDigitalDocument();
@@ -301,7 +300,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 throw new NotExportableException("Record is not marked as exportable, skip export");
 
             }
-            if (!md.stream().anyMatch(m -> m.getValue() != null && m.getValue().matches("[YyJj]"))) {
+            if (md.stream().noneMatch(m -> m.getValue() != null && m.getValue().matches("[YyJj]"))) {
                 throw new NotExportableException("Record is not marked as exportable, skip export");
             }
         }
@@ -347,6 +346,44 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             }
         }
 
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFolder)) {
+            DocStruct physical = dd.getPhysicalDocStruct();
+            if (physical != null && physical.getAllChildren() != null) {
+                List<String> imageNamesInFolder = StorageProvider.getInstance().list(imageFolder);
+                List<String> imageNamesInFile = new ArrayList<>();
+                List<DocStruct> pages = physical.getAllChildren();
+                List<DocStruct> pagesToDelete = new ArrayList<>();
+                for (DocStruct page : pages) {
+                    String currentImage = Paths.get(page.getImageName()).getFileName().toString();
+                    if (imageNamesInFile.contains(currentImage)) {
+                        // duplicate entry, remove page
+                        pagesToDelete.add(page);
+                    } else {
+                        imageNamesInFile.add(currentImage);
+                    }
+                    if (!imageNamesInFolder.contains(currentImage)) {
+                        // image does not longer exist, remove page
+                        pagesToDelete.add(page);
+                    }
+                }
+                for (DocStruct page : pagesToDelete) {
+                    physical.removeChild(page);
+                }
+                // finally generate new phys order
+
+                int order = 1;
+                for (DocStruct page : physical.getAllChildren()) {
+                    for (Metadata md : page.getAllMetadata()) {
+                        if ("physPageNumber".equals(md.getType().getName())) {
+                            md.setValue(String.valueOf(order));
+                            order++;
+                            break;
+                        }
+                    }
+                }
+            }
+
+        }
         return dd;
     }
 

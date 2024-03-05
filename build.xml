@@ -9,7 +9,7 @@
 		<exec executable="mvn">
 			<arg value="package"/>
 		</exec>
-		<copy file="target/plugin_intranda_export_${name}.jar" todir="/opt/digiverso/goobi/plugins/export/" overwrite="true"/>
+		<copy file="module-base/target/plugin-export-luxArtistDictionary-base-24.03-SNAPSHOT.jar" todir="/opt/digiverso/goobi/plugins/export/" overwrite="true"/>
 	</target>
 
 </project>

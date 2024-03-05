@@ -18,24 +18,24 @@ public class GenerationRule {
 
     private final String value;
     private final String numberFormat;
-    
+
     public GenerationRule(String value) {
         this(value, null);
     }
-    
+
     public GenerationRule(String value, String numberFormat) {
         this.value = value;
         this.numberFormat = numberFormat;
     }
-    
+
     public String generate(VariableReplacer vr) {
-        
+
         String v = vr == null ? this.value : vr.replace(this.value);
-        if(StringUtils.isNotBlank(numberFormat)) {
+        if (StringUtils.isNotBlank(numberFormat)) {
             NumberFormat format = new DecimalFormat(numberFormat);
             Matcher matcher = Pattern.compile("\\d+").matcher(v);
             List<Group> groups = new ArrayList<>();
-            while(matcher.find()) {
+            while (matcher.find()) {
                 groups.add(new Group(matcher.group(), matcher.start(), matcher.end()));
             }
             Collections.reverse(groups);
@@ -46,17 +46,17 @@ public class GenerationRule {
         }
         return v;
     }
-    
+
     private class Group {
         public int start;
         public int end;
         public String content;
-        
+
         public Group(String content, int start, int end) {
             this.content = content;
             this.start = start;
             this.end = end;
         }
     }
-    
+
 }

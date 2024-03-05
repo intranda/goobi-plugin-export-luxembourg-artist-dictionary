@@ -7,10 +7,9 @@ import lombok.Data;
 @Data
 public class VocabularyRecordConfig {
 
-    private final String groupType ;
+    private final String groupType;
     private final Integer vocabularyId;
     private final String recordIdentifierMetadata;
     private final List<VocabularyEnrichment> enrichments;
 
-    
 }

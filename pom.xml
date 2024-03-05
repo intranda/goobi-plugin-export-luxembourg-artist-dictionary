@@ -9,6 +9,9 @@
   <groupId>io.goobi.workflow.plugin</groupId>
   <artifactId>plugin-export-luxArtistDictionary</artifactId>
   <packaging>pom</packaging>
+  <properties>
+      <maven.compiler.release>11</maven.compiler.release>
+  </properties>
   <modules>
     <module>module-base</module>
   </modules>
