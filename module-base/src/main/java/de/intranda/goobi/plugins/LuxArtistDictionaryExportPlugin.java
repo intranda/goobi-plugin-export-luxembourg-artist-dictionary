@@ -16,7 +16,7 @@ import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.goobi.beans.Process;
 import org.goobi.beans.ProjectFileGroup;
 import org.goobi.beans.Step;
@@ -55,6 +55,7 @@ import ugh.dl.Metadata;
 import ugh.dl.MetadataGroup;
 import ugh.dl.MetadataType;
 import ugh.dl.Prefs;
+import ugh.dl.Reference;
 import ugh.dl.VirtualFileGroup;
 import ugh.exceptions.DocStructHasNoTypeException;
 import ugh.exceptions.MetadataTypeNotAllowedException;
@@ -346,7 +347,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             }
         }
 
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(imageFolder)) {
+        if (StringUtils.isNotBlank(imageFolder)) {
             DocStruct physical = dd.getPhysicalDocStruct();
             if (physical != null && physical.getAllChildren() != null) {
                 List<String> imageNamesInFolder = StorageProvider.getInstance().list(imageFolder);
@@ -366,7 +367,14 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                         pagesToDelete.add(page);
                     }
                 }
+
                 for (DocStruct page : pagesToDelete) {
+
+                    List<Reference> refs = new ArrayList<>(page.getAllFromReferences());
+                    for (ugh.dl.Reference ref : refs) {
+                        ref.getSource().removeReferenceTo(page);
+                    }
+
                     physical.removeChild(page);
                 }
                 // finally generate new phys order
@@ -382,7 +390,6 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                     }
                 }
             }
-
         }
         return dd;
     }
