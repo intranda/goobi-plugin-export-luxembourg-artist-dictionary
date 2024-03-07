@@ -7,7 +7,7 @@
     <relativePath />
   </parent>
   <groupId>io.goobi.workflow.plugin</groupId>
-  <artifactId>plugin-export-luxArtistDictionary</artifactId>
+  <artifactId>plugin-export-luxembourg-artist-dictionary</artifactId>
   <packaging>pom</packaging>
   <properties>
       <maven.compiler.release>11</maven.compiler.release>
