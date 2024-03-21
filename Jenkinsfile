@@ -43,11 +43,26 @@ pipeline {
       }
     }
 
+    stage('deploy-libs') {
+      when {
+        anyOf {
+          branch 'master'
+          branch 'develop'
+        }
+      }
+      steps {
+        script {
+          if (fileExists('module-lib/pom.xml')) {
+            sh 'mvn -f module-lib/pom.xml deploy'
+          }
+        }
+      }
+    }
   }
 
   post {
     always {
-      junit allowEmptyResults: true, testResults: "**/target/surefire-reports/*.xml"
+      junit "**/target/surefire-reports/*.xml"
       step([
         $class           : 'JacocoPublisher',
         execPattern      : '**/target/jacoco.exec',
