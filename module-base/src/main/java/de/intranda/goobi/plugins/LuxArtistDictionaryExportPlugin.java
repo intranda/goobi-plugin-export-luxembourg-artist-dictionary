@@ -164,34 +164,49 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
         // if media folder is used, remove all pages from master folder
 
+        List<String> imagesInMediaFolder = StorageProvider.getInstance().list(process.getImagesTifDirectory(false));
+
         if (config.getBoolean("cleanupPagination", false)) {
             List<DocStruct> pagesToDelete = new ArrayList<>();
-            DocStruct pyhsical = ff.getDigitalDocument().getPhysicalDocStruct();
-            for (DocStruct page : pyhsical.getAllChildren()) {
-                Path completeNameInMets = Paths.get(page.getImageName());
-                if (completeNameInMets.getParent().toString().contains("master")) {
-                    pagesToDelete.add(page);
-                }
-            }
-            for (DocStruct pageToRemove : pagesToDelete) {
-                pyhsical.removeChild(pageToRemove);
-                List<Reference> refs = new ArrayList<>(pageToRemove.getAllFromReferences());
-                for (ugh.dl.Reference ref : refs) {
-                    DocStruct source = ref.getSource();
-                    for (Reference reference : source.getAllToReferences()) {
-                        if (reference.getTarget().equals(pageToRemove)) {
-                            source.getAllToReferences().remove(reference);
-                            break;
+            List<ContentFile> contentFilesToDelete = new ArrayList<>();
+            DigitalDocument dd = ff.getDigitalDocument();
+            DocStruct pyhsical = dd.getPhysicalDocStruct();
+            if (pyhsical != null) {
+                for (DocStruct page : pyhsical.getAllChildren()) {
+                    String imageName = Paths.get(page.getImageName()).getFileName().toString();
+                    if (!imagesInMediaFolder.contains(imageName)) {
+                        pagesToDelete.add(page);
+                        for (ContentFile cf : dd.getFileSet().getAllFiles()) {
+                            String contentFileLocation = Paths.get(cf.getLocation()).getFileName().toString();
+                            if (contentFileLocation.equals(imageName)) {
+                                contentFilesToDelete.add(cf);
+                            }
                         }
                     }
                 }
-            }
-            if (!pagesToDelete.isEmpty()) {
-                // update process
-                process.writeMetadataFile(ff);
+                for (DocStruct pageToRemove : pagesToDelete) {
+                    pyhsical.removeChild(pageToRemove);
+                    List<Reference> refs = new ArrayList<>(pageToRemove.getAllFromReferences());
+                    for (ugh.dl.Reference ref : refs) {
+                        DocStruct source = ref.getSource();
+                        for (Reference reference : source.getAllToReferences()) {
+                            if (reference.getTarget().equals(pageToRemove)) {
+                                source.getAllToReferences().remove(reference);
+                                break;
+                            }
+                        }
+                    }
+                }
+                for (ContentFile cf : contentFilesToDelete) {
+                    dd.getFileSet().removeFile(cf);
+                }
+
+                if (!pagesToDelete.isEmpty()) {
+                    // update process
+                    process.writeMetadataFile(ff);
+                }
             }
         }
-
     }
 
     private void setProcessStatus(Process process, String value) {
