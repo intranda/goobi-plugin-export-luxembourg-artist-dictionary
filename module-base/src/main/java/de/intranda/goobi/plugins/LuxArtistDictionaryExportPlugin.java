@@ -62,6 +62,7 @@ import ugh.exceptions.MetadataTypeNotAllowedException;
 import ugh.exceptions.PreferencesException;
 import ugh.exceptions.ReadException;
 import ugh.exceptions.TypeNotAllowedForParentException;
+import ugh.exceptions.UGHException;
 import ugh.exceptions.WriteException;
 import ugh.fileformats.mets.MetsMods;
 import ugh.fileformats.mets.MetsModsImportExport;
@@ -116,8 +117,10 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
             XMLConfiguration config = getConfig();
 
-            List<MetadataConfiguration> additionalMetadata = readMetadataConfigurations(getConfig());
-            List<VocabularyRecordConfig> vocabularyConfigs = readVocabularyRecordConfigs(getConfig());
+            cleanUpPagination(process, ff, config);
+
+            List<MetadataConfiguration> additionalMetadata = readMetadataConfigurations(config);
+            List<VocabularyRecordConfig> vocabularyConfigs = readVocabularyRecordConfigs(config);
 
             DigitalDocument dd = enrichFileformat(ff, prefs, config, process.getImagesTifDirectory(true));
 
@@ -130,7 +133,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             // Replace rights and digiprov entries.
             addProjectData(mm, process, vp);
             addAdditionalMetadata(additionalMetadata, dd, prefs, vp);
-            writeFileGroups(process, dd, vp, mm);
+            writeFileGroups(process, dd, vp, mm, config);
             mm.write(Paths.get(destination, process.getTitel() + ".xml").toString());
 
             if (!exportFiles(process, vp, destination)) {
@@ -150,9 +153,45 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             log.error(e);
             problems.add("Cannot read metadata file.");
             return false;
+        } catch (UGHException e) {
+            log.error(e);
         }
 
         return true;
+    }
+
+    private void cleanUpPagination(Process process, Fileformat ff, XMLConfiguration config) throws UGHException, IOException, SwapException {
+
+        // if media folder is used, remove all pages from master folder
+
+        if (config.getBoolean("cleanupPagination", false)) {
+            List<DocStruct> pagesToDelete = new ArrayList<>();
+            DocStruct pyhsical = ff.getDigitalDocument().getPhysicalDocStruct();
+            for (DocStruct page : pyhsical.getAllChildren()) {
+                Path completeNameInMets = Paths.get(page.getImageName());
+                if (completeNameInMets.getParent().toString().contains("master")) {
+                    pagesToDelete.add(page);
+                }
+            }
+            for (DocStruct pageToRemove : pagesToDelete) {
+                pyhsical.removeChild(pageToRemove);
+                List<Reference> refs = new ArrayList<>(pageToRemove.getAllFromReferences());
+                for (ugh.dl.Reference ref : refs) {
+                    DocStruct source = ref.getSource();
+                    for (Reference reference : source.getAllToReferences()) {
+                        if (reference.getTarget().equals(pageToRemove)) {
+                            source.getAllToReferences().remove(reference);
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!pagesToDelete.isEmpty()) {
+                // update process
+                process.writeMetadataFile(ff);
+            }
+        }
+
     }
 
     private void setProcessStatus(Process process, String value) {
@@ -445,13 +484,13 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
     private XMLConfiguration getConfig() {
         XMLConfiguration xmlConfig = ConfigPlugins.getPluginConfig(title);
-        //      xmlConfig.setExpressionEngine(new XPathExpressionEngine());
         xmlConfig.setReloadingStrategy(new FileChangedReloadingStrategy());
         return xmlConfig;
     }
 
-    private void writeFileGroups(Process process, DigitalDocument dd, VariableReplacer vp, MetsModsImportExport mm)
+    private void writeFileGroups(Process process, DigitalDocument dd, VariableReplacer vp, MetsModsImportExport mm, XMLConfiguration config)
             throws IOException, SwapException {
+
         List<ProjectFileGroup> myFilegroups = process.getProjekt().getFilegroups();
         boolean useOriginalFiles = false;
         if (myFilegroups != null && !myFilegroups.isEmpty()) {
