@@ -118,13 +118,13 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             XMLConfiguration config = getConfig();
 
             cleanUpPagination(process, ff, config);
-
+            String vocabularyBaseUrl = config.getString("vocabularyBaseUrl");
             List<MetadataConfiguration> additionalMetadata = readMetadataConfigurations(config);
             List<VocabularyRecordConfig> vocabularyConfigs = readVocabularyRecordConfigs(config);
 
             DigitalDocument dd = enrichFileformat(ff, prefs, config, process.getImagesTifDirectory(true));
 
-            enrichFromVocabulary(prefs, dd, vocabularyConfigs);
+            enrichFromVocabulary(prefs, dd, vocabularyConfigs, vocabularyBaseUrl);
 
             // export data
             VariableReplacer vp = new VariableReplacer(dd, prefs, process, null);
@@ -171,7 +171,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             List<ContentFile> contentFilesToDelete = new ArrayList<>();
             DigitalDocument dd = ff.getDigitalDocument();
             DocStruct pyhsical = dd.getPhysicalDocStruct();
-            if (pyhsical != null) {
+            if (pyhsical != null && pyhsical.getAllChildren() != null) {
                 for (DocStruct page : pyhsical.getAllChildren()) {
                     String imageName = Paths.get(page.getImageName()).getFileName().toString();
                     if (!imagesInMediaFolder.contains(imageName)) {
@@ -287,22 +287,22 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         }
     }
 
-    private void enrichFromVocabulary(Prefs prefs, DigitalDocument dd, List<VocabularyRecordConfig> vocabConfigs)
+    private void enrichFromVocabulary(Prefs prefs, DigitalDocument dd, List<VocabularyRecordConfig> vocabConfigs, String baseUrl)
             throws MetadataTypeNotAllowedException {
         DocStruct logical = dd.getLogicalDocStruct();
         for (Metadata metadata : new ArrayList<>(logical.getAllMetadata())) {
-            vocabularyEnrichment(prefs, metadata);
+            vocabularyEnrichment(prefs, metadata, baseUrl);
         }
 
         for (MetadataGroup group : logical.getAllMetadataGroups()) {
             vocabularyEnrichment(group, vocabConfigs);
             for (Metadata metadata : new ArrayList<>(group.getMetadataList())) {
-                vocabularyEnrichment(prefs, metadata);
+                vocabularyEnrichment(prefs, metadata, baseUrl);
             }
             for (MetadataGroup subgroup : group.getAllMetadataGroups()) {
                 vocabularyEnrichment(subgroup, vocabConfigs);
                 for (Metadata metadata : new ArrayList<>(subgroup.getMetadataList())) {
-                    vocabularyEnrichment(prefs, metadata);
+                    vocabularyEnrichment(prefs, metadata, baseUrl);
                 }
             }
 
@@ -912,11 +912,17 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         return null;
     }
 
-    private void vocabularyEnrichment(Prefs prefs, Metadata metadata) throws MetadataTypeNotAllowedException {
+    private void vocabularyEnrichment(Prefs prefs, Metadata metadata, String configuredBaseUrl) throws MetadataTypeNotAllowedException {
 
         if (StringUtils.isNotBlank(metadata.getAuthorityValue()) && metadata.getAuthorityURI().contains("vocabulary")) {
             String vocabularyName = metadata.getAuthorityID();
             String vocabRecordUrl = metadata.getAuthorityValue();
+            String baseUrl;
+            if (StringUtils.isBlank(configuredBaseUrl)) {
+                baseUrl = metadata.getAuthorityURI();
+            } else {
+                baseUrl = configuredBaseUrl;
+            }
             String vocabRecordID = vocabRecordUrl.substring(vocabRecordUrl.lastIndexOf("/") + 1);
             vocabRecordUrl = vocabRecordUrl.substring(0, vocabRecordUrl.lastIndexOf("/"));
             String vocabularyID = vocabRecordUrl.substring(vocabRecordUrl.lastIndexOf("/") + 1);
@@ -940,13 +946,12 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 VocabularyManager.getAllRecords(vocabulary);
                 for (VocabRecord r : vocabulary.getRecords()) {
                     if (r.getTitle().equals(vocabRecordID)) {
-                        metadata.setAuthorityValue(metadata.getAuthorityURI() + "/" + r.getId());
                         vr = r;
                         break;
                     }
                 }
             }
-
+            metadata.setAuthorityValue(baseUrl + "/" + vr.getVocabularyId() + "/" + vr.getId());
             if (vr != null) {
                 switch (vocabularyName) {
                     case "Location":
