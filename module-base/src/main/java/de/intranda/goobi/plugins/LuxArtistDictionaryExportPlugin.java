@@ -61,6 +61,7 @@ import ugh.exceptions.DocStructHasNoTypeException;
 import ugh.exceptions.MetadataTypeNotAllowedException;
 import ugh.exceptions.PreferencesException;
 import ugh.exceptions.ReadException;
+import ugh.exceptions.TypeNotAllowedAsChildException;
 import ugh.exceptions.TypeNotAllowedForParentException;
 import ugh.exceptions.UGHException;
 import ugh.exceptions.WriteException;
@@ -164,26 +165,15 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
         // if media folder is used, remove all pages from master folder
 
-        List<String> imagesInMediaFolder = StorageProvider.getInstance().list(process.getImagesTifDirectory(false));
-
+        String mediaFolder = process.getImagesTifDirectory(false);
+        List<Path> imagesInMediaFolder = StorageProvider.getInstance().listFiles(mediaFolder);
         if (config.getBoolean("cleanupPagination", false)) {
-            List<DocStruct> pagesToDelete = new ArrayList<>();
-            List<ContentFile> contentFilesToDelete = new ArrayList<>();
             DigitalDocument dd = ff.getDigitalDocument();
             DocStruct pyhsical = dd.getPhysicalDocStruct();
+            DocStruct logical = dd.getLogicalDocStruct();
             if (pyhsical != null && pyhsical.getAllChildren() != null) {
-                for (DocStruct page : pyhsical.getAllChildren()) {
-                    String imageName = Paths.get(page.getImageName()).getFileName().toString();
-                    if (!imagesInMediaFolder.contains(imageName)) {
-                        pagesToDelete.add(page);
-                        for (ContentFile cf : dd.getFileSet().getAllFiles()) {
-                            String contentFileLocation = Paths.get(cf.getLocation()).getFileName().toString();
-                            if (contentFileLocation.equals(imageName)) {
-                                contentFilesToDelete.add(cf);
-                            }
-                        }
-                    }
-                }
+                List<DocStruct> pagesToDelete = new ArrayList<>(pyhsical.getAllChildren());
+                List<ContentFile> contentFilesToDelete = new ArrayList<>(dd.getFileSet().getAllFiles());
                 for (DocStruct pageToRemove : pagesToDelete) {
                     pyhsical.removeChild(pageToRemove);
                     List<Reference> refs = new ArrayList<>(pageToRemove.getAllFromReferences());
@@ -199,6 +189,41 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 }
                 for (ContentFile cf : contentFilesToDelete) {
                     dd.getFileSet().removeFile(cf);
+                }
+                Prefs prefs = process.getRegelsatz().getPreferences();
+                int currentPhysicalOrder = 0;
+                MetadataType physPageNumber = prefs.getMetadataTypeByName("physPageNumber");
+                MetadataType logicalPageNumber = prefs.getMetadataTypeByName("logicalPageNumber");
+
+                for (Path image : imagesInMediaFolder) {
+                    DocStruct dsPage = dd.createDocStruct(prefs.getDocStrctTypeByName("page"));
+                    String mimetype = NIOFileUtils.getMimeTypeFromFile(image);
+                    try {
+                        // physical page no
+                        pyhsical.addChild(dsPage);
+                        Metadata mdTemp = new Metadata(physPageNumber);
+                        mdTemp.setValue(String.valueOf(++currentPhysicalOrder));
+                        dsPage.addMetadata(mdTemp);
+
+                        // logical page no
+                        mdTemp = new Metadata(logicalPageNumber);
+
+                        mdTemp.setValue("uncounted");
+
+                        dsPage.addMetadata(mdTemp);
+                        logical.addReferenceTo(dsPage, "logical_physical");
+
+                        // image name
+                        ContentFile cf = new ContentFile();
+                        cf.setMimetype(mimetype);
+                        cf.setLocation("file://" + mediaFolder + image.getFileName().toString());
+
+                        dsPage.addContentFile(cf);
+
+                    } catch (TypeNotAllowedAsChildException | MetadataTypeNotAllowedException e) {
+                        log.error(e);
+                    }
+
                 }
 
                 if (!pagesToDelete.isEmpty()) {
