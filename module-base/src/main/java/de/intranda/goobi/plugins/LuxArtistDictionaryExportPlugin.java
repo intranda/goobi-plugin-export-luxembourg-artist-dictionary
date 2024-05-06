@@ -16,7 +16,7 @@ import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.goobi.beans.Process;
 import org.goobi.beans.ProjectFileGroup;
 import org.goobi.beans.Step;
@@ -55,12 +55,15 @@ import ugh.dl.Metadata;
 import ugh.dl.MetadataGroup;
 import ugh.dl.MetadataType;
 import ugh.dl.Prefs;
+import ugh.dl.Reference;
 import ugh.dl.VirtualFileGroup;
 import ugh.exceptions.DocStructHasNoTypeException;
 import ugh.exceptions.MetadataTypeNotAllowedException;
 import ugh.exceptions.PreferencesException;
 import ugh.exceptions.ReadException;
+import ugh.exceptions.TypeNotAllowedAsChildException;
 import ugh.exceptions.TypeNotAllowedForParentException;
+import ugh.exceptions.UGHException;
 import ugh.exceptions.WriteException;
 import ugh.fileformats.mets.MetsMods;
 import ugh.fileformats.mets.MetsModsImportExport;
@@ -112,14 +115,17 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             // read mets file
             Prefs prefs = process.getRegelsatz().getPreferences();
             Fileformat ff = process.readMetadataFile();
+
             XMLConfiguration config = getConfig();
 
-            List<MetadataConfiguration> additionalMetadata = readMetadataConfigurations(getConfig());
-            List<VocabularyRecordConfig> vocabularyConfigs = readVocabularyRecordConfigs(getConfig());
+            cleanUpPagination(process, ff, config);
+            String vocabularyBaseUrl = config.getString("vocabularyBaseUrl");
+            List<MetadataConfiguration> additionalMetadata = readMetadataConfigurations(config);
+            List<VocabularyRecordConfig> vocabularyConfigs = readVocabularyRecordConfigs(config);
 
-            DigitalDocument dd = enrichFileformat(ff, prefs, config);
+            DigitalDocument dd = enrichFileformat(ff, prefs, config, process.getImagesTifDirectory(true));
 
-            enrichFromVocabulary(prefs, dd, vocabularyConfigs);
+            enrichFromVocabulary(prefs, dd, vocabularyConfigs, vocabularyBaseUrl);
 
             // export data
             VariableReplacer vp = new VariableReplacer(dd, prefs, process, null);
@@ -128,7 +134,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             // Replace rights and digiprov entries.
             addProjectData(mm, process, vp);
             addAdditionalMetadata(additionalMetadata, dd, prefs, vp);
-            writeFileGroups(process, dd, vp, mm);
+            writeFileGroups(process, dd, vp, mm, config);
             mm.write(Paths.get(destination, process.getTitel() + ".xml").toString());
 
             if (!exportFiles(process, vp, destination)) {
@@ -148,9 +154,84 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             log.error(e);
             problems.add("Cannot read metadata file.");
             return false;
+        } catch (UGHException e) {
+            log.error(e);
         }
 
         return true;
+    }
+
+    private void cleanUpPagination(Process process, Fileformat ff, XMLConfiguration config) throws UGHException, IOException, SwapException {
+
+        // if media folder is used, remove all pages from master folder
+
+        String mediaFolder = process.getImagesTifDirectory(false);
+        List<Path> imagesInMediaFolder = StorageProvider.getInstance().listFiles(mediaFolder);
+        if (config.getBoolean("cleanupPagination", false)) {
+            DigitalDocument dd = ff.getDigitalDocument();
+            DocStruct pyhsical = dd.getPhysicalDocStruct();
+            DocStruct logical = dd.getLogicalDocStruct();
+            if (pyhsical != null && pyhsical.getAllChildren() != null) {
+                List<DocStruct> pagesToDelete = new ArrayList<>(pyhsical.getAllChildren());
+                List<ContentFile> contentFilesToDelete = new ArrayList<>(dd.getFileSet().getAllFiles());
+                for (DocStruct pageToRemove : pagesToDelete) {
+                    pyhsical.removeChild(pageToRemove);
+                    List<Reference> refs = new ArrayList<>(pageToRemove.getAllFromReferences());
+                    for (ugh.dl.Reference ref : refs) {
+                        DocStruct source = ref.getSource();
+                        for (Reference reference : source.getAllToReferences()) {
+                            if (reference.getTarget().equals(pageToRemove)) {
+                                source.getAllToReferences().remove(reference);
+                                break;
+                            }
+                        }
+                    }
+                }
+                for (ContentFile cf : contentFilesToDelete) {
+                    dd.getFileSet().removeFile(cf);
+                }
+                Prefs prefs = process.getRegelsatz().getPreferences();
+                int currentPhysicalOrder = 0;
+                MetadataType physPageNumber = prefs.getMetadataTypeByName("physPageNumber");
+                MetadataType logicalPageNumber = prefs.getMetadataTypeByName("logicalPageNumber");
+
+                for (Path image : imagesInMediaFolder) {
+                    DocStruct dsPage = dd.createDocStruct(prefs.getDocStrctTypeByName("page"));
+                    String mimetype = NIOFileUtils.getMimeTypeFromFile(image);
+                    try {
+                        // physical page no
+                        pyhsical.addChild(dsPage);
+                        Metadata mdTemp = new Metadata(physPageNumber);
+                        mdTemp.setValue(String.valueOf(++currentPhysicalOrder));
+                        dsPage.addMetadata(mdTemp);
+
+                        // logical page no
+                        mdTemp = new Metadata(logicalPageNumber);
+
+                        mdTemp.setValue("uncounted");
+
+                        dsPage.addMetadata(mdTemp);
+                        logical.addReferenceTo(dsPage, "logical_physical");
+
+                        // image name
+                        ContentFile cf = new ContentFile();
+                        cf.setMimetype(mimetype);
+                        cf.setLocation("file://" + mediaFolder + image.getFileName().toString());
+
+                        dsPage.addContentFile(cf);
+
+                    } catch (TypeNotAllowedAsChildException | MetadataTypeNotAllowedException e) {
+                        log.error(e);
+                    }
+
+                }
+
+                if (!pagesToDelete.isEmpty()) {
+                    // update process
+                    process.writeMetadataFile(ff);
+                }
+            }
+        }
     }
 
     private void setProcessStatus(Process process, String value) {
@@ -181,7 +262,6 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 }
             }
         }
-
     }
 
     private List<VocabularyRecordConfig> readVocabularyRecordConfigs(XMLConfiguration configuration) {
@@ -220,8 +300,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 boolean force = config.getBoolean("[@force]", false);
                 GenerationRule rule = new GenerationRule(config.getString("rule"), config.getString("rule[@numberFormat]"));
                 if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(rule.getValue())) {
-                    MetadataConfiguration md = new MetadataConfiguration(type, force, rule);
-                    return md;
+                    return new MetadataConfiguration(type, force, rule);
                 } else {
                     return null;
                 }
@@ -233,22 +312,22 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         }
     }
 
-    private void enrichFromVocabulary(Prefs prefs, DigitalDocument dd, List<VocabularyRecordConfig> vocabConfigs)
+    private void enrichFromVocabulary(Prefs prefs, DigitalDocument dd, List<VocabularyRecordConfig> vocabConfigs, String baseUrl)
             throws MetadataTypeNotAllowedException {
         DocStruct logical = dd.getLogicalDocStruct();
         for (Metadata metadata : new ArrayList<>(logical.getAllMetadata())) {
-            vocabularyEnrichment(prefs, metadata);
+            vocabularyEnrichment(prefs, metadata, baseUrl);
         }
 
         for (MetadataGroup group : logical.getAllMetadataGroups()) {
             vocabularyEnrichment(group, vocabConfigs);
             for (Metadata metadata : new ArrayList<>(group.getMetadataList())) {
-                vocabularyEnrichment(prefs, metadata);
+                vocabularyEnrichment(prefs, metadata, baseUrl);
             }
             for (MetadataGroup subgroup : group.getAllMetadataGroups()) {
                 vocabularyEnrichment(subgroup, vocabConfigs);
                 for (Metadata metadata : new ArrayList<>(subgroup.getMetadataList())) {
-                    vocabularyEnrichment(prefs, metadata);
+                    vocabularyEnrichment(prefs, metadata, baseUrl);
                 }
             }
 
@@ -287,7 +366,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         mm.setSruUrl(vp.replace(process.getProjekt().getMetsSruUrl()));
     }
 
-    protected DigitalDocument enrichFileformat(Fileformat ff, Prefs prefs, XMLConfiguration config)
+    protected DigitalDocument enrichFileformat(Fileformat ff, Prefs prefs, XMLConfiguration config, String imageFolder)
             throws PreferencesException, MetadataTypeNotAllowedException, NotExportableException, ExportException {
         MetadataType published = prefs.getMetadataTypeByName("Published");
         DigitalDocument dd = ff.getDigitalDocument();
@@ -301,7 +380,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 throw new NotExportableException("Record is not marked as exportable, skip export");
 
             }
-            if (!md.stream().anyMatch(m -> m.getValue() != null && m.getValue().matches("[YyJj]"))) {
+            if (md.stream().noneMatch(m -> m.getValue() != null && m.getValue().matches("[YyJj]"))) {
                 throw new NotExportableException("Record is not marked as exportable, skip export");
             }
         }
@@ -347,6 +426,50 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             }
         }
 
+        if (StringUtils.isNotBlank(imageFolder)) {
+            DocStruct physical = dd.getPhysicalDocStruct();
+            if (physical != null && physical.getAllChildren() != null) {
+                List<String> imageNamesInFolder = StorageProvider.getInstance().list(imageFolder);
+                List<String> imageNamesInFile = new ArrayList<>();
+                List<DocStruct> pages = physical.getAllChildren();
+                List<DocStruct> pagesToDelete = new ArrayList<>();
+                for (DocStruct page : pages) {
+                    String currentImage = Paths.get(page.getImageName()).getFileName().toString();
+                    if (imageNamesInFile.contains(currentImage)) {
+                        // duplicate entry, remove page
+                        pagesToDelete.add(page);
+                    } else {
+                        imageNamesInFile.add(currentImage);
+                    }
+                    if (!imageNamesInFolder.contains(currentImage)) {
+                        // image does not longer exist, remove page
+                        pagesToDelete.add(page);
+                    }
+                }
+
+                for (DocStruct page : pagesToDelete) {
+
+                    List<Reference> refs = new ArrayList<>(page.getAllFromReferences());
+                    for (ugh.dl.Reference ref : refs) {
+                        ref.getSource().removeReferenceTo(page);
+                    }
+
+                    physical.removeChild(page);
+                }
+                // finally generate new phys order
+
+                int order = 1;
+                for (DocStruct page : physical.getAllChildren()) {
+                    for (Metadata md : page.getAllMetadata()) {
+                        if ("physPageNumber".equals(md.getType().getName())) {
+                            md.setValue(String.valueOf(order));
+                            order++;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
         return dd;
     }
 
@@ -401,13 +524,13 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
     private XMLConfiguration getConfig() {
         XMLConfiguration xmlConfig = ConfigPlugins.getPluginConfig(title);
-        //      xmlConfig.setExpressionEngine(new XPathExpressionEngine());
         xmlConfig.setReloadingStrategy(new FileChangedReloadingStrategy());
         return xmlConfig;
     }
 
-    private void writeFileGroups(Process process, DigitalDocument dd, VariableReplacer vp, MetsModsImportExport mm)
+    private void writeFileGroups(Process process, DigitalDocument dd, VariableReplacer vp, MetsModsImportExport mm, XMLConfiguration config)
             throws IOException, SwapException {
+
         List<ProjectFileGroup> myFilegroups = process.getProjekt().getFilegroups();
         boolean useOriginalFiles = false;
         if (myFilegroups != null && !myFilegroups.isEmpty()) {
@@ -814,11 +937,17 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         return null;
     }
 
-    private void vocabularyEnrichment(Prefs prefs, Metadata metadata) throws MetadataTypeNotAllowedException {
+    private void vocabularyEnrichment(Prefs prefs, Metadata metadata, String configuredBaseUrl) throws MetadataTypeNotAllowedException {
 
         if (StringUtils.isNotBlank(metadata.getAuthorityValue()) && metadata.getAuthorityURI().contains("vocabulary")) {
             String vocabularyName = metadata.getAuthorityID();
             String vocabRecordUrl = metadata.getAuthorityValue();
+            String baseUrl;
+            if (StringUtils.isBlank(configuredBaseUrl)) {
+                baseUrl = metadata.getAuthorityURI();
+            } else {
+                baseUrl = configuredBaseUrl;
+            }
             String vocabRecordID = vocabRecordUrl.substring(vocabRecordUrl.lastIndexOf("/") + 1);
             vocabRecordUrl = vocabRecordUrl.substring(0, vocabRecordUrl.lastIndexOf("/"));
             String vocabularyID = vocabRecordUrl.substring(vocabRecordUrl.lastIndexOf("/") + 1);
@@ -842,13 +971,12 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 VocabularyManager.getAllRecords(vocabulary);
                 for (VocabRecord r : vocabulary.getRecords()) {
                     if (r.getTitle().equals(vocabRecordID)) {
-                        metadata.setAuthorityValue(metadata.getAuthorityURI() + "/" + r.getId());
                         vr = r;
                         break;
                     }
                 }
             }
-
+            metadata.setAuthorityValue(baseUrl + "/" + vr.getVocabularyId() + "/" + vr.getId());
             if (vr != null) {
                 switch (vocabularyName) {
                     case "Location":
