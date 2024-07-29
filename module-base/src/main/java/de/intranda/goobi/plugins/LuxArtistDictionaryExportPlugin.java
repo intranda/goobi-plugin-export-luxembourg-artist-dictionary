@@ -13,6 +13,8 @@ import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.helper.exceptions.UghHelperException;
 import de.sub.goobi.persistence.managers.PropertyManager;
 import io.goobi.vocabulary.exchange.FieldDefinition;
+import io.goobi.vocabulary.exchange.FieldValue;
+import io.goobi.vocabulary.exchange.TranslationInstance;
 import io.goobi.vocabulary.exchange.Vocabulary;
 import io.goobi.vocabulary.exchange.VocabularySchema;
 import io.goobi.workflow.api.vocabulary.APIException;
@@ -64,7 +66,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -1020,35 +1025,39 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                     break;
 
                 default:
-                    // TODO: Fix this
-//                    for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
-//                        String recordLabel = f.getFieldValue("eng");
-//
-//                        if (StringUtils.isNotBlank(recordLabel)) {
-//                            String metadataName = null;
-//                            FieldDefinition def = f.getDefinition();
-//                            // find metadata name
-//                            if (StringUtils.isNotBlank(def.getLanguage())) {
-//                                metadataName = "_" + recordLabel + "_" + def.getLanguage();
-//                            } else {
-//                                metadataName = "_" + recordLabel;
-//                            }
-//                            metadataName = metadataName.replace(" ", "").toLowerCase();
-//                            // create metadata
-//                            MetadataType mdt = prefs.getMetadataTypeByName(metadataName);
-//                            if (mdt != null) {
-//                                // set value
-//                                Metadata vocabMetadata = new Metadata(mdt);
-//                                vocabMetadata.setValue(f.getValue());
-//                                try {
-//                                    metadata.getParent().addMetadata(vocabMetadata);
-//                                } catch (MetadataTypeNotAllowedException e) {
-//
-//                                }
-//                            }
-//                        }
-//                    }
-//                    break;
+                    for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
+                        FieldDefinition def = f.getDefinition();
+                        Map<String, List<String>> languageValues = new HashMap<>();
+                        for (FieldValue v : f.getValues()) {
+                            for (TranslationInstance t : v.getTranslations()) {
+                                String language = "";
+                                if (t.getLanguage() != null) {
+                                    language = t.getLanguage();
+                                }
+                                languageValues.computeIfAbsent(language, l -> new LinkedList<>());
+                                languageValues.get(language).add(t.getValue());
+                            }
+                        }
+                        for (Map.Entry<String, List<String>> e : languageValues.entrySet()) {
+                            // find metadata name
+                            String metadataName = "_" + def.getName() + (e.getKey().isBlank() ? "" : "_" + e.getKey());
+                            metadataName = metadataName.replace(" ", "").toLowerCase();
+
+                            // create metadata
+                            MetadataType mdt = prefs.getMetadataTypeByName(metadataName);
+                            if (mdt != null) {
+                                // set value
+                                Metadata vocabMetadata = new Metadata(mdt);
+                                vocabMetadata.setValue(String.join("|", e.getValue()));
+                                try {
+                                    metadata.getParent().addMetadata(vocabMetadata);
+                                } catch (MetadataTypeNotAllowedException ex) {
+
+                                }
+                            }
+                        }
+                    }
+                    break;
             }
         }
     }
