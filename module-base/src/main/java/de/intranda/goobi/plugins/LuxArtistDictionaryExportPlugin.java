@@ -12,12 +12,12 @@ import de.sub.goobi.helper.exceptions.ExportFileException;
 import de.sub.goobi.helper.exceptions.SwapException;
 import de.sub.goobi.helper.exceptions.UghHelperException;
 import de.sub.goobi.persistence.managers.PropertyManager;
-import io.goobi.vocabulary.exchange.FieldDefinition;
+import io.goobi.vocabulary.exchange.Vocabulary;
+import io.goobi.vocabulary.exchange.VocabularyRecord;
 import io.goobi.vocabulary.exchange.VocabularySchema;
 import io.goobi.workflow.api.vocabulary.APIException;
 import io.goobi.workflow.api.vocabulary.VocabularyAPIManager;
-import io.goobi.workflow.api.vocabulary.jsfwrapper.JSFVocabulary;
-import io.goobi.workflow.api.vocabulary.jsfwrapper.JSFVocabularyRecord;
+import io.goobi.workflow.api.vocabulary.helper.ExtendedVocabularyRecord;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -910,26 +910,27 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                                     .map(Long::parseLong)
                                     .map(Long::intValue)
                                     .orElse(-1);
-                            JSFVocabularyRecord r = VocabularyAPIManager.getInstance().vocabularyRecords().get(vocabularyRecordId);
+                            ExtendedVocabularyRecord r = VocabularyAPIManager.getInstance().vocabularyRecords().get(vocabularyRecordId);
                             io.goobi.vocabulary.exchange.Vocabulary vocabulary = VocabularyAPIManager.getInstance().vocabularies().get(r.getVocabularyId());
                             VocabularySchema schema = VocabularyAPIManager.getInstance().vocabularySchemas().get(vocabulary.getSchemaId());
 
-                            for (VocabularyEnrichment enrichment : config.getEnrichments()) {
-                                FieldDefinition enrichmentField = schema.getDefinitions().stream()
-                                        .filter(d -> d.getName().equals(enrichment.getVocabularyField()))
-                                        .findAny()
-                                        .orElseThrow();
-
-                                String fieldValue = r.getFieldValue(enrichmentField);
-
-                                List<Metadata> metadataList =
-                                        Optional.ofNullable(group.getMetadataByType(enrichment.getMetadataType())).orElse(Collections.emptyList());
-                                for (Metadata metadata : metadataList) {
-                                    if (StringUtils.isBlank(metadata.getValue()) || "null".equalsIgnoreCase(metadata.getValue())) {
-                                        metadata.setValue(fieldValue);
-                                    }
-                                }
-                            }
+                            // TODO: Find value helper in vocabulary record
+//                            for (VocabularyEnrichment enrichment : config.getEnrichments()) {
+//                                FieldDefinition enrichmentField = schema.getDefinitions().stream()
+//                                        .filter(d -> d.getName().equals(enrichment.getVocabularyField()))
+//                                        .findAny()
+//                                        .orElseThrow();
+//
+//                                String fieldValue = r.getFieldValue(enrichmentField);
+//
+//                                List<Metadata> metadataList =
+//                                        Optional.ofNullable(group.getMetadataByType(enrichment.getMetadataType())).orElse(Collections.emptyList());
+//                                for (Metadata metadata : metadataList) {
+//                                    if (StringUtils.isBlank(metadata.getValue()) || "null".equalsIgnoreCase(metadata.getValue())) {
+//                                        metadata.setValue(fieldValue);
+//                                    }
+//                                }
+//                            }
                         } catch (APIException e) {
                             e.printStackTrace();
                         }
@@ -951,8 +952,8 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 baseUrl = configuredBaseUrl;
             }
 
-            JSFVocabularyRecord matchingRecord = VocabularyAPIManager.getInstance().vocabularyRecords().get(vocabRecordUrl);
-            JSFVocabulary vocabulary = VocabularyAPIManager.getInstance().vocabularies().all().stream()
+            VocabularyRecord matchingRecord = VocabularyAPIManager.getInstance().vocabularyRecords().get(vocabRecordUrl);
+            Vocabulary vocabulary = VocabularyAPIManager.getInstance().vocabularies().all().stream()
                     .filter(v -> v.getId().equals(matchingRecord.getVocabularyId()))
                     .findAny()
                     .orElseThrow();
