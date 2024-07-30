@@ -928,9 +928,9 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                                     continue;
                                 }
 
-                                String fieldValue = r.getFieldValueForDefinition(enrichmentField.get());
+                                Optional<String> fieldValue = r.getFieldValueForDefinition(enrichmentField.get());
 
-                                if (fieldValue.isBlank()) {
+                                if (fieldValue.isEmpty()) {
                                     continue;
                                 }
 
@@ -938,7 +938,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                                         Optional.ofNullable(group.getMetadataByType(enrichment.getMetadataType())).orElse(Collections.emptyList());
                                 for (Metadata metadata : metadataList) {
                                     if (StringUtils.isBlank(metadata.getValue()) || "null".equalsIgnoreCase(metadata.getValue())) {
-                                        metadata.setValue(fieldValue);
+                                        metadata.setValue(fieldValue.get());
                                     }
                                 }
                             }
@@ -963,8 +963,8 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             matchingRecord.writeReferenceMetadata(metadata);
             switch (vocabularyName) {
                 case "Location":
-                    String value = matchingRecord.getFieldValueForDefinitionName("Location");
-                    String authority = matchingRecord.getFieldValueForDefinitionName("Authority Value");
+                    String value = matchingRecord.getFieldValueForDefinitionName("Location").orElseThrow();
+                    String authority = matchingRecord.getFieldValueForDefinitionName("Authority Value").orElseThrow();
                     metadata.setValue(value);
                     metadata.setAutorityFile("geonames", "http://www.geonames.org/", "http://www.geonames.org/" + authority);
                     break;
