@@ -463,7 +463,9 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                     physical.removeChild(page);
                 }
                 // finally generate new phys order
+            }
 
+            if (physical != null && physical.getAllChildren() != null) {
                 int order = 1;
                 for (DocStruct page : physical.getAllChildren()) {
                     for (Metadata md : page.getAllMetadata()) {
