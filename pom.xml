@@ -9,6 +9,7 @@
   <groupId>io.goobi.workflow.plugin</groupId>
   <artifactId>plugin-export-luxembourg-artist-dictionary</artifactId>
   <packaging>pom</packaging>
+  <version>24.06.1</version>
   <properties>
       <maven.compiler.release>11</maven.compiler.release>
   </properties>
