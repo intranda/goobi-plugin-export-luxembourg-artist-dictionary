@@ -1,5 +1,34 @@
 package de.intranda.goobi.plugins;
 
+import java.io.IOException;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.goobi.beans.Process;
+import org.goobi.beans.ProjectFileGroup;
+import org.goobi.beans.Step;
+import org.goobi.beans.User;
+import org.goobi.production.enums.LogType;
+import org.goobi.production.enums.PluginType;
+import org.goobi.production.plugin.interfaces.IExportPlugin;
+import org.goobi.production.plugin.interfaces.IPlugin;
+
 import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.config.ConfigurationHelper;
 import de.sub.goobi.helper.FilesystemHelper;
@@ -25,19 +54,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
-import org.apache.commons.configuration.HierarchicalConfiguration;
-import org.apache.commons.configuration.XMLConfiguration;
-import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.goobi.beans.Process;
-import org.goobi.beans.ProjectFileGroup;
-import org.goobi.beans.Step;
-import org.goobi.beans.User;
-import org.goobi.production.enums.LogType;
-import org.goobi.production.enums.PluginType;
-import org.goobi.production.plugin.interfaces.IExportPlugin;
-import org.goobi.production.plugin.interfaces.IPlugin;
 import ugh.dl.ContentFile;
 import ugh.dl.DigitalDocument;
 import ugh.dl.DocStruct;
@@ -58,21 +74,6 @@ import ugh.exceptions.UGHException;
 import ugh.exceptions.WriteException;
 import ugh.fileformats.mets.MetsMods;
 import ugh.fileformats.mets.MetsModsImportExport;
-
-import java.io.IOException;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @PluginImplementation
 @Log4j2
@@ -273,23 +274,23 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         List<HierarchicalConfiguration> configs = configuration.configurationsAt("vocabulary");
         if (configs != null) {
             return configs.stream().map(config -> {
-                        String groupType = config.getString("metadataGroupType", null);
-                        Integer vocabularyId = config.getInteger("vocabularyId", null);
-                        String identifierMetadata = config.getString("recordIdentifierMetadata", null);
-                        if (StringUtils.isNotBlank(groupType) && StringUtils.isNotBlank(identifierMetadata) && vocabularyId != null) {
-                            List<HierarchicalConfiguration> enrichConfigs = config.configurationsAt("enrich");
-                            List<VocabularyEnrichment> enrichments = Optional.ofNullable(enrichConfigs).map(ecs -> {
-                                return ecs.stream().map(ec -> {
-                                    String md = ec.getString("metadataType", "");
-                                    String field = ec.getString("vocabularyField", "");
-                                    return new VocabularyEnrichment(field, md);
-                                }).collect(Collectors.toList());
-                            }).orElse(Collections.emptyList());
-                            return new VocabularyRecordConfig(groupType, vocabularyId, identifierMetadata, enrichments);
-                        } else {
-                            return null;
-                        }
-                    })
+                String groupType = config.getString("metadataGroupType", null);
+                Integer vocabularyId = config.getInteger("vocabularyId", null);
+                String identifierMetadata = config.getString("recordIdentifierMetadata", null);
+                if (StringUtils.isNotBlank(groupType) && StringUtils.isNotBlank(identifierMetadata) && vocabularyId != null) {
+                    List<HierarchicalConfiguration> enrichConfigs = config.configurationsAt("enrich");
+                    List<VocabularyEnrichment> enrichments = Optional.ofNullable(enrichConfigs).map(ecs -> {
+                        return ecs.stream().map(ec -> {
+                            String md = ec.getString("metadataType", "");
+                            String field = ec.getString("vocabularyField", "");
+                            return new VocabularyEnrichment(field, md);
+                        }).collect(Collectors.toList());
+                    }).orElse(Collections.emptyList());
+                    return new VocabularyRecordConfig(groupType, vocabularyId, identifierMetadata, enrichments);
+                } else {
+                    return null;
+                }
+            })
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
         } else {
@@ -301,15 +302,15 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         List<HierarchicalConfiguration> metadataConfigs = configuration.configurationsAt("metadata");
         if (metadataConfigs != null) {
             return metadataConfigs.stream().map(config -> {
-                        String type = config.getString("[@type]");
-                        boolean force = config.getBoolean("[@force]", false);
-                        GenerationRule rule = new GenerationRule(config.getString("rule"), config.getString("rule[@numberFormat]"));
-                        if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(rule.getValue())) {
-                            return new MetadataConfiguration(type, force, rule);
-                        } else {
-                            return null;
-                        }
-                    })
+                String type = config.getString("[@type]");
+                boolean force = config.getBoolean("[@force]", false);
+                GenerationRule rule = new GenerationRule(config.getString("rule"), config.getString("rule[@numberFormat]"));
+                if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(rule.getValue())) {
+                    return new MetadataConfiguration(type, force, rule);
+                } else {
+                    return null;
+                }
+            })
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
         } else {
@@ -426,8 +427,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         if (addEventLocationFromAgent && logical.getAllMetadataGroupsByType(prefs.getMetadataGroupTypeByName("LocationGroup")).isEmpty()) {
             try {
                 addLocationFromRelatedAgent(logical, prefs);
-            } catch (PreferencesException | ReadException | MetadataTypeNotAllowedException |
-                     DocStructHasNoTypeException e) {
+            } catch (PreferencesException | ReadException | MetadataTypeNotAllowedException | DocStructHasNoTypeException e) {
                 log.error("Unable to add location metadata group to event from agent: {}", e.toString());
             }
         }
@@ -463,7 +463,9 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                     physical.removeChild(page);
                 }
                 // finally generate new phys order
+            }
 
+            if (physical != null && physical.getAllChildren() != null) {
                 int order = 1;
                 for (DocStruct page : physical.getAllChildren()) {
                     for (Metadata md : page.getAllMetadata()) {
@@ -657,26 +659,6 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                     problems.add(EXPORT_ERROR_PREFIX + errorDetails);
                     return false;
                 }
-                /* alte Success-Ordner löschen */
-                String successPath = myProzess.getProjekt().getDmsImportSuccessPath();
-                successPath = replacer.replace(successPath);
-                Path successFile = Paths.get(successPath, myProzess.getTitel());
-                if (!StorageProvider.getInstance().deleteDir(successFile)) {
-                    String errorDetails = "Success folder could not be cleared.";
-                    Helper.setFehlerMeldung(errorMessageTitle, errorDetails);
-                    problems.add(EXPORT_ERROR_PREFIX + errorDetails);
-                    return false;
-                }
-                /* alte Error-Ordner löschen */
-                String importPath = myProzess.getProjekt().getDmsImportErrorPath();
-                importPath = replacer.replace(importPath);
-                Path errorfile = Paths.get(importPath, myProzess.getTitel());
-                if (!StorageProvider.getInstance().deleteDir(errorfile)) {
-                    String errorDetails = "Error folder could not be cleared.";
-                    Helper.setFehlerMeldung(errorMessageTitle, errorDetails);
-                    problems.add(EXPORT_ERROR_PREFIX + errorDetails);
-                    return false;
-                }
 
                 if (!StorageProvider.getInstance().isFileExists(benutzerHome)) {
                     try {
@@ -747,8 +729,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             Helper.setFehlerMeldung(errorMessageTitle, errorDetails);
             problems.add(EXPORT_ERROR_PREFIX + errorDetails);
             return false;
-        } catch (
-                Exception exception) { //NOSONAR InterruptedException must not be re-thrown as it is not running in a separate thread
+        } catch (Exception exception) { //NOSONAR InterruptedException must not be re-thrown as it is not running in a separate thread
             Helper.setFehlerMeldung(errorMessageTitle, exception);
             problems.add(EXPORT_ERROR_PREFIX + exception.getMessage());
             return false;
@@ -762,8 +743,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         if (myBenutzer != null) {
             try {
                 FilesystemHelper.createDirectoryForUser(target, myBenutzer.getLogin());
-            } catch (
-                    Exception e) { //NOSONAR InterruptedException must not be re-thrown as it is not running in a separate thread
+            } catch (Exception e) { //NOSONAR InterruptedException must not be re-thrown as it is not running in a separate thread
                 Helper.setFehlerMeldung("Export canceled, could not create destination directory: " + inTargetFolder, e);
             }
         }
@@ -837,8 +817,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                     } else {
                         FilesystemHelper.createDirectoryForUser(zielTif.toString(), myBenutzer.getLogin());
                     }
-                } catch (
-                        Exception exception) { //NOSONAR InterruptedException must not be re-thrown as it is not running in a separate thread
+                } catch (Exception exception) { //NOSONAR InterruptedException must not be re-thrown as it is not running in a separate thread
                     String errorDetails = "Could not create destination directory.";
                     Helper.setFehlerMeldung(EXPORT_ERROR_PREFIX + "Error", errorDetails);
                     log.error(errorDetails, exception);
@@ -920,7 +899,8 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                             VocabularySchema schema = VocabularyAPIManager.getInstance().vocabularySchemas().get(vocabulary.getSchemaId());
 
                             for (VocabularyEnrichment enrichment : config.getEnrichments()) {
-                                Optional<FieldDefinition> enrichmentField = schema.getDefinitions().stream()
+                                Optional<FieldDefinition> enrichmentField = schema.getDefinitions()
+                                        .stream()
                                         .filter(d -> d.getName().equals(enrichment.getVocabularyField()))
                                         .findFirst();
 
