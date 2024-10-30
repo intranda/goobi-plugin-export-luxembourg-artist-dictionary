@@ -2,6 +2,7 @@
  
     <exportUnpublishedRecords>false</exportUnpublishedRecords>
 	<addEventLocationFromAgent>false</addEventLocationFromAgent>
+    <vocabularyUriReplacement from="http://localhost:8081" to="https://some.external.address.com/vocabulary" />
 	<!-- <metadata type="lklIdentifier" force="false">
     	<rule numberFormat="00000">lkl{processid}</rule>
     </metadata>

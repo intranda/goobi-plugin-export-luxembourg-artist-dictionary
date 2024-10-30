@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.io.FilenameUtils;
@@ -129,6 +130,16 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             List<MetadataConfiguration> additionalMetadata = readMetadataConfigurations(config);
             List<VocabularyRecordConfig> vocabularyConfigs = readVocabularyRecordConfigs(config);
 
+            Optional<String> authorityUriReplacementFrom = Optional.empty();
+            Optional<String> authorityUriReplacementTo = Optional.empty();
+            try {
+                SubnodeConfiguration replacement = config.configurationAt("vocabularyUriReplacement");
+                authorityUriReplacementFrom = Optional.ofNullable(replacement.getString("[@from]", null));
+                authorityUriReplacementTo = Optional.ofNullable(replacement.getString("[@to]", null));
+            } catch (IllegalArgumentException e) {
+                // Ignore missing setting
+            }
+
             DigitalDocument dd = enrichFileformat(ff, prefs, config, process.getImagesTifDirectory(true));
 
             enrichFromVocabulary(prefs, dd, vocabularyConfigs);
@@ -141,6 +152,12 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             addProjectData(mm, process, vp);
             addAdditionalMetadata(additionalMetadata, dd, prefs, vp);
             writeFileGroups(process, dd, vp, mm, config);
+
+            if (authorityUriReplacementFrom.isPresent() && authorityUriReplacementTo.isPresent()) {
+                log.debug("Replacing authority URIs with \"{}\" replaced by \"{}\"", authorityUriReplacementFrom.get(), authorityUriReplacementTo.get());
+                replaceAuthorityLinks(mm, authorityUriReplacementFrom.get(), authorityUriReplacementTo.get());
+            }
+
             mm.write(Paths.get(destination, process.getTitel() + ".xml").toString());
 
             if (!exportFiles(process, vp, destination)) {
@@ -165,6 +182,21 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         }
 
         return true;
+    }
+
+    private void replaceAuthorityLinks(MetsModsImportExport mm, String from, String to) {
+        Optional.ofNullable(mm.getDigitalDocument().getLogicalDocStruct().getAllMetadata()).ifPresent(list -> list.forEach(m -> replaceAuthorityLinksInMetadata(m, from, to)));
+        Optional.ofNullable(mm.getDigitalDocument().getLogicalDocStruct().getAllMetadataGroups()).ifPresent(groups -> groups.forEach(g -> replaceAuthorityLinksInMetadataGroup(g, from, to)));
+    }
+
+    private void replaceAuthorityLinksInMetadataGroup(MetadataGroup mg, String from, String to) {
+        Optional.ofNullable(mg.getMetadataList()).ifPresent(list -> list.forEach(m -> replaceAuthorityLinksInMetadata(m, from, to)));
+        Optional.ofNullable(mg.getAllMetadataGroups()).ifPresent(groups -> groups.forEach(g -> replaceAuthorityLinksInMetadataGroup(g, from, to)));
+    }
+
+    private void replaceAuthorityLinksInMetadata(Metadata m, String from, String to) {
+        Optional.ofNullable(m.getAuthorityURI()).ifPresent(uri -> m.setAuthorityValue(uri.replace(from, to)));
+        Optional.ofNullable(m.getAuthorityValue()).ifPresent(value -> m.setAuthorityValue(value.replace(from, to)));
     }
 
     private void cleanUpPagination(Process process, Fileformat ff, XMLConfiguration config) throws UGHException, IOException, SwapException {
