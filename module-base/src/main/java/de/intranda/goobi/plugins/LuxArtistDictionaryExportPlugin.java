@@ -932,117 +932,135 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     }
 
     private void vocabularyEnrichment(Prefs prefs, Metadata metadata) throws MetadataTypeNotAllowedException {
-        if (isValidVocabularyReference(metadata)) {
-            String vocabularyName = metadata.getAuthorityID();
-            String vocabRecordUrl = metadata.getAuthorityValue();
+        if (!hasVocabularyReference(metadata)) {
+            return;
+        }
+        if (isExternalReference(metadata)) {
+            return;
+        }
+        if (!isValidVocabularyReference(metadata)) {
+            log.warn("Metadata has invalid vocabulary references!\n\tAuthority: {}\n\tAuthority URI: {}\n\tValue URI: {}", metadata.getAuthorityID(), metadata.getAuthorityURI(), metadata.getAuthorityValue());
+            return;
+        }
 
-            ExtendedVocabularyRecord matchingRecord = VocabularyAPIManager.getInstance().vocabularyRecords().get(vocabRecordUrl);
+        String vocabularyName = metadata.getAuthorityID();
+        String vocabRecordUrl = metadata.getAuthorityValue();
 
-            matchingRecord.writeReferenceMetadata(metadata);
-            switch (vocabularyName) {
-                case "Location":
-                    String value = matchingRecord.getFieldValueForDefinitionName("Location").orElseThrow();
-                    String authority = matchingRecord.getFieldValueForDefinitionName("Authority Value").orElseThrow();
-                    metadata.setValue(value);
-                    metadata.setAutorityFile("geonames", "http://www.geonames.org/", "http://www.geonames.org/" + authority);
-                    break;
-                case "R01 Relationship Person - Person":
-                case "R02 Relationship Collective agent - Collective agent":
-                case "R03a Relationship Person - Collective agent":
-                case "R03b Relationship Collective agent - Person":
-                case "R04 Relationship Person - Event":
-                case "R05 Relationship Collective agent - Event":
-                case "R06 Relationship Person - Work":
-                case "R07 Relationship Collective agent - Work":
-                case "R08 Relationship Event - Work":
-                case "R09 Relationship Person - Award":
-                case "R10 Relationship Collective agent - Award":
-                case "R11 Relationship Work - Award":
-                case "R12 Relationship Event - Award":
-                    String eng = null;
-                    String fre = null;
-                    String ger = null;
-                    // check if relation or reverse relation is used
-                    boolean useReverseRelationship = false;
-                    for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
-                        if (f.getFieldValue().equals(metadata.getValue())) {
-                            if (f.getDefinition().getName().startsWith("Reverse")) {
-                                useReverseRelationship = true;
+        ExtendedVocabularyRecord matchingRecord = VocabularyAPIManager.getInstance().vocabularyRecords().get(vocabRecordUrl);
+
+        matchingRecord.writeReferenceMetadata(metadata);
+        switch (vocabularyName) {
+            case "Location":
+                String value = matchingRecord.getFieldValueForDefinitionName("Location").orElseThrow();
+                String authority = matchingRecord.getFieldValueForDefinitionName("Authority Value").orElseThrow();
+                metadata.setValue(value);
+                metadata.setAutorityFile("geonames", "http://www.geonames.org/", "http://www.geonames.org/" + authority);
+                break;
+            case "R01 Relationship Person - Person":
+            case "R02 Relationship Collective agent - Collective agent":
+            case "R03a Relationship Person - Collective agent":
+            case "R03b Relationship Collective agent - Person":
+            case "R04 Relationship Person - Event":
+            case "R05 Relationship Collective agent - Event":
+            case "R06 Relationship Person - Work":
+            case "R07 Relationship Collective agent - Work":
+            case "R08 Relationship Event - Work":
+            case "R09 Relationship Person - Award":
+            case "R10 Relationship Collective agent - Award":
+            case "R11 Relationship Work - Award":
+            case "R12 Relationship Event - Award":
+                String eng = null;
+                String fre = null;
+                String ger = null;
+                // check if relation or reverse relation is used
+                boolean useReverseRelationship = false;
+                for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
+                    if (f.getFieldValue().equals(metadata.getValue())) {
+                        if (f.getDefinition().getName().startsWith("Reverse")) {
+                            useReverseRelationship = true;
+                        }
+                        break;
+                    }
+                }
+                // get normed values
+                for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
+                    if ((f.getDefinition().getName().startsWith("Reverse") && useReverseRelationship)
+                            || (f.getDefinition().getName().startsWith("Relationship") && !useReverseRelationship)) {
+                        ger = f.getFieldValue("ger");
+                        eng = f.getFieldValue("eng");
+                        fre = f.getFieldValue("fre");
+                    }
+                }
+                // write normed metadata
+                try {
+                    Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_ger"));
+                    md.setValue(ger);
+                    metadata.getParent().addMetadata(md);
+                } catch (MetadataTypeNotAllowedException e) {
+                }
+                try {
+                    Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_eng"));
+                    md.setValue(eng);
+                    metadata.getParent().addMetadata(md);
+                } catch (MetadataTypeNotAllowedException e) {
+                }
+                try {
+                    Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_fre"));
+                    md.setValue(fre);
+                    metadata.getParent().addMetadata(md);
+                } catch (MetadataTypeNotAllowedException e) {
+                }
+                break;
+
+            default:
+                for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
+                    FieldDefinition def = f.getDefinition();
+                    Map<String, List<String>> languageValues = new HashMap<>();
+                    for (FieldValue v : f.getValues()) {
+                        for (TranslationInstance t : v.getTranslations()) {
+                            String language = "";
+                            if (t.getLanguage() != null) {
+                                language = t.getLanguage();
                             }
-                            break;
+                            languageValues.computeIfAbsent(language, l -> new LinkedList<>());
+                            languageValues.get(language).add(t.getValue());
                         }
                     }
-                    // get normed values
-                    for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
-                        if ((f.getDefinition().getName().startsWith("Reverse") && useReverseRelationship)
-                                || (f.getDefinition().getName().startsWith("Relationship") && !useReverseRelationship)) {
-                            ger = f.getFieldValue("ger");
-                            eng = f.getFieldValue("eng");
-                            fre = f.getFieldValue("fre");
-                        }
-                    }
-                    // write normed metadata
-                    try {
-                        Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_ger"));
-                        md.setValue(ger);
-                        metadata.getParent().addMetadata(md);
-                    } catch (MetadataTypeNotAllowedException e) {
-                    }
-                    try {
-                        Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_eng"));
-                        md.setValue(eng);
-                        metadata.getParent().addMetadata(md);
-                    } catch (MetadataTypeNotAllowedException e) {
-                    }
-                    try {
-                        Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_fre"));
-                        md.setValue(fre);
-                        metadata.getParent().addMetadata(md);
-                    } catch (MetadataTypeNotAllowedException e) {
-                    }
-                    break;
+                    for (Map.Entry<String, List<String>> e : languageValues.entrySet()) {
+                        // find metadata name
+                        String metadataName = "_" + def.getName() + (e.getKey().isBlank() ? "" : "_" + e.getKey());
+                        metadataName = metadataName.replace(" ", "").toLowerCase();
 
-                default:
-                    for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
-                        FieldDefinition def = f.getDefinition();
-                        Map<String, List<String>> languageValues = new HashMap<>();
-                        for (FieldValue v : f.getValues()) {
-                            for (TranslationInstance t : v.getTranslations()) {
-                                String language = "";
-                                if (t.getLanguage() != null) {
-                                    language = t.getLanguage();
-                                }
-                                languageValues.computeIfAbsent(language, l -> new LinkedList<>());
-                                languageValues.get(language).add(t.getValue());
-                            }
-                        }
-                        for (Map.Entry<String, List<String>> e : languageValues.entrySet()) {
-                            // find metadata name
-                            String metadataName = "_" + def.getName() + (e.getKey().isBlank() ? "" : "_" + e.getKey());
-                            metadataName = metadataName.replace(" ", "").toLowerCase();
+                        // create metadata
+                        MetadataType mdt = prefs.getMetadataTypeByName(metadataName);
+                        if (mdt != null) {
+                            // set value
+                            Metadata vocabMetadata = new Metadata(mdt);
+                            vocabMetadata.setValue(String.join("|", e.getValue()));
+                            try {
+                                metadata.getParent().addMetadata(vocabMetadata);
+                            } catch (MetadataTypeNotAllowedException ex) {
 
-                            // create metadata
-                            MetadataType mdt = prefs.getMetadataTypeByName(metadataName);
-                            if (mdt != null) {
-                                // set value
-                                Metadata vocabMetadata = new Metadata(mdt);
-                                vocabMetadata.setValue(String.join("|", e.getValue()));
-                                try {
-                                    metadata.getParent().addMetadata(vocabMetadata);
-                                } catch (MetadataTypeNotAllowedException ex) {
-
-                                }
                             }
                         }
                     }
-                    break;
-            }
+                }
+                break;
         }
     }
 
-    private boolean isValidVocabularyReference(Metadata metadata) {
+    private boolean hasVocabularyReference(Metadata metadata) {
         return StringUtils.isNotBlank(metadata.getAuthorityURI())
-                && StringUtils.isNotBlank(metadata.getAuthorityValue())
+                && StringUtils.isNotBlank(metadata.getAuthorityValue());
+    }
+
+    private boolean isExternalReference(Metadata metadata) {
+        return hasVocabularyReference(metadata)
+                && metadata.getAuthorityURI().contains("http://www.geonames.org");
+    }
+
+    private boolean isValidVocabularyReference(Metadata metadata) {
+        return hasVocabularyReference(metadata)
                 && metadata.getAuthorityURI().contains("/api/v1/vocabularies/")
                 && metadata.getAuthorityValue().contains("/api/v1/records/");
     }
