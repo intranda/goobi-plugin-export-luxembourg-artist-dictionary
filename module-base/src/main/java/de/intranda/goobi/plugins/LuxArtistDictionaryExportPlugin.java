@@ -932,9 +932,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     }
 
     private void vocabularyEnrichment(Prefs prefs, Metadata metadata) throws MetadataTypeNotAllowedException {
-
-        // TODO: Very bad test for "correct" authority URI, might change
-        if (StringUtils.isNotBlank(metadata.getAuthorityValue()) && metadata.getAuthorityURI().contains("vocabularies")) {
+        if (isValidVocabularyReference(metadata)) {
             String vocabularyName = metadata.getAuthorityID();
             String vocabRecordUrl = metadata.getAuthorityValue();
 
@@ -1040,6 +1038,13 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                     break;
             }
         }
+    }
+
+    private boolean isValidVocabularyReference(Metadata metadata) {
+        return StringUtils.isNotBlank(metadata.getAuthorityURI())
+                && StringUtils.isNotBlank(metadata.getAuthorityValue())
+                && metadata.getAuthorityURI().contains("/api/v1/vocabularies/")
+                && metadata.getAuthorityValue().contains("/api/v1/records/");
     }
 
     private void generateMessage(Process process, LogType logtype, String message) {
