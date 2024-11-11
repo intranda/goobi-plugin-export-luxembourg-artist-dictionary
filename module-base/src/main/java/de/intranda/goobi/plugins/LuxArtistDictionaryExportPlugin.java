@@ -154,7 +154,8 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             writeFileGroups(process, dd, vp, mm, config);
 
             if (authorityUriReplacementFrom.isPresent() && authorityUriReplacementTo.isPresent()) {
-                log.debug("Replacing authority URIs with \"{}\" replaced by \"{}\"", authorityUriReplacementFrom.get(), authorityUriReplacementTo.get());
+                log.debug("Replacing authority URIs with \"{}\" replaced by \"{}\"", authorityUriReplacementFrom.get(),
+                        authorityUriReplacementTo.get());
                 replaceAuthorityLinks(mm, authorityUriReplacementFrom.get(), authorityUriReplacementTo.get());
             }
 
@@ -185,8 +186,10 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     }
 
     private void replaceAuthorityLinks(MetsModsImportExport mm, String from, String to) {
-        Optional.ofNullable(mm.getDigitalDocument().getLogicalDocStruct().getAllMetadata()).ifPresent(list -> list.forEach(m -> replaceAuthorityLinksInMetadata(m, from, to)));
-        Optional.ofNullable(mm.getDigitalDocument().getLogicalDocStruct().getAllMetadataGroups()).ifPresent(groups -> groups.forEach(g -> replaceAuthorityLinksInMetadataGroup(g, from, to)));
+        Optional.ofNullable(mm.getDigitalDocument().getLogicalDocStruct().getAllMetadata())
+                .ifPresent(list -> list.forEach(m -> replaceAuthorityLinksInMetadata(m, from, to)));
+        Optional.ofNullable(mm.getDigitalDocument().getLogicalDocStruct().getAllMetadataGroups())
+                .ifPresent(groups -> groups.forEach(g -> replaceAuthorityLinksInMetadataGroup(g, from, to)));
     }
 
     private void replaceAuthorityLinksInMetadataGroup(MetadataGroup mg, String from, String to) {
@@ -971,7 +974,8 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             return;
         }
         if (!isValidVocabularyReference(metadata)) {
-            log.warn("Metadata has invalid vocabulary references!\n\tAuthority: {}\n\tAuthority URI: {}\n\tValue URI: {}", metadata.getAuthorityID(), metadata.getAuthorityURI(), metadata.getAuthorityValue());
+            log.warn("Metadata has invalid vocabulary references!\n\tAuthority: {}\n\tAuthority URI: {}\n\tValue URI: {}", metadata.getAuthorityID(),
+                    metadata.getAuthorityURI(), metadata.getAuthorityValue());
             return;
         }
 
@@ -986,7 +990,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 String value = matchingRecord.getFieldValueForDefinitionName("Location").orElseThrow();
                 String authority = matchingRecord.getFieldValueForDefinitionName("Authority Value").orElseThrow();
                 metadata.setValue(value);
-                metadata.setAutorityFile("geonames", "http://www.geonames.org/", "http://www.geonames.org/" + authority);
+                metadata.setAuthorityFile("geonames", "http://www.geonames.org/", "http://www.geonames.org/" + authority);
                 break;
             case "R01 Relationship Person - Person":
             case "R02 Relationship Collective agent - Collective agent":
@@ -1001,6 +1005,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             case "R10 Relationship Collective agent - Award":
             case "R11 Relationship Work - Award":
             case "R12 Relationship Event - Award":
+            case "R13 Relationship Award - Award":
                 String eng = null;
                 String fre = null;
                 String ger = null;
