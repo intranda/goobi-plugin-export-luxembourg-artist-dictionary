@@ -151,7 +151,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             // Replace rights and digiprov entries.
             addProjectData(mm, process, vp);
             addAdditionalMetadata(additionalMetadata, dd, prefs, vp);
-            writeFileGroups(process, dd, vp, mm, config);
+            writeFileGroups(process, dd, vp, mm);
 
             if (authorityUriReplacementFrom.isPresent() && authorityUriReplacementTo.isPresent()) {
                 log.debug("Replacing authority URIs with \"{}\" replaced by \"{}\"", authorityUriReplacementFrom.get(),
@@ -286,12 +286,12 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
     private void addAdditionalMetadata(List<MetadataConfiguration> additionalMetadata, DigitalDocument dd, Prefs prefs, VariableReplacer vp) {
         for (MetadataConfiguration config : additionalMetadata) {
-            MetadataType type = prefs.getMetadataTypeByName(config.getMetadataType());
-            if (type != null) {
-                List<? extends Metadata> existingMetadata = dd.getLogicalDocStruct().getAllMetadataByType(type);
+            MetadataType mdt = prefs.getMetadataTypeByName(config.getMetadataType());
+            if (mdt != null) {
+                List<? extends Metadata> existingMetadata = dd.getLogicalDocStruct().getAllMetadataByType(mdt);
                 if (config.isForceCreation() || existingMetadata == null || existingMetadata.isEmpty()) {
                     try {
-                        Metadata md = new Metadata(type);
+                        Metadata md = new Metadata(mdt);
                         md.setValue(config.getRule().generate(vp));
                         if (StringUtils.isNotBlank(md.getValue())) {
                             dd.getLogicalDocStruct().addMetadata(md);
@@ -571,7 +571,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         return xmlConfig;
     }
 
-    private void writeFileGroups(Process process, DigitalDocument dd, VariableReplacer vp, MetsModsImportExport mm, XMLConfiguration config)
+    private void writeFileGroups(Process process, DigitalDocument dd, VariableReplacer vp, MetsModsImportExport mm)
             throws IOException, SwapException {
 
         List<ProjectFileGroup> myFilegroups = process.getProjekt().getFilegroups();
@@ -724,7 +724,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 imageDownload(myProzess, benutzerHome, atsPpnBand, DIRECTORY_SUFFIX);
             }
             if (this.exportFulltext) {
-                fulltextDownload(myProzess, benutzerHome, atsPpnBand, DIRECTORY_SUFFIX);
+                fulltextDownload(myProzess, benutzerHome, atsPpnBand);
             }
 
             String ed = myProzess.getExportDirectory();
@@ -785,8 +785,8 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         return target;
     }
 
-    public void fulltextDownload(Process myProzess, Path benutzerHome, String atsPpnBand, final String ordnerEndung)
-            throws IOException, InterruptedException, SwapException, DAOException {
+    public void fulltextDownload(Process myProzess, Path benutzerHome, String atsPpnBand)
+            throws IOException, SwapException {
 
         // download sources
         Path sources = Paths.get(myProzess.getSourceDirectory());
@@ -895,7 +895,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     }
 
     public void copy3DObjectHelperFiles(Process myProzess, Path zielTif, Path file)
-            throws IOException, InterruptedException, SwapException, DAOException {
+            throws IOException, SwapException {
         Path tiffDirectory = Paths.get(myProzess.getImagesTifDirectory(true));
         String baseName = FilenameUtils.getBaseName(file.getFileName().toString());
         List<Path> helperFiles = StorageProvider.getInstance()
@@ -1034,18 +1034,21 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                     md.setValue(ger);
                     metadata.getParent().addMetadata(md);
                 } catch (MetadataTypeNotAllowedException e) {
+                    log.trace(e);
                 }
                 try {
                     Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_eng"));
                     md.setValue(eng);
                     metadata.getParent().addMetadata(md);
                 } catch (MetadataTypeNotAllowedException e) {
+                    log.trace(e);
                 }
                 try {
                     Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_fre"));
                     md.setValue(fre);
                     metadata.getParent().addMetadata(md);
                 } catch (MetadataTypeNotAllowedException e) {
+                    log.trace(e);
                 }
                 break;
 
@@ -1077,7 +1080,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                             try {
                                 metadata.getParent().addMetadata(vocabMetadata);
                             } catch (MetadataTypeNotAllowedException ex) {
-
+                                log.trace(e);
                             }
                         }
                     }
