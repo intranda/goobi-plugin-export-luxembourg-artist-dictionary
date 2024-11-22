@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
+import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.io.FilenameUtils;
@@ -129,6 +130,16 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             List<MetadataConfiguration> additionalMetadata = readMetadataConfigurations(config);
             List<VocabularyRecordConfig> vocabularyConfigs = readVocabularyRecordConfigs(config);
 
+            Optional<String> authorityUriReplacementFrom = Optional.empty();
+            Optional<String> authorityUriReplacementTo = Optional.empty();
+            try {
+                SubnodeConfiguration replacement = config.configurationAt("vocabularyUriReplacement");
+                authorityUriReplacementFrom = Optional.ofNullable(replacement.getString("[@from]", null));
+                authorityUriReplacementTo = Optional.ofNullable(replacement.getString("[@to]", null));
+            } catch (IllegalArgumentException e) {
+                // Ignore missing setting
+            }
+
             DigitalDocument dd = enrichFileformat(ff, prefs, config, process.getImagesTifDirectory(true));
 
             enrichFromVocabulary(prefs, dd, vocabularyConfigs);
@@ -140,7 +151,14 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             // Replace rights and digiprov entries.
             addProjectData(mm, process, vp);
             addAdditionalMetadata(additionalMetadata, dd, prefs, vp);
-            writeFileGroups(process, dd, vp, mm, config);
+            writeFileGroups(process, dd, vp, mm);
+
+            if (authorityUriReplacementFrom.isPresent() && authorityUriReplacementTo.isPresent()) {
+                log.debug("Replacing authority URIs with \"{}\" replaced by \"{}\"", authorityUriReplacementFrom.get(),
+                        authorityUriReplacementTo.get());
+                replaceAuthorityLinks(mm, authorityUriReplacementFrom.get(), authorityUriReplacementTo.get());
+            }
+
             mm.write(Paths.get(destination, process.getTitel() + ".xml").toString());
 
             if (!exportFiles(process, vp, destination)) {
@@ -165,6 +183,23 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         }
 
         return true;
+    }
+
+    private void replaceAuthorityLinks(MetsModsImportExport mm, String from, String to) {
+        Optional.ofNullable(mm.getDigitalDocument().getLogicalDocStruct().getAllMetadata())
+                .ifPresent(list -> list.forEach(m -> replaceAuthorityLinksInMetadata(m, from, to)));
+        Optional.ofNullable(mm.getDigitalDocument().getLogicalDocStruct().getAllMetadataGroups())
+                .ifPresent(groups -> groups.forEach(g -> replaceAuthorityLinksInMetadataGroup(g, from, to)));
+    }
+
+    private void replaceAuthorityLinksInMetadataGroup(MetadataGroup mg, String from, String to) {
+        Optional.ofNullable(mg.getMetadataList()).ifPresent(list -> list.forEach(m -> replaceAuthorityLinksInMetadata(m, from, to)));
+        Optional.ofNullable(mg.getAllMetadataGroups()).ifPresent(groups -> groups.forEach(g -> replaceAuthorityLinksInMetadataGroup(g, from, to)));
+    }
+
+    private void replaceAuthorityLinksInMetadata(Metadata m, String from, String to) {
+        Optional.ofNullable(m.getAuthorityURI()).ifPresent(uri -> m.setAuthorityValue(uri.replace(from, to)));
+        Optional.ofNullable(m.getAuthorityValue()).ifPresent(value -> m.setAuthorityValue(value.replace(from, to)));
     }
 
     private void cleanUpPagination(Process process, Fileformat ff, XMLConfiguration config) throws UGHException, IOException, SwapException {
@@ -251,12 +286,12 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
     private void addAdditionalMetadata(List<MetadataConfiguration> additionalMetadata, DigitalDocument dd, Prefs prefs, VariableReplacer vp) {
         for (MetadataConfiguration config : additionalMetadata) {
-            MetadataType type = prefs.getMetadataTypeByName(config.getMetadataType());
-            if (type != null) {
-                List<? extends Metadata> existingMetadata = dd.getLogicalDocStruct().getAllMetadataByType(type);
+            MetadataType mdt = prefs.getMetadataTypeByName(config.getMetadataType());
+            if (mdt != null) {
+                List<? extends Metadata> existingMetadata = dd.getLogicalDocStruct().getAllMetadataByType(mdt);
                 if (config.isForceCreation() || existingMetadata == null || existingMetadata.isEmpty()) {
                     try {
-                        Metadata md = new Metadata(type);
+                        Metadata md = new Metadata(mdt);
                         md.setValue(config.getRule().generate(vp));
                         if (StringUtils.isNotBlank(md.getValue())) {
                             dd.getLogicalDocStruct().addMetadata(md);
@@ -536,7 +571,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         return xmlConfig;
     }
 
-    private void writeFileGroups(Process process, DigitalDocument dd, VariableReplacer vp, MetsModsImportExport mm, XMLConfiguration config)
+    private void writeFileGroups(Process process, DigitalDocument dd, VariableReplacer vp, MetsModsImportExport mm)
             throws IOException, SwapException {
 
         List<ProjectFileGroup> myFilegroups = process.getProjekt().getFilegroups();
@@ -689,7 +724,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 imageDownload(myProzess, benutzerHome, atsPpnBand, DIRECTORY_SUFFIX);
             }
             if (this.exportFulltext) {
-                fulltextDownload(myProzess, benutzerHome, atsPpnBand, DIRECTORY_SUFFIX);
+                fulltextDownload(myProzess, benutzerHome, atsPpnBand);
             }
 
             String ed = myProzess.getExportDirectory();
@@ -750,8 +785,8 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
         return target;
     }
 
-    public void fulltextDownload(Process myProzess, Path benutzerHome, String atsPpnBand, final String ordnerEndung)
-            throws IOException, InterruptedException, SwapException, DAOException {
+    public void fulltextDownload(Process myProzess, Path benutzerHome, String atsPpnBand)
+            throws IOException, SwapException {
 
         // download sources
         Path sources = Paths.get(myProzess.getSourceDirectory());
@@ -860,7 +895,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     }
 
     public void copy3DObjectHelperFiles(Process myProzess, Path zielTif, Path file)
-            throws IOException, InterruptedException, SwapException, DAOException {
+            throws IOException, SwapException {
         Path tiffDirectory = Paths.get(myProzess.getImagesTifDirectory(true));
         String baseName = FilenameUtils.getBaseName(file.getFileName().toString());
         List<Path> helperFiles = StorageProvider.getInstance()
@@ -932,114 +967,142 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     }
 
     private void vocabularyEnrichment(Prefs prefs, Metadata metadata) throws MetadataTypeNotAllowedException {
-
-        // TODO: Very bad test for "correct" authority URI, might change
-        if (StringUtils.isNotBlank(metadata.getAuthorityValue()) && metadata.getAuthorityURI().contains("vocabularies")) {
-            String vocabularyName = metadata.getAuthorityID();
-            String vocabRecordUrl = metadata.getAuthorityValue();
-
-            ExtendedVocabularyRecord matchingRecord = VocabularyAPIManager.getInstance().vocabularyRecords().get(vocabRecordUrl);
-
-            matchingRecord.writeReferenceMetadata(metadata);
-            switch (vocabularyName) {
-                case "Location":
-                    String value = matchingRecord.getFieldValueForDefinitionName("Location").orElseThrow();
-                    String authority = matchingRecord.getFieldValueForDefinitionName("Authority Value").orElseThrow();
-                    metadata.setValue(value);
-                    metadata.setAutorityFile("geonames", "http://www.geonames.org/", "http://www.geonames.org/" + authority);
-                    break;
-                case "R01 Relationship Person - Person":
-                case "R02 Relationship Collective agent - Collective agent":
-                case "R03a Relationship Person - Collective agent":
-                case "R03b Relationship Collective agent - Person":
-                case "R04 Relationship Person - Event":
-                case "R05 Relationship Collective agent - Event":
-                case "R06 Relationship Person - Work":
-                case "R07 Relationship Collective agent - Work":
-                case "R08 Relationship Event - Work":
-                case "R09 Relationship Person - Award":
-                case "R10 Relationship Collective agent - Award":
-                case "R11 Relationship Work - Award":
-                case "R12 Relationship Event - Award":
-                    String eng = null;
-                    String fre = null;
-                    String ger = null;
-                    // check if relation or reverse relation is used
-                    boolean useReverseRelationship = false;
-                    for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
-                        if (f.getFieldValue().equals(metadata.getValue())) {
-                            if (f.getDefinition().getName().startsWith("Reverse")) {
-                                useReverseRelationship = true;
-                            }
-                            break;
-                        }
-                    }
-                    // get normed values
-                    for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
-                        if ((f.getDefinition().getName().startsWith("Reverse") && useReverseRelationship)
-                                || (f.getDefinition().getName().startsWith("Relationship") && !useReverseRelationship)) {
-                            ger = f.getFieldValue("ger");
-                            eng = f.getFieldValue("eng");
-                            fre = f.getFieldValue("fre");
-                        }
-                    }
-                    // write normed metadata
-                    try {
-                        Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_ger"));
-                        md.setValue(ger);
-                        metadata.getParent().addMetadata(md);
-                    } catch (MetadataTypeNotAllowedException e) {
-                    }
-                    try {
-                        Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_eng"));
-                        md.setValue(eng);
-                        metadata.getParent().addMetadata(md);
-                    } catch (MetadataTypeNotAllowedException e) {
-                    }
-                    try {
-                        Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_fre"));
-                        md.setValue(fre);
-                        metadata.getParent().addMetadata(md);
-                    } catch (MetadataTypeNotAllowedException e) {
-                    }
-                    break;
-
-                default:
-                    for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
-                        FieldDefinition def = f.getDefinition();
-                        Map<String, List<String>> languageValues = new HashMap<>();
-                        for (FieldValue v : f.getValues()) {
-                            for (TranslationInstance t : v.getTranslations()) {
-                                String language = "";
-                                if (t.getLanguage() != null) {
-                                    language = t.getLanguage();
-                                }
-                                languageValues.computeIfAbsent(language, l -> new LinkedList<>());
-                                languageValues.get(language).add(t.getValue());
-                            }
-                        }
-                        for (Map.Entry<String, List<String>> e : languageValues.entrySet()) {
-                            // find metadata name
-                            String metadataName = "_" + def.getName() + (e.getKey().isBlank() ? "" : "_" + e.getKey());
-                            metadataName = metadataName.replace(" ", "").toLowerCase();
-
-                            // create metadata
-                            MetadataType mdt = prefs.getMetadataTypeByName(metadataName);
-                            if (mdt != null) {
-                                // set value
-                                Metadata vocabMetadata = new Metadata(mdt);
-                                vocabMetadata.setValue(String.join("|", e.getValue()));
-                                try {
-                                    metadata.getParent().addMetadata(vocabMetadata);
-                                } catch (MetadataTypeNotAllowedException ex) {
-
-                                }
-                            }
-                        }
-                    }
-                    break;
-            }
+        if (!hasVocabularyReference(metadata)) {
+            return;
         }
+        if (isExternalReference(metadata)) {
+            return;
+        }
+        if (!isValidVocabularyReference(metadata)) {
+            log.warn("Metadata has invalid vocabulary references!\n\tAuthority: {}\n\tAuthority URI: {}\n\tValue URI: {}", metadata.getAuthorityID(),
+                    metadata.getAuthorityURI(), metadata.getAuthorityValue());
+            return;
+        }
+
+        String vocabularyName = metadata.getAuthorityID();
+        String vocabRecordUrl = metadata.getAuthorityValue();
+
+        ExtendedVocabularyRecord matchingRecord = VocabularyAPIManager.getInstance().vocabularyRecords().get(vocabRecordUrl);
+
+        matchingRecord.writeReferenceMetadata(metadata);
+        switch (vocabularyName) {
+            case "Location":
+                String value = matchingRecord.getFieldValueForDefinitionName("Location").orElseThrow();
+                String authority = matchingRecord.getFieldValueForDefinitionName("Authority Value").orElseThrow();
+                metadata.setValue(value);
+                metadata.setAuthorityFile("geonames", "http://www.geonames.org/", "http://www.geonames.org/" + authority);
+                break;
+            case "R01 Relationship Person - Person":
+            case "R02 Relationship Collective agent - Collective agent":
+            case "R03a Relationship Person - Collective agent":
+            case "R03b Relationship Collective agent - Person":
+            case "R04 Relationship Person - Event":
+            case "R05 Relationship Collective agent - Event":
+            case "R06 Relationship Person - Work":
+            case "R07 Relationship Collective agent - Work":
+            case "R08 Relationship Event - Work":
+            case "R09 Relationship Person - Award":
+            case "R10 Relationship Collective agent - Award":
+            case "R11 Relationship Work - Award":
+            case "R12 Relationship Event - Award":
+            case "R13 Relationship Award - Award":
+                String eng = null;
+                String fre = null;
+                String ger = null;
+                // check if relation or reverse relation is used
+                boolean useReverseRelationship = false;
+                for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
+                    if (f.getFieldValue().equals(metadata.getValue())) {
+                        if (f.getDefinition().getName().startsWith("Reverse")) {
+                            useReverseRelationship = true;
+                        }
+                        break;
+                    }
+                }
+                // get normed values
+                for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
+                    if ((f.getDefinition().getName().startsWith("Reverse") && useReverseRelationship)
+                            || (f.getDefinition().getName().startsWith("Relationship") && !useReverseRelationship)) {
+                        ger = f.getFieldValue("ger");
+                        eng = f.getFieldValue("eng");
+                        fre = f.getFieldValue("fre");
+                    }
+                }
+                // write normed metadata
+                try {
+                    Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_ger"));
+                    md.setValue(ger);
+                    metadata.getParent().addMetadata(md);
+                } catch (MetadataTypeNotAllowedException e) {
+                    log.trace(e);
+                }
+                try {
+                    Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_eng"));
+                    md.setValue(eng);
+                    metadata.getParent().addMetadata(md);
+                } catch (MetadataTypeNotAllowedException e) {
+                    log.trace(e);
+                }
+                try {
+                    Metadata md = new Metadata(prefs.getMetadataTypeByName("_relationship_type_fre"));
+                    md.setValue(fre);
+                    metadata.getParent().addMetadata(md);
+                } catch (MetadataTypeNotAllowedException e) {
+                    log.trace(e);
+                }
+                break;
+
+            default:
+                for (ExtendedFieldInstance f : matchingRecord.getExtendedFields()) {
+                    FieldDefinition def = f.getDefinition();
+                    Map<String, List<String>> languageValues = new HashMap<>();
+                    for (FieldValue v : f.getValues()) {
+                        for (TranslationInstance t : v.getTranslations()) {
+                            String language = "";
+                            if (t.getLanguage() != null) {
+                                language = t.getLanguage();
+                            }
+                            languageValues.computeIfAbsent(language, l -> new LinkedList<>());
+                            languageValues.get(language).add(t.getValue());
+                        }
+                    }
+                    for (Map.Entry<String, List<String>> e : languageValues.entrySet()) {
+                        // find metadata name
+                        String metadataName = "_" + def.getName() + (e.getKey().isBlank() ? "" : "_" + e.getKey());
+                        metadataName = metadataName.replace(" ", "").toLowerCase();
+
+                        // create metadata
+                        MetadataType mdt = prefs.getMetadataTypeByName(metadataName);
+                        if (mdt != null) {
+                            // set value
+                            Metadata vocabMetadata = new Metadata(mdt);
+                            vocabMetadata.setValue(String.join("|", e.getValue()));
+                            try {
+                                metadata.getParent().addMetadata(vocabMetadata);
+                            } catch (MetadataTypeNotAllowedException ex) {
+                                log.trace(e);
+                            }
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    private boolean hasVocabularyReference(Metadata metadata) {
+        return StringUtils.isNotBlank(metadata.getAuthorityURI())
+                && StringUtils.isNotBlank(metadata.getAuthorityValue());
+    }
+
+    private boolean isExternalReference(Metadata metadata) {
+        return hasVocabularyReference(metadata)
+                && metadata.getAuthorityURI().contains("http://www.geonames.org");
+    }
+
+    private boolean isValidVocabularyReference(Metadata metadata) {
+        return hasVocabularyReference(metadata)
+                && metadata.getAuthorityURI().contains("/api/v1/vocabularies/")
+                && metadata.getAuthorityValue().contains("/api/v1/records/");
     }
 
     private void generateMessage(Process process, LogType logtype, String message) {
