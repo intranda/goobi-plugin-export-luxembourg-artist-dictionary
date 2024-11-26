@@ -994,8 +994,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 break;
             case "R01 Relationship Person - Person":
             case "R02 Relationship Collective agent - Collective agent":
-            case "R03a Relationship Person - Collective agent":
-            case "R03b Relationship Collective agent - Person":
+            case "R03 Relationship Person - Collective agent":
             case "R04 Relationship Person - Event":
             case "R05 Relationship Collective agent - Event":
             case "R06 Relationship Person - Work":
