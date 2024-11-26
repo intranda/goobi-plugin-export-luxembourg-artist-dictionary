@@ -984,7 +984,6 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
         ExtendedVocabularyRecord matchingRecord = VocabularyAPIManager.getInstance().vocabularyRecords().get(vocabRecordUrl);
 
-        matchingRecord.writeReferenceMetadata(metadata);
         switch (vocabularyName) {
             case "Location":
                 String value = matchingRecord.getFieldValueForDefinitionName("Location").orElseThrow();
@@ -1086,6 +1085,10 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 }
                 break;
         }
+
+        String value = metadata.getValue();
+        matchingRecord.writeReferenceMetadata(metadata);
+        metadata.setValue(value);
     }
 
     private boolean hasVocabularyReference(Metadata metadata) {
