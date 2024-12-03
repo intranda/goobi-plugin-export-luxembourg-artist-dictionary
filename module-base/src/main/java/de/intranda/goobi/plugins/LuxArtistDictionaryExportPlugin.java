@@ -86,7 +86,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     private static final String EXPORT_ERROR_PREFIX = "Export cancelled: ";
     private static final String PROCESS_PROPERTY_PROCESS_STATUS = "ProcessStatus";
 
-    private static final List<String> REPRESENTATIVE_IMAGE_SUBJECTS = List.of("Portrait", "Event visual", "Award visual ");
+    private static final List<String> REPRESENTATIVE_IMAGE_SUBJECTS = List.of("Porträt", "Portrait", "Event visual", "Award visual ");
 
     @Getter
     private String title = "intranda_export_luxArtistDictionary";
