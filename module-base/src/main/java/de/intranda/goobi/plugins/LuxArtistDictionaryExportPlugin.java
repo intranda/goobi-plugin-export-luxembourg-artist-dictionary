@@ -86,7 +86,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
     private static final String EXPORT_ERROR_PREFIX = "Export cancelled: ";
     private static final String PROCESS_PROPERTY_PROCESS_STATUS = "ProcessStatus";
 
-    private static final List<String> REPRESENTATIVE_IMAGE_SUBJECTS = List.of("Portrait", "Event visual", "Award visual ");
+    private static final List<String> REPRESENTATIVE_IMAGE_SUBJECTS = List.of("Porträt", "Portrait", "Event visual", "Award visual ");
 
     @Getter
     private String title = "intranda_export_luxArtistDictionary";
@@ -984,7 +984,6 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
 
         ExtendedVocabularyRecord matchingRecord = VocabularyAPIManager.getInstance().vocabularyRecords().get(vocabRecordUrl);
 
-        matchingRecord.writeReferenceMetadata(metadata);
         switch (vocabularyName) {
             case "Location":
                 String value = matchingRecord.getFieldValueForDefinitionName("Location").orElseThrow();
@@ -994,8 +993,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 break;
             case "R01 Relationship Person - Person":
             case "R02 Relationship Collective agent - Collective agent":
-            case "R03a Relationship Person - Collective agent":
-            case "R03b Relationship Collective agent - Person":
+            case "R03 Relationship Person - Collective agent":
             case "R04 Relationship Person - Event":
             case "R05 Relationship Collective agent - Event":
             case "R06 Relationship Person - Work":
@@ -1087,6 +1085,10 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 }
                 break;
         }
+
+        String value = metadata.getValue();
+        matchingRecord.writeReferenceMetadata(metadata);
+        metadata.setValue(value);
     }
 
     private boolean hasVocabularyReference(Metadata metadata) {
