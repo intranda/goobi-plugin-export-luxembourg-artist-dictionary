@@ -1004,6 +1004,8 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
             case "R11 Relationship Work - Award":
             case "R12 Relationship Event - Award":
             case "R13 Relationship Award - Award":
+            case "R13 Relationship Work - Work":
+            case "R14 Relationship Event - Event":
                 String eng = null;
                 String fre = null;
                 String ger = null;
