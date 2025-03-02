@@ -3,7 +3,7 @@
   <parent>
     <groupId>io.goobi.workflow.plugin</groupId>
     <artifactId>plugin-export-luxembourg-artist-dictionary</artifactId>
-    <version>25.02-SNAPSHOT</version>
+    <version>25.02</version>
   </parent>
   <artifactId>plugin-export-luxembourg-artist-dictionary-base</artifactId>
   <packaging>jar</packaging>
