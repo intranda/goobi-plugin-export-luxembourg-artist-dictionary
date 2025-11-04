@@ -21,6 +21,7 @@ import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.goobi.beans.Process;
 import org.goobi.beans.ProjectFileGroup;
 import org.goobi.beans.Step;
@@ -613,7 +614,7 @@ public class LuxArtistDictionaryExportPlugin implements IExportPlugin, IPlugin {
                 String base2 = FilenameUtils.getBaseName(name2);
                 String extension1 = FilenameUtils.getExtension(name1);
                 String extension2 = FilenameUtils.getExtension(name2);
-                if (StringUtils.equalsIgnoreCase(base1, base2)) {
+                if (Strings.CI.equals(base1, base2)) {
                     if (StringUtils.isBlank(extension1)) {
                         return 1;
                     } else if (StringUtils.isBlank(extension2)) {
